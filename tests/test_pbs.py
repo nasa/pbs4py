@@ -1,6 +1,6 @@
 import pytest
 import filecmp
-from pyrefine.pbs import PBS
+from pbs4py import PBS
 
 def test_profile_file_checking():
     actual_file_location = "~"

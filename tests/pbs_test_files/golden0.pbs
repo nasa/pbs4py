@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+#PBS -N test_job
+#PBS -q queue
+#PBS -l select=1:ncpus=5:mpiprocs=5
+#PBS -l walltime=24:00:00
+#PBS -o test_job_pbs.log
+#PBS -j oe
+#PBS -r n
+
+
+cd $PBS_O_WORKDIR
+source ~/.bashrc
+
+command1
+command2

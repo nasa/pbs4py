@@ -9,27 +9,8 @@ build
 tests/test_output_files
 htmlcov
 .coverage
-examples/*/*/Flow*
-examples/*/*/geom*
-examples/*/geom*
 
 *pbs
 *log
-fun3d.nml_*
-*solb
 *out
-*dat
-*.forces
-*.grid_info
-*szplt
-*meshb
-*.flow
-*.trace
-moving_body.input_*
-*.restart
-*.mapbc
-*.ugrid
-*.names
-*.tec
-sfe.cfg_*
 cov.xml
