@@ -3,8 +3,8 @@ import numpy as np
 import time
 from datetime import datetime
 from typing import List
-from pyrefine.pbs import PBS
-from pyrefine.directory_utils import cd
+from pbs4py import PBS
+from .directory_utils import cd
 
 class Job:
     def __init__(self, name: str, body: List[str]):
