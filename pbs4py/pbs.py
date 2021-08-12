@@ -1,27 +1,30 @@
 #!/usr/bin/env python
 import os
-from typing import Type
+from typing import List
 import numpy as np
 
 
 class PBS:
-    def __init__(self, queue_name='K4-route', ncpus_per_node=40, queue_node_limit=10,
-                 time=72, profile_file='~/.bashrc'):
+    def __init__(self, queue_name: str = 'K4-route',
+                 ncpus_per_node: int = 40,
+                 queue_node_limit: int = 10,
+                 time: int = 72,
+                 profile_file: str = '~/.bashrc'):
         """
         | A class for creating and running pbs jobs. Default queue properties are for K4.
-        | Defaults not set during instantiation can be adjusted with the setter functions.
+        | Defaults not set during instantiation can be adjusted by directly modifying attributes.
 
         Parameters
         ----------
-        queue_name: str
+        queue_name:
             Queue name which goes on the "#PBS -N {name}" line of the pbs header
-        ncpus_per_node: int
+        ncpus_per_node:
             Number of CPU cores per node
-        queue_node_limit: int
+        queue_node_limit:
             Maximum number of nodes allowed in this queue
-        time: int
+        time:
             The requested job walltime in hours
-        profile_file: str
+        profile_file:
             The file setting the environment to source inside the PBS job
         """
 
@@ -107,6 +110,108 @@ class PBS:
     def requested_number_of_nodes(self, number_of_nodes):
         self._requested_number_of_nodes = np.min((number_of_nodes, self.queue_node_limit))
 
+    def create_mpi_command(self, command: str,
+                           output_root_name: str,
+                           openmp_threads: int = None) -> str:
+        """
+        Wrap a command with mpiexec and route its standard and error output to a file
+
+        Parameters
+        ----------
+        command:
+            The command thats needs to run in parallel
+        output_root_name:
+            The root name of the output file, {output_root_name}.out.
+        openmp_threads:
+            The number of openmp threads per mpi process.
+
+        Returns
+        -------
+        full_command: str
+            The full command string.
+        """
+        proc_info = ' '
+        omp_env_variable = ''
+        if openmp_threads is not None:
+            omp_env_variable += f'OMP_NUM_THREADS={openmp_threads} '
+
+            num_mpi_procs = (self.ncpus_per_node // openmp_threads) * self.requested_number_of_nodes
+            proc_info += f'-np {num_mpi_procs} '
+            self.mpiprocs_per_node = (self.ncpus_per_node // openmp_threads)
+
+            if self.mpiexec == 'mpiexec_mpt':
+                procs = ','.join([str(i) for i in range(self.ncpus_per_node)])
+                proc_info += f'omplace -c "{procs}" -nt {openmp_threads} -vv '
+            else:
+                omp_env_variable += 'OMP_PLACES=cores OMP_PROC_BIND=close '
+        else:
+            self.mpiprocs_per_node = self.ncpus_per_node
+
+        direct_output = f' > {output_root_name}.out 2>&1'
+        full_command = omp_env_variable + self.mpiexec + proc_info + command + direct_output
+        return full_command
+
+    def launch(self, job_name: str, job_body: List[str],
+               blocking: bool = True, dependency: str = None) -> str:
+        """
+        Create a pbs script and launch the job
+
+        Parameters
+        ----------
+        job_name:
+            The name of the job.
+        job_body:
+            List of commands to run in the body of the PBS job.
+        blocking:
+            If true, this function will wait for the PBS job to complete before returning.
+            If false, this function will launch the job but not wait for it to finish.
+        dependency:
+            PBS jobs or colon separated jobs in a string that this one depends one.
+
+        Returns
+        -------
+        pbs_command_output: str
+            The stdout of the pbs command. If the pbs job is successfully launch,
+            this will be the pbs job id.
+        """
+        pbs_file = f'{job_name}.pbs'
+
+        self.write_pbs_file(pbs_file, job_name, job_body, dependency)
+        return self._run_pbs_job(pbs_file, blocking)
+
+    def write_pbs_file(self, pbs_file: str, job_name: str,
+                       job_body: List[str], dependency: str = None):
+        """
+        Create a pbs script file
+
+        Parameters
+        ----------
+        pbs_file:
+            name of file to write to
+        job_name:
+            The name of the job.
+        job_body:
+            List of commands to run in the body of the PBS job.
+        dependency:
+            PBS jobs or colon separated jobs that this one depends one.
+        """
+        with open(pbs_file, mode='w') as fh:
+            pbs_header = self._create_pbs_header(job_name, dependency)
+            for line in pbs_header:
+                fh.write(line + '\n')
+
+            for _ in range(2):
+                fh.write('\n')
+
+            fh.write('cd $PBS_O_WORKDIR\n')
+            fh.write('source %s\n' % self.profile_filename)
+
+            for _ in range(1):
+                fh.write('\n')
+
+            for line in job_body:
+                fh.write(line + '\n')
+
     def _create_select_line(self):
         select = f'select={self.requested_number_of_nodes}'
         ncpus = f'ncpus={self.ncpus_per_node}'
@@ -119,7 +224,7 @@ class PBS:
             select_line += f':model={self.model}'
         return select_line
 
-    def _create_pbs_header(self, job_name, dependency = None):
+    def _create_pbs_header(self, job_name, dependency=None):
         """
         Create the pbs job description block.
 
@@ -153,104 +258,6 @@ class PBS:
         if dependency is not None:
             pbs_header.append(f'#PBS -W depend={self.dependency_type}:{dependency}')
         return pbs_header
-
-    def create_mpi_command(self, command, output_root_name, openmp_threads=None):
-        """
-        Wrap a command with mpiexec and route its standard and error output to a file
-
-        Parameters
-        ----------
-        command: str
-            The command thats needs to run in parallel
-        output_root_name: str
-            The root name of the output file, {output_root_name}.out.
-        openmp_threads: int
-            The number of openmp threads per mpi process.
-
-        Returns
-        -------
-        full_command: str
-            The full command string.
-        """
-        proc_info = ' '
-        omp_env_variable = ''
-        if openmp_threads is not None:
-            omp_env_variable += f'OMP_NUM_THREADS={openmp_threads} '
-
-            num_mpi_procs = (self.ncpus_per_node // openmp_threads) * self.requested_number_of_nodes
-            proc_info += f'-np {num_mpi_procs} '
-            self.mpiprocs_per_node = (self.ncpus_per_node // openmp_threads)
-
-            if self.mpiexec == 'mpiexec_mpt':
-                procs = ','.join([str(i) for i in range(self.ncpus_per_node)])
-                proc_info += f'omplace -c "{procs}" -nt {openmp_threads} -vv '
-            else:
-                omp_env_variable += 'OMP_PLACES=cores OMP_PROC_BIND=close '
-        else:
-            self.mpiprocs_per_node = self.ncpus_per_node
-
-        direct_output = f' > {output_root_name}.out 2>&1'
-        full_command = omp_env_variable + self.mpiexec + proc_info + command + direct_output
-        return full_command
-
-    def launch(self, job_name, job_body, blocking=True, dependency=None):
-        """
-        Create a pbs script and launch the job
-
-        Parameters
-        ----------
-        job_name: str
-            The name of the job.
-        job_body: list[str]
-            List of commands to run in the body of the PBS job.
-        blocking: bool
-            If true, this function will wait for the PBS job to complete before returning.
-            If false, this function will launch the job but not wait for it to finish.
-        dependency: str
-            PBS jobs or colon separated jobs that this one depends one.
-
-        Returns
-        -------
-        pbs_command_output: str
-            The stdout of the pbs command. If the pbs job is successfully launch,
-            this will be the pbs job id.
-        """
-        pbs_file = f'{job_name}.pbs'
-
-        self.write_pbs_file(pbs_file, job_name, job_body, dependency)
-        return self._run_pbs_job(pbs_file, blocking)
-
-    def write_pbs_file(self, pbs_file, job_name, job_body, dependency=None):
-        """
-        Create a pbs script file
-
-        Parameters
-        ----------
-        pbs_file: str
-            name of file to write to
-        job_name: str
-            The name of the job.
-        job_body: list[str]
-            List of commands to run in the body of the PBS job.
-        dependency: str
-            PBS jobs or colon separated jobs that this one depends one.
-        """
-        with open(pbs_file, mode='w') as fh:
-            pbs_header = self._create_pbs_header(job_name, dependency)
-            for line in pbs_header:
-                fh.write(line + '\n')
-
-            for _ in range(2):
-                fh.write('\n')
-
-            fh.write('cd $PBS_O_WORKDIR\n')
-            fh.write('source %s\n' % self.profile_filename)
-
-            for _ in range(1):
-                fh.write('\n')
-
-            for line in job_body:
-                fh.write(line + '\n')
 
     def _run_pbs_job(self, pbs_file, blocking):
         options = ''
@@ -313,35 +320,24 @@ class PBS:
 
 
 class FakePBS(PBS):
-    def __init__(self, queue_name='K4-route', ncpus_per_node=40, queue_node_limit=10, time=72):
+    def __init__(self):
         """
         A fake PBS class for directly running commands while still calling as
         if it were a standard pbs driver.
-
-        Parameters
-        ----------
-        queue_name: str
-            Queue name which goes on the "#PBS -N {name}" line of the pbs header
-        ncpus_per_node: int
-            Number of CPU cores per node
-        queue_node_limit: int
-            Maximum number of nodes allowed in this queue
-        time: int
-            The requested job walltime in hours
         """
-        super().__init__(queue_name, ncpus_per_node, queue_node_limit, time)
+        super().__init__()
 
-    def launch(self, job_name, job_body, blocking=True):
+    def launch(self, job_name: str, job_body: List[str], blocking: bool = True):
         """
         Runs the commands in the job_body
 
         Parameters
         ----------
-        job_name: str
+        job_name:
             [ignored]
-        job_body: list[str]
+        job_body:
             List of commands to run
-        blocking: bool
+        blocking:
             [ignored]
 
         Returns
