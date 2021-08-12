@@ -3,13 +3,8 @@
 PBS Job Handling
 %%%%%%%%%%%%%%%%
 
-The adaptation process requires automation of creating and submitting PBS jobs.
-However each HPC machine's PBS set up is slightly different.
-The PBS class is a tool to define properties of the PBS set up you want to use
-and then launch jobs.
-
-Note: Nothing about these utility classes is specific to adaptation, so they
-could be used for other job scripting.
+The PBS class is a tool to define properties of the PBS set up you want to use,
+write pbs scripts, and launch jobs.
 
 
 PBS stand alone example
@@ -81,8 +76,10 @@ the ``PBS`` class has several classmethods that serve as alternate constructors 
 
 FakePBS Class
 *************
-Some adaptation such as 2D problems are small enough to run everything in a single pbs job so that you avoid having to sit in the queue for each operation.
-The FakePBS object appears to the adaptation drivers as a standard PBS object, but directly runs the commands instead of putting them into a PBS job and launching the job.
+Some scripts may be set up with the PBS job handler originally, but you may want to run
+the script within an existing PBS job without launching new PBS jobs.
+The FakePBS object appears to driving scripts as a standard PBS object,
+but directly runs the commands instead of putting them into a PBS job and launching the job.
 
 .. autoclass:: FakePBS
    :members:
