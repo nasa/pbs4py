@@ -77,7 +77,10 @@ class PBS:
         #: Default is 'afterok' which only launches the new job if the previous one was successful.
         self.dependency_type = 'afterok'
 
+        #: str: Profile file to source to top of PBS script
         self.profile_filename = profile_file
+
+        #: int: number of compute nodes to request
         self.requested_number_of_nodes = 1
 
     @property
