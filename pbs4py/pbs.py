@@ -271,14 +271,20 @@ class PBS:
     # Alternate constructors for NASA HPC queues
     @classmethod
     def k4(cls, time=72, profile_file='~/.bashrc'):
+        """
+        The K4 queues including K4-standard-512. Skylake nodes.
+        """
         return cls(queue_name='K4-route', ncpus_per_node=40,
-                   queue_node_limit=10, time=time,
+                   queue_node_limit=16, time=time,
                    profile_file=profile_file)
 
     @classmethod
     def k3(cls, time=72, profile_file='~/.bashrc'):
+        """
+        The K3 queues including K4-standard-512. Skylake nodes.
+        """
         return cls(queue_name='K3-route', ncpus_per_node=16,
-                   queue_node_limit=25, time=time,
+                   queue_node_limit=40, time=time,
                    profile_file=profile_file)
 
     @classmethod
