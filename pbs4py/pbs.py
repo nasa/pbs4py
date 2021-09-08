@@ -270,32 +270,74 @@ class PBS:
 
     # Alternate constructors for NASA HPC queues
     @classmethod
-    def k4(cls, time=72, profile_file='~/.bashrc'):
+    def k4(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        The K4 queues including K4-standard-512. Skylake nodes.
+        The K4 queues on LaRC's K cluster including K4-standard-512.
+
+        Parameters
+        ----------
+        time:
+            The requested job walltime in hours
+        profile_file:
+            The file setting the environment to source inside the PBS job
         """
         return cls(queue_name='K4-route', ncpus_per_node=40,
                    queue_node_limit=16, time=time,
                    profile_file=profile_file)
 
     @classmethod
-    def k3(cls, time=72, profile_file='~/.bashrc'):
+    def k3(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        The K3 queues including K4-standard-512. Skylake nodes.
+        The K3 queues on LaRC's K cluster including K3-standard-512.
+
+        Parameters
+        ----------
+        time:
+            The requested job walltime in hours
+        profile_file:
+            The file setting the environment to source inside the PBS job
         """
         return cls(queue_name='K3-route', ncpus_per_node=16,
                    queue_node_limit=40, time=time,
                    profile_file=profile_file)
 
     @classmethod
-    def k3a(cls, time=72, profile_file='~/.bashrc'):
+    def k3a(cls, time: int = 72, profile_file: str = '~/.bashrc'):
+        """
+        The K3a queue on LaRC's K cluster.
+
+        Parameters
+        ----------
+        time:
+            The requested job walltime in hours
+        profile_file:
+            The file setting the environment to source inside the PBS job
+        """
         return cls(queue_name='K3a-route', ncpus_per_node=16,
                    queue_node_limit=25, time=time,
                    profile_file=profile_file)
 
     @classmethod
-    def nas(cls, group_list, proc_type='broadwell', queue_name='long',
-            time=72, profile_file='~/.bashrc'):
+    def nas(cls, group_list: str, proc_type: str = 'broadwell', queue_name: str = 'long',
+            time: int = 72, profile_file: str = '~/.bashrc'):
+        """
+        Queues at NAS.
+
+        Parameters
+        ----------
+        group_list:
+            The charge number or group for the group_list entry of the pbs header.
+            The associated PBS header line is "#PBS -W group_list={group_list}".
+        proc_type:
+            The type of processor to submit to. Can write out or just the first 3 letters:
+            'cas', 'sky', 'bro', 'has', 'ivy', 'san'.
+        queue_name:
+            Which queue to submit to: devel, debug, normal, long,
+        time:
+            The requested job walltime in hours
+        profile_file:
+            The file setting the environment to source inside the PBS job
+        """
 
         if 'cas' in proc_type.lower():
             ncpus_per_node = 40
