@@ -28,7 +28,7 @@ class PBS:
             The file setting the environment to source inside the PBS job
         """
 
-        #: str: The name of the queue which goes on the "#PBS -N {queue_name}"
+        #: str: The name of the queue which goes on the ``#PBS -N {queue_name}``
         #: line of the pbs header
         self.queue_name = queue_name
 
@@ -42,35 +42,35 @@ class PBS:
         self.time = time
 
         #: int: The number of mpi ranks per node. The default behavior is to set
-        #: `mpiprocs_per_node = ncpus_per_node` where ncpus_per_node is
+        #: ``mpiprocs_per_node = ncpus_per_node`` where ncpus_per_node is
         #: the value given during instantiation. For standard MPI execution,
-        #: For mpi+openMP, `mpiprocs_per_node` may be less than `ncpus_per_node`.
+        #: For mpi+openMP, ``mpiprocs_per_node`` may be less than ``ncpus_per_node``.
         self.mpiprocs_per_node = ncpus_per_node
 
         #: str or None: The processor model if it needs to be specified.
-        #: The associated PBS header line is "#PBS -l select=#:ncpus=#:mpiprocs=#:model={model}"
-        #: If left as `None`, the ":model={mode}" will not be added to the header line
+        #: The associated PBS header line is ``#PBS -l select=#:ncpus=#:mpiprocs=#:model={model}``
+        #: If left as `None`, the ``:model={mode}`` will not be added to the header line
         self.model = None
 
         #: str or None: The group for the group_list entry of the pbs header if necessary.
-        #: The associated PBS header line is "#PBS -W group_list={group_list}"
+        #: The associated PBS header line is ``#PBS -W group_list={group_list}``
         self.group_list = None
 
         #: str or None: Requested memory size on the select line. Need to include units in the str.
-        #: The associated PBS header line is "#PBS -l select=#:mem={mem}"
+        #: The associated PBS header line is ``#PBS -l select=#:mem={mem}``
         self.mem = None
 
         #: str: The hashbang line which sets the shell for the PBS script.
-        #: If unset, the default is "#!/usr/bin/env bash".
+        #: If unset, the default is ``#!/usr/bin/env bash``.
         self.hashbang = '#!/usr/bin/env bash'
 
         #: str: The mpi execution command name: mpiexec, mpirun, mpiexec_mpt, etc.
         self.mpiexec = 'mpiexec'
 
-        #: str: pbs -m mail options. 'e' at exit, 'b' at beginning, 'a' at abort
+        #: str: ``pbs -m`` mail options. 'e' at exit, 'b' at beginning, 'a' at abort
         self.mail_options = None
 
-        #: str: pbs -M mail list. Who to email when mail_options are triggered
+        #: str: ``pbs -M`` mail list. Who to email when mail_options are triggered
         self.mail_list = None
 
         #: str: Type of dependency if dependency active.
@@ -87,8 +87,8 @@ class PBS:
     def profile_filename(self):
         """
         The file to source at the start of the pbs script to set the environment.
-        Typical names include "~/.profile", "~/.bashrc", and "~/.cshrc".
-        The default profile filename is "~/.bashrc"
+        Typical names include '~/.profile', '~/.bashrc', and '~/.cshrc'.
+        The default profile filename is '~/.bashrc'
         """
         return self._profile_filename
 
@@ -102,8 +102,8 @@ class PBS:
     @property
     def requested_number_of_nodes(self):
         """
-        The node of nodes to request. That is, the "select" number in the
-        "#PBS -l select={number_of_nodes}:ncpus=40:mpiprocs=40".
+        The node of nodes to request. That is, the 'select' number in the
+        ``#PBS -l select={requested_number_of_nodes}:ncpus=40:mpiprocs=40``.
 
         :type: int
         """
@@ -272,7 +272,7 @@ class PBS:
     @classmethod
     def k4(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        The K4 queues on LaRC's K cluster including K4-standard-512.
+        Constructor for the K4 queues on LaRC's K cluster including K4-standard-512.
 
         Parameters
         ----------
@@ -288,7 +288,7 @@ class PBS:
     @classmethod
     def k3(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        The K3 queues on LaRC's K cluster including K3-standard-512.
+        Constructor for the K3 queues on LaRC's K cluster including K3-standard-512.
 
         Parameters
         ----------
@@ -304,7 +304,7 @@ class PBS:
     @classmethod
     def k3a(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        The K3a queue on LaRC's K cluster.
+        Constructor for the K3a queue on LaRC's K cluster.
 
         Parameters
         ----------
@@ -321,7 +321,7 @@ class PBS:
     def nas(cls, group_list: str, proc_type: str = 'broadwell', queue_name: str = 'long',
             time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        Queues at NAS.
+        Constructor for the queues at NAS. Must specify the group_list
 
         Parameters
         ----------
@@ -375,10 +375,15 @@ class FakePBS(PBS):
         """
         A fake PBS class for directly running commands while still calling as
         if it were a standard pbs driver.
+        This can be used to seemless switch between modes where PBS jobs are
+        launched for each "job", or using a FakePBS object when you don't want to
+        launch a new pbs job for each "job", e.g., driving a script
+        while already within the PBS job.
         """
         super().__init__()
 
-    def launch(self, job_name: str, job_body: List[str], blocking: bool = True):
+    def launch(self, job_name: str, job_body: List[str],
+               blocking: bool = True, dependency: str = None) -> str:
         """
         Runs the commands in the job_body
 
@@ -389,6 +394,8 @@ class FakePBS(PBS):
         job_body:
             List of commands to run
         blocking:
+            [ignored]
+        dependency:
             [ignored]
 
         Returns
