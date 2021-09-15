@@ -6,7 +6,7 @@ stages:
 
 variables:
   user_name: fun3d
-  build_machine: k4
+  build_machine: k
   build_directory: /hpnobackup1/fun3d/component-ci
   project_repo: git@gitlab.larc.nasa.gov:kejacob1/pbs4py.git
   project_name: pbs4py
