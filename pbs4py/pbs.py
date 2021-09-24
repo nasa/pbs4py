@@ -363,7 +363,7 @@ class PBS:
             model = 'san'
 
         pbs = cls(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
-                  queue_node_limit=1e99, time=time, profile_file=profile_file)
+                  queue_node_limit=int(1e6), time=time, profile_file=profile_file)
 
         pbs.group_list = group_list
         pbs.model = model
