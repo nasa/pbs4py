@@ -60,6 +60,10 @@ class PBS:
         #: The associated PBS header line is ``#PBS -l select=#:mem={mem}``
         self.mem = None
 
+        #: str or None: index range for PBS array of jobs
+        #: The associated PBS header line is ``#PBS -J {array_range}``
+        self.array_range = None
+
         #: str: The hashbang line which sets the shell for the PBS script.
         #: If unset, the default is ``#!/usr/bin/env bash``.
         self.hashbang = '#!/usr/bin/env bash'
@@ -252,6 +256,8 @@ class PBS:
                       '#PBS -j oe',  # join standard and error ouptut
                       '#PBS -r n']
 
+        if self.array_range is not None:
+            pbs_header.append(f'#PBS -J {self.array_range}')
         if self.group_list is not None:
             pbs_header.insert(2, '#PBS -W group_list=%s' % self.group_list)
         if self.mail_options is not None:
