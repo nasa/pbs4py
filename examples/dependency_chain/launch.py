@@ -1,4 +1,4 @@
-from pyrefine import PBS
+from pbs4py import PBS
 
 k3 = PBS.k3(time=1)
 k3.mem = '4gb'

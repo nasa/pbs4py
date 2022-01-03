@@ -1,6 +1,5 @@
 import os
 import pytest
-import filecmp
 from pbs4py import PBS
 
 test_directory = os.path.dirname(os.path.abspath(__file__))
@@ -17,69 +16,6 @@ def test_profile_file_checking():
     nonexistant_file = "i_am_not_a_file.xyz"
     with pytest.raises(FileNotFoundError):
         pbs.profile_filename = nonexistant_file
-
-
-@pytest.fixture
-def pbs_header_test():
-    queue_name = 'queue'
-    ncpus_per_node = 5
-    queue_node_limit = 10
-    time = 24
-    hashbang = '#!/usr/bin/tcsh'
-    pbs_header_test = PBS(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
-                          queue_node_limit=queue_node_limit, time=time)
-    pbs_header_test.hashbang = hashbang
-    pbs_header_test.requested_number_of_nodes = 2
-    return pbs_header_test
-
-
-def test_pbs_header(pbs_header_test):
-    job_name = 'test_job'
-    header = pbs_header_test._create_pbs_header(job_name)
-
-    assert header[0] == "#!/usr/bin/tcsh"
-    assert header[1] == "#PBS -N test_job"
-    assert header[2] == "#PBS -q queue"
-    assert header[3] == "#PBS -l select=2:ncpus=5:mpiprocs=5"
-    assert header[4] == "#PBS -l walltime=24:00:00"
-    assert header[5] == "#PBS -o test_job_pbs.log"
-    assert header[6] == "#PBS -j oe"
-    assert header[7] == "#PBS -r n"
-    assert len(header) == 8
-
-
-def test_pbs_header_email_option(pbs_header_test: PBS):
-    pbs_header_test.mail_options = 'be'
-    pbs_header_test.mail_list = 'kevin@nasa.gov'
-    job_name = 'test_job'
-    header = pbs_header_test._create_pbs_header(job_name)
-
-    assert header[-2] == '#PBS -m be'
-    assert header[-1] == '#PBS -M kevin@nasa.gov'
-
-
-def test_pbs_header_group_list(pbs_header_test: PBS):
-    pbs_header_test.group_list = 'n1337'
-    job_name = 'test_job'
-    header = pbs_header_test._create_pbs_header(job_name)
-
-    assert header[2] == '#PBS -W group_list=n1337'
-
-
-def test_pbs_header_with_model_defined(pbs_header_test):
-    pbs_header_test.model = 'bro'
-    job_name = 'test_job'
-    header = pbs_header_test._create_pbs_header(job_name)
-    for header_line in header:
-        if '-l select' in header_line:
-            assert header_line == "#PBS -l select=2:ncpus=5:mpiprocs=5:model=bro"
-
-
-def test_pbs_header_with_group_name_defined(pbs_header_test):
-    pbs_header_test.group_list = 'n1337'
-    job_name = 'test_job'
-    header = pbs_header_test._create_pbs_header(job_name)
-    assert header[2] == "#PBS -W group_list=n1337"
 
 
 def test_create_mpi_command_openmpi():
@@ -114,20 +50,69 @@ def test_create_mpi_command_mpt():
     assert mpi_command == expected_command
 
 
-def test_write_pbs_file():
-    golden_file = f'{test_directory}/pbs_test_files/golden0.pbs'
-    queue_name = 'queue'
-    ncpus_per_node = 5
-    queue_node_limit = 10
-    time = 24
-    hashbang = '#!/usr/bin/bash'
-    pbs = PBS(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
-              queue_node_limit=queue_node_limit, time=time)
-    pbs.hashbang = hashbang
+def test_k3_class_method():
+    k3 = PBS.k3()
+    assert k3.queue_name == 'K3-route'
+    assert k3.ncpus_per_node == 16
+    assert k3.queue_node_limit == 40
 
-    job_name = 'test_job'
-    job_body = ['command1', 'command2']
-    pbs_file = f'{test_directory}/test_output_files/test.pbs'
-    pbs.write_pbs_file(pbs_file, job_name, job_body)
 
-    assert filecmp.cmp(pbs_file, golden_file)
+def test_k3a_class_method():
+    k3a = PBS.k3a()
+    assert k3a.queue_name == 'K3a-route'
+    assert k3a.ncpus_per_node == 16
+    assert k3a.queue_node_limit == 25
+
+
+def test_k4_class_method():
+    k4 = PBS.k4()
+    assert k4.queue_name == 'K4-route'
+    assert k4.ncpus_per_node == 40
+    assert k4.queue_node_limit == 16
+
+
+def test_nas_cascadelake_class_method():
+    nas = PBS.nas('n1337', 'cas')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 40
+    assert nas.model == 'cas_ait'
+
+
+def test_nas_skylake_class_method():
+    nas = PBS.nas('n1337', 'skylake')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 40
+    assert nas.model == 'sky_ele'
+
+
+def test_nas_broadwell_class_method():
+    nas = PBS.nas('n1337', 'bro')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 28
+    assert nas.model == 'bro'
+
+
+def test_nas_haswell_class_method():
+    nas = PBS.nas('n1337', 'has')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 24
+    assert nas.model == 'has'
+
+
+def test_nas_ivybridge_class_method():
+    nas = PBS.nas('n1337', 'ivy')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 20
+    assert nas.model == 'ivy'
+
+
+def test_nas_sandybridge_class_method():
+    nas = PBS.nas('n1337', 'san')
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 20
+    assert nas.model == 'san'
+
+
+def test_nas_class_method_with_bad_queue_name():
+    with pytest.raises(ValueError):
+        nas = PBS.nas('n1337', 'not_a_queue')
