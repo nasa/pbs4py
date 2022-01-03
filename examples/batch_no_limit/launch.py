@@ -1,6 +1,6 @@
 import os
-from pyrefine.pbs import PBS
-from pyrefine.pbs_batch import Job, PBSBatch
+from pbs4py.pbs import PBS
+from pbs4py.pbs_batch import Job, PBSBatch
 
 
 pbs = PBS.k3()
