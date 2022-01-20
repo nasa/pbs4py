@@ -297,11 +297,14 @@ class PBS:
         else:
             return []
 
-    def _run_pbs_job(self, pbs_file, blocking):
+    def _run_pbs_job(self, pbs_file: str, blocking: bool, print_command_output=True) -> str:
         options = ''
         if blocking:
             options += '-Wblock=true'
-        return os.popen(f'qsub {options} {pbs_file}').read().strip()
+        command_output = os.popen(f'qsub {options} {pbs_file}').read().strip()
+        if print_command_output:
+            print(command_output)
+        return command_output
 
     # Alternate constructors for NASA HPC queues
     @classmethod
