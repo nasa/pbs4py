@@ -1,5 +1,4 @@
 import os
-import pytest
 import filecmp
 from typing import List
 from pbs4py import PBS
