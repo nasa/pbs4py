@@ -1,8 +1,6 @@
-import os
 import pytest
-import filecmp
 from typing import List
-from pbs4py import PBS, pbs
+from pbs4py import PBS
 
 
 def check_list_of_strings(actual: List[str], expected: List[str]):
