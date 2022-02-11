@@ -3,7 +3,7 @@ import numpy as np
 import time
 from datetime import datetime
 from typing import List
-from pbs4py import PBS
+from .pbs import PBS
 from .directory_utils import cd
 
 
