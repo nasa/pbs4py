@@ -3,7 +3,7 @@
 PBS Job Batch Submission
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-The PBSBatch class is a tool launch many jobs simulatenously.
+The PBSBatch class is a tool launch many jobs simultaneously.
 
 The basic steps are:
 
@@ -15,7 +15,7 @@ The basic steps are:
 Setting up the Job Directories
 ==============================
 By default jobs are launched in directories with the same name as the job.
-This prevents concurrent jobs in the batch from overwritting each other's output files.
+This prevents concurrent jobs in the batch from overwriting each other's output files.
 
 To set up a job, these directories can be created and populated with code like this:
 
