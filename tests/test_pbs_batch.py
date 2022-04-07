@@ -2,13 +2,13 @@ import os
 import pytest
 from typing import List
 
-from pbs4py import PBSBatch, Job
+from pbs4py import PBSBatch, BatchJob
 from pbs4py.directory_utils import cd
 
 test_directory = os.path.dirname(os.path.abspath(__file__))
 
 
-class MockJob(Job):
+class MockJob(BatchJob):
     def __init__(self, name: str, body: List[str]):
         super().__init__(name, body)
         self.state_check_count = 0

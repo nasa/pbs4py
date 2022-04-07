@@ -7,7 +7,7 @@ from .pbs import PBS
 from .directory_utils import cd
 
 
-class Job:
+class BatchJob:
     def __init__(self, name: str, body: List[str]):
         """
         Class for individual PBS jobs within a batch of jobs
@@ -46,7 +46,7 @@ class Job:
 
 
 class PBSBatch:
-    def __init__(self, pbs: PBS, jobs: List[Job], use_separate_directories: bool = True):
+    def __init__(self, pbs: PBS, jobs: List[BatchJob], use_separate_directories: bool = True):
         """
         Batch of PBS jobs. Assumes all jobs required the same
         job request size. By default, separate directories with the job's name
@@ -145,7 +145,7 @@ class PBSBatch:
             else:
                 break
 
-    def _launch_jobs_in_a_list(self, jobs: List[Job]):
+    def _launch_jobs_in_a_list(self, jobs: List[BatchJob]):
         for job in jobs:
             dirname = job.name if self.use_separate_directories else '.'
             with cd(dirname):
@@ -154,7 +154,7 @@ class PBSBatch:
     def _all_jobs_submitted(self, next_job_to_submit):
         return next_job_to_submit == len(self.jobs)
 
-    def _get_job_states(self, jobs: List[Job]) -> List[str]:
+    def _get_job_states(self, jobs: List[BatchJob]) -> List[str]:
         states = []
         for job in jobs:
             states.append(job.get_pbs_job_state())

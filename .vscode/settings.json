@@ -7,10 +7,12 @@
     "python.testing.pytestEnabled": true,
     "python.testing.cwd": "${workspaceFolder}",
     "python.formatting.autopep8Args": [
-        "--max-line-length", "100", "--experimental"
+        "--max-line-length",
+        "100",
+        "--experimental"
     ],
     "python.formatting.provider": "autopep8",
-    "editor.formatOnSave": true, 
+    "editor.formatOnSave": true,
     "python.analysis.useImportHeuristic": true,
-    "restructuredtext.confPath": "${workspaceFolder}/docs/source",
+    "esbonio.sphinx.confDir": "${workspaceFolder}/docs/source",
 }
