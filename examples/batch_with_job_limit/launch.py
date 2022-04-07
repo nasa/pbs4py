@@ -1,5 +1,5 @@
 import os
-from pbs4py import PBS, PBSBatch, Job
+from pbs4py import PBS, PBSBatch, BatchJob
 
 
 pbs = PBS.k3a()
@@ -10,7 +10,7 @@ for ijob in range(10):
     name = f'sample{ijob}'
     commands = [f'sleep {ijob*60}',
                 f'cat {name}.txt']
-    jobs.append(Job(name, commands))
+    jobs.append(BatchJob(name, commands))
 
 batch = PBSBatch(pbs, jobs)
 batch.create_directories()
