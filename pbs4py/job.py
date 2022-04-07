@@ -4,16 +4,43 @@ from typing import List
 
 class PBSJob:
     def __init__(self, id: int):
+        """
+        A class for querying information and managing a particular pbs job
+        """
         self.id = id
         self.read_properties_from_qstat()
 
     def read_properties_from_qstat(self):
-        qstat_output = os.popen(f'qstat -xf {self.id}').read().split('\n')
-
+        """
+        Use qstat to get the current attributes of this job
+        """
+        qstat_output = self._run_qstat_to_get_full_job_attributes()
         if self._is_a_known_job(qstat_output):
             self._parse_attributes_from_qstat_output(qstat_output)
         else:
             self._set_empty_attributes()
+
+    def qdel(self, echo_command: bool = True) -> str:
+        """
+        Call qdel to delete this job
+
+        Parameters
+        ----------
+        echo_command:
+            Whether to print the command before running it
+
+        Returns
+        -------
+        command_output:
+            The output of the shell command
+        """
+        command = f'qdel {self.id}'
+        if echo_command:
+            print(command)
+        return os.popen(command).read()
+
+    def _run_qstat_to_get_full_job_attributes(self):
+        return os.popen(f'qstat -xf {self.id}').read().split('\n')
 
     def _is_a_known_job(self, qstat_output):
         return not 'Unknown Job Id' in qstat_output
@@ -21,14 +48,18 @@ class PBSJob:
     def _parse_attributes_from_qstat_output(self, qstat_output: List[str]):
         qstat_dict = self._convert_qstat_output_to_a_dictionary(qstat_output)
 
-        self.name = qstat_dict['Job_Name']
-        self.queue = qstat_dict['queue']
-        self.state = qstat_dict['job_state']
+        self.name: str = qstat_dict['Job_Name']
+        self.queue: str = qstat_dict['queue']
+        self.state: str = qstat_dict['job_state']
+        self.workdir = self._parse_workdir(qstat_dict)
 
         if 'model' in qstat_dict['Resource_List.select']:
             self.model = qstat_dict['Resource_List.select'].split('model=')[-1]
         else:
             self.model = ''
+
+    def _parse_workdir(self, qstat_dict: dict) -> str:
+        return qstat_dict['Variable_List'].split('PBS_O_WORKDIR=')[-1].split(',')[0]
 
     def _convert_qstat_output_to_a_dictionary(self, qstat_output: List[str]) -> dict:
         qstat_dict = {}
@@ -45,3 +76,4 @@ class PBSJob:
         self.model = ''
         self.queue = ''
         self.state = ''
+        self.workdir = '~'

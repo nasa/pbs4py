@@ -39,9 +39,7 @@ def filter_jobs_to_delete_by_name_substring(user_jobs: List[PBSJob], name_substr
 
 def delete_jobs(jobs: List[PBSJob]):
     for job in jobs:
-        command = f'qdel {job.id}'
-        print(command)
-        os.system(command)
+        job.qdel(echo_command=True)
 
 
 def print_jobs_that_will_be_deleted(jobs_to_delete: List[PBSJob]):
