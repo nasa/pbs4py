@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Union
 
 
 class PBSJob:
@@ -39,7 +39,7 @@ class PBSJob:
             print(command)
         return os.popen(command).read()
 
-    def _run_qstat_to_get_full_job_attributes(self):
+    def _run_qstat_to_get_full_job_attributes(self) -> Union[List[str], str]:
         return os.popen(f'qstat -xf {self.id}').read().split('\n')
 
     def _is_a_known_job(self, qstat_output):
@@ -58,6 +58,13 @@ class PBSJob:
         else:
             self.model = ''
 
+    def _set_empty_attributes(self):
+        self.name = ''
+        self.model = ''
+        self.queue = ''
+        self.state = ''
+        self.workdir = ''
+
     def _parse_workdir(self, qstat_dict: dict) -> str:
         return qstat_dict['Variable_List'].split('PBS_O_WORKDIR=')[-1].split(',')[0]
 
@@ -70,10 +77,3 @@ class PBSJob:
                 value = split_line[1].strip()
                 qstat_dict[key] = value
         return qstat_dict
-
-    def _set_empty_attributes(self):
-        self.name = ''
-        self.model = ''
-        self.queue = ''
-        self.state = ''
-        self.workdir = '~'
