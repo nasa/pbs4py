@@ -5,9 +5,34 @@ from typing import List, Union
 class PBSJob:
     def __init__(self, id: int):
         """
-        A class for querying information and managing a particular pbs job
+        A class for querying information and managing a particular submitted
+        pbs job. For the id number in the constructor, the qstat command will
+        be used to populate the attributes of the job.
+
+        Parameters
+        ----------
+        id:
+            The id number of the job
         """
-        self.id = id
+
+        #: The ID number of the job
+        self.id: int = id
+
+        #: The name of the job
+        self.name: str = ''
+
+        #: The model attribute on the select line from the job submission
+        self.model: str = ''
+
+        #: The queue which this job was submitted to
+        self.queue: str = ''
+
+        #: Whether the job is queued, running, or finished
+        self.state: str = ''
+
+        #: The value of $PBS_O_WORKDIR
+        self.workdir: str = ''
+
         self.read_properties_from_qstat()
 
     def read_properties_from_qstat(self):

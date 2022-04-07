@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 """
-A script to delete active PBS jobs of the current user filters by id range, job name substring, and queue.
+A script to delete active PBS jobs of the current user.
+The list of jobs to be deleted can be filtered by id range, job name substring, and queue.
+For safety, the default behavior is to show the user which jobs will be deleted and ask for confirmation
+before any jobs are deleted.
 """
 import os
 import argparse
@@ -8,6 +11,29 @@ import re
 from typing import List
 
 from pbs4py.job import PBSJob
+
+
+def arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument('--id_range',
+                        nargs=2,
+                        default=(-1, -1),
+                        help='Delete jobs in a range of id numbers, [min id, max id]')
+    parser.add_argument('--queue',
+                        default='',
+                        help='Delete jobs in a specific queue')
+    parser.add_argument('--name',
+                        default='',
+                        help='Delete jobs in a specific string in the name')
+    parser.add_argument('--confirm',
+                        action='store_true',
+                        dest='confirm',
+                        help='Whether to prompt the user for confirmation of before deleting')
+    parser.add_argument('--no-confirm', dest='confirm', action='store_false')
+    parser.set_defaults(confirm=True)
+    return parser
 
 
 def get_active_jobs_for_user():
@@ -63,25 +89,7 @@ def user_confirms():
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument('--id_range',
-                        nargs=2,
-                        default=(-1, -1),
-                        help='Delete jobs in a range of id numbers, [min id, max id]')
-    parser.add_argument('--queue',
-                        default='',
-                        help='Delete jobs in a specific queue')
-    parser.add_argument('--name',
-                        default='',
-                        help='Delete jobs in a specific string in the name')
-    parser.add_argument('--confirm',
-                        action='store_true',
-                        dest='confirm',
-                        help='Whether to prompt the user for confirmation of before deleting')
-    parser.add_argument('--no-confirm', dest='confirm', action='store_false')
-    parser.set_defaults(confirm=True)
+    parser = arg_parser()
 
     args = parser.parse_args()
     confirm = args.confirm

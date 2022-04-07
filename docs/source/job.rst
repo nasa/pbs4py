@@ -1,11 +1,7 @@
 .. _pbs_job_section:
 
-PBS Job Manager
-%%%%%%%%%%%%%%%
-
-
-Job Class
-=========
+PBS Job Class
+%%%%%%%%%%%%%
 
 .. automodule:: pbs4py.job
 
