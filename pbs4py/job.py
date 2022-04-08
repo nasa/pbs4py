@@ -56,7 +56,7 @@ class PBSJob:
 
         Returns
         -------
-        command_output:
+        command_output: str
             The output of the shell command
         """
         command = f'qdel {self.id}'
