@@ -1,8 +1,8 @@
-from pbs4py.batch_launcher import BatchLauncher
+from pbs4py.launcher_base import Launcher
 from typing import List
 
 
-class BSUB(BatchLauncher):
+class BSUB(Launcher):
     def __init__(self,
                  time: int = 72,
                  profile_file: str = '~/.bashrc'):

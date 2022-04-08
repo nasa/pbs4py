@@ -1,9 +1,8 @@
-import abc
 import os
 from typing import List
 
 
-class BatchLauncher(metaclass=abc.ABCMeta):
+class Launcher:
     def __init__(self):
         self.workdir_env_variable: str = ''
         self.profile_filename: str = ''
@@ -27,23 +26,10 @@ class BatchLauncher(metaclass=abc.ABCMeta):
         else:
             raise FileNotFoundError('Unable to set profile file.')
 
-    @abc.abstractmethod
     def create_mpi_command(self, command: str,
                            output_root_name: str,
                            openmp_threads: int = None) -> str:
-        return ''
-
-    @abc.abstractmethod
-    def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
-        return
-
-    @abc.abstractmethod
-    def _create_list_of_optional_header_lines(self, dependency: str) -> List[str]:
-        return ['']
-
-    @abc.abstractmethod
-    def _run_job(self, job_filename: str, blocking: bool, print_command_output: bool = True) -> str:
-        return ''
+        raise NotImplementedError('Launcher must implement a create_mpi_command method')
 
     def launch(self, job_name: str, job_body: List[str],
                blocking: bool = True, dependency: str = None) -> str:
@@ -109,3 +95,12 @@ class BatchLauncher(metaclass=abc.ABCMeta):
         header = self._create_list_of_standard_header_options(job_name)
         header.extend(self._create_list_of_optional_header_lines(dependency))
         return header
+
+    def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
+        return ['']
+
+    def _create_list_of_optional_header_lines(self, dependency: str) -> List[str]:
+        return ['']
+
+    def _run_job(self, job_filename: str, blocking: bool, print_command_output: bool = True) -> str:
+        raise NotImplementedError('Launcher must implement a _run_job method')

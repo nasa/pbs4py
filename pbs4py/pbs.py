@@ -3,10 +3,10 @@ import os
 from typing import List, Union
 import numpy as np
 
-from pbs4py.batch_launcher import BatchLauncher
+from pbs4py.launcher_base import Launcher
 
 
-class PBS(BatchLauncher):
+class PBS(Launcher):
     def __init__(self, queue_name: str = 'K4-route',
                  ncpus_per_node: int = 40,
                  queue_node_limit: int = 10,
