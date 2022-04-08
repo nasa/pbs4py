@@ -13,6 +13,17 @@ class BSUB(Launcher):
         """
         A Class for creating and running jobs using the Department of Energy
         batch system.
+
+        Parameters
+        ----------
+        project:
+            The project which to charge for submitted jobs
+        ngpu_per_node:
+            The number of GPUs per compute node
+        time:
+            The requested wall time for the job(s) in hours
+        profile_filename:
+            The file setting the environment to source inside the PBS job
         """
         #: The requested wall time for the job(s) in hours
         self.time: int = time
