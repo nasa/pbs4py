@@ -12,6 +12,7 @@ Launching jobs
 
    pbs.rst
    pbs_batch.rst
+   bsub.rst
 
 
 Managing jobs

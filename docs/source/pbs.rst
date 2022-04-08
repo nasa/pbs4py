@@ -19,6 +19,7 @@ PBS Class
 
 .. autoclass:: PBS
    :members:
+   :inherited-members:
 
 PBS's classmethod constructors
 ------------------------------

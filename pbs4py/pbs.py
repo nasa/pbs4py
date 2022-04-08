@@ -66,10 +66,6 @@ class PBS(Launcher):
         #: The associated PBS header line is ``#PBS -J {array_range}``
         self.array_range: Union[str, None] = None
 
-        #: The hashbang line which sets the shell for the PBS script.
-        #: If unset, the default is ``#!/usr/bin/env bash``.
-        self.hashbang: str = '#!/usr/bin/env bash'
-
         #: The mpi execution command name: mpiexec, mpirun, mpiexec_mpt, etc.
         self.mpiexec: str = 'mpiexec'
 

@@ -4,9 +4,16 @@ from typing import List
 
 class Launcher:
     def __init__(self):
+
+        #: The hashbang line which sets the shell for the PBS script.
+        #: If unset, the default is ``#!/usr/bin/env bash``.
+        self.hashbang: str = '#!/usr/bin/env bash'
+
+        # these are properties that users typically don't need to set, but are
+        # specific to each queueing software
         self.workdir_env_variable: str = ''
         self.profile_filename: str = ''
-        self.batch_file_extension = ''
+        self.batch_file_extension: str = ''
 
     @property
     def profile_filename(self):
