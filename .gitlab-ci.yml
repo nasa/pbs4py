@@ -44,6 +44,19 @@ unit_tests:
     - "ssh -tt -o LogLevel=error  ${user_name}@${build_machine} \"cd ${project_dir}
            && module load Python_3.7.1 && setenv PYTHONPATH `pwd`:$PYTHONPATH && pytest -vs \" "
 
+test_doc_build:
+  stage: docs
+  only:
+    - merge_requests
+  tags:
+    - gitlab_runner
+  script:
+    - "ssh -tt -o LogLevel=error  ${user_name}@${build_machine} \"cd ${project_dir}
+           && module load Python_3.7.1 && setenv PYTHONPATH `pwd`:$PYTHONPATH
+           && setenv PATH /u/fun3d/.local/bin:$PATH && cd docs
+           && make html SPHINXOPTS='-W --keep-going -n'
+           && cd build && tar zcvf pbs4py_html.tgz html \" "
+
 build_docs:
   stage: docs
   only:
