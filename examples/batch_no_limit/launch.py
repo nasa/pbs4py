@@ -1,6 +1,5 @@
 import os
-from pbs4py.pbs import PBS
-from pbs4py.pbs_batch import BatchJob, PBSBatch
+from pbs4py import PBS, BatchJob, PBSBatch
 
 
 pbs = PBS.k3()

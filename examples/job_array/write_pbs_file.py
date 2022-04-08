@@ -8,4 +8,4 @@ k4.array_range = '1-4'
 
 command_list = [f'echo "Array job index = ${{PBS_ARRAY_INDEX}}"']
 
-k4.write_pbs_file('test_array.pbs', 'test_array', command_list)
+k4.write_job_file('test_array.pbs', 'test_array', command_list)
