@@ -9,7 +9,7 @@ class BSUB(Launcher):
                  project: str,
                  ngpu_per_node: int = 6,
                  time: int = 72,
-                 profile_file: str = '~/.bashrc'):
+                 profile_filename: str = '~/.bashrc'):
         """
         A Class for creating and running jobs using the Department of Energy
         batch system.
@@ -29,7 +29,7 @@ class BSUB(Launcher):
         #: Mail a job report when complete
         self.mail_when_complete: bool = True
 
-        self.profile_file = profile_file
+        self.profile_filename = profile_filename
         self.workdir_env_variable = '$LS_SUBCWD'
         self.batch_file_extension = 'lsf'
 
