@@ -1,6 +1,6 @@
 .. _pbs_section:
 
-PBS Job Handling
+PBS Job Launcher
 %%%%%%%%%%%%%%%%
 
 The PBS class is a tool to define properties of the PBS set up you want to use,

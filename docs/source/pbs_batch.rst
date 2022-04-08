@@ -8,9 +8,9 @@ The PBSBatch class is a tool launch many jobs simultaneously.
 The basic steps are:
 
 1. Instantiating a :class:`~pbs4py.pbs.PBS` that will be used to submit the jobs.
-2. Creating a list of :class:`~pbs4py.pbs_batch.Job` objects that hold the name of the job and a list of the commands to run.
+2. Creating a list of :class:`~pbs4py.pbs_batch.BatchJob` objects that hold the name of the job and a list of the commands to run.
 3. Setting up the job directory with the appropriate input files.
-4. Giving the ``PBS`` object and list of ``Jobs`` to the :class:`~pbs4py.pbs_batch.PBSBatch` constructor and then calling one of the launch methods.
+4. Giving the ``PBS`` object and list of ``BatchJob`` to the :class:`~pbs4py.pbs_batch.PBSBatch` constructor and then calling one of the launch methods.
 
 Setting up the Job Directories
 ==============================
@@ -45,11 +45,11 @@ as a courtesy to your fellow HPC users.
 It has an optional argument to wait for the jobs to finish before returning or
 returning immediately after all of the jobs are submitted to the queue.
 
-Job Class
-=========
+Batch Job Class
+===============
 .. automodule:: pbs4py.pbs_batch
 
-.. autoclass:: Job
+.. autoclass:: BatchJob
    :members:
 
 PBSBatch Class

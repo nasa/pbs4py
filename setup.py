@@ -11,5 +11,6 @@ setup(
     author_email="kevin.e.jacobson@nasa.gov",
     zip_safe=False,
     packages=find_packages(),
-    scripts=['pbs4py/qdel_user_jobs.py']
+    scripts=['pbs4py/scripts/qdel_user_jobs.py',
+             'pbs4py/scripts/job_dir.py']
 )

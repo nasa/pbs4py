@@ -1,3 +1,4 @@
 [run]
 source=pbs4py
 omit=pbs4py/directory_utils.py
+     pbs4py/scripts/*.py
