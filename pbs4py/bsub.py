@@ -37,7 +37,7 @@ class BSUB(Launcher):
                            output_root_name: str,
                            openmp_threads: int = 1) -> str:
         num_mpi_procs = self.requested_number_of_nodes * self.ngpu_per_node
-        command = f'jsrun -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} > {output_root_name}.out >2>&1'
+        command = f'jsrun -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} > {output_root_name}.out 2>&1'
         return command
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
@@ -80,7 +80,7 @@ class BSUB(Launcher):
 
     def _run_job(self, job_filename: str, blocking: bool, print_command_output: bool = True) -> str:
         if blocking:
-            raise NotImplementedError('Blocking for bsub not implemented')
+            print('Warning: Blocking for bsub not implemented')
 
         command = f'bsub {job_filename}'
         if print_command_output:
