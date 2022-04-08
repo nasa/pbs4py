@@ -3,8 +3,10 @@ import os
 from typing import List, Union
 import numpy as np
 
+from pbs4py.batch_launcher import BatchLauncher
 
-class PBS:
+
+class PBS(BatchLauncher):
     def __init__(self, queue_name: str = 'K4-route',
                  ncpus_per_node: int = 40,
                  queue_node_limit: int = 10,
@@ -84,23 +86,8 @@ class PBS:
         self.profile_filename: str = profile_file
         self.requested_number_of_nodes: int = 1
 
-    @property
-    def profile_filename(self):
-        """
-        The file to source at the start of the pbs script to set the environment.
-        Typical names include '~/.profile', '~/.bashrc', and '~/.cshrc'.
-        The default profile filename is '~/.bashrc'
-
-        :type: str
-        """
-        return self._profile_filename
-
-    @profile_filename.setter
-    def profile_filename(self, profile_filename):
-        if os.path.exists(os.path.expanduser(profile_filename)):
-            self._profile_filename = profile_filename
-        else:
-            raise FileNotFoundError('Unable to set profile file.')
+        self.workdir_env_variable = '$PBS_O_WORKDIR'
+        self.batch_file_extension = 'pbs'
 
     @property
     def requested_number_of_nodes(self):
@@ -156,71 +143,6 @@ class PBS:
         direct_output = f' > {output_root_name}.out 2>&1'
         full_command = omp_env_variable + self.mpiexec + proc_info + command + direct_output
         return full_command
-
-    def launch(self, job_name: str, job_body: List[str],
-               blocking: bool = True, dependency: str = None) -> str:
-        """
-        Create a pbs script and launch the job
-
-        Parameters
-        ----------
-        job_name:
-            The name of the job.
-        job_body:
-            List of commands to run in the body of the PBS job.
-        blocking:
-            If true, this function will wait for the PBS job to complete before returning.
-            If false, this function will launch the job but not wait for it to finish.
-        dependency:
-            PBS jobs or colon separated jobs in a string that this one depends one.
-
-        Returns
-        -------
-        pbs_command_output: str
-            The stdout of the pbs command. If the pbs job is successfully launch,
-            this will be the pbs job id.
-        """
-        pbs_file = f'{job_name}.pbs'
-        self.write_pbs_file(pbs_file, job_name, job_body, dependency)
-        return self._run_pbs_job(pbs_file, blocking)
-
-    def write_pbs_file(self, pbs_filename: str, job_name: str,
-                       job_body: List[str], dependency: str = None):
-        """
-        Create a pbs script file in the current directory using the pbs properties and commands defined in ``job_body``.
-
-        Parameters
-        ----------
-        pbs_file:
-            name of file to write to
-        job_name:
-            The name of the job.
-        job_body:
-            List of commands to run in the body of the PBS job.
-        dependency:
-            PBS jobs or colon separated jobs that this one depends one.
-        """
-        with open(pbs_filename, mode='w') as fh:
-            pbs_header = self._create_pbs_header(job_name, dependency)
-            for line in pbs_header:
-                fh.write(line + '\n')
-
-            for _ in range(2):
-                fh.write('\n')
-
-            fh.write('cd $PBS_O_WORKDIR\n')
-            fh.write('source %s\n' % self.profile_filename)
-
-            for _ in range(1):
-                fh.write('\n')
-
-            for line in job_body:
-                fh.write(line + '\n')
-
-    def _create_pbs_header(self, job_name: str, dependency: str = None) -> List[str]:
-        pbs_header = self._create_list_of_standard_header_options(job_name)
-        pbs_header.extend(self._create_list_of_optional_header_lines(dependency))
-        return pbs_header
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [self.hashbang,
@@ -297,11 +219,11 @@ class PBS:
         else:
             return []
 
-    def _run_pbs_job(self, pbs_file: str, blocking: bool, print_command_output=True) -> str:
+    def _run_job(self, job_filename: str, blocking: bool, print_command_output=True) -> str:
         options = ''
         if blocking:
             options += '-Wblock=true'
-        command_output = os.popen(f'qsub {options} {pbs_file}').read().strip()
+        command_output = os.popen(f'qsub {options} {job_filename}').read().strip()
         if print_command_output:
             print(command_output)
         return command_output
