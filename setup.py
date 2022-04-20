@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __package_name__ = "pbs4py"
-__package_version__ = "0.0.1"
+__package_version__ = "0.0.2"
 
 setup(
     name=__package_name__,
