@@ -12,5 +12,6 @@ setup(
     zip_safe=False,
     packages=find_packages(),
     scripts=['pbs4py/scripts/qdel_user_jobs.py',
-             'pbs4py/scripts/job_dir.py']
+             'pbs4py/scripts/job_dir.py'],
+    install_requires=['numpy']
 )
