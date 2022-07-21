@@ -6,12 +6,14 @@ test_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_profile_file_checking():
-    actual_file_location = "~"
+    real_file = 'pbs4py_unit_test_dummy.txt'
+    os.system(f'touch {real_file}')
 
     pbs = PBS.k4()
-    pbs.profile_filename = actual_file_location
+    pbs.profile_filename = real_file
 
-    assert pbs.profile_filename == actual_file_location
+    assert pbs.profile_filename == real_file
+    os.system(f'rm {real_file}')
 
     nonexistant_file = "i_am_not_a_file.xyz"
     with pytest.raises(FileNotFoundError):

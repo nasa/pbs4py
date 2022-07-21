@@ -9,6 +9,7 @@ build
 tests/test_output_files
 htmlcov
 .coverage
+.DS_Store
 
 *pbs
 *log

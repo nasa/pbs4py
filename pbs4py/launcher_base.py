@@ -28,7 +28,7 @@ class Launcher:
 
     @profile_filename.setter
     def profile_filename(self, profile_filename):
-        if os.path.exists(os.path.expanduser(profile_filename)):
+        if os.path.isfile(os.path.expanduser(profile_filename)):
             self._profile_filename = profile_filename
         else:
             raise FileNotFoundError('Unable to set profile file.')

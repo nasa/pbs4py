@@ -43,12 +43,6 @@ class PBS(Launcher):
         #: The requested wall time for the pbs job(s) in hours
         self.time: int = time
 
-        #: The number of mpi ranks per node. The default behavior is to set
-        #: ``mpiprocs_per_node = ncpus_per_node`` where ncpus_per_node is
-        #: the value given during instantiation. For standard MPI execution,
-        #: For mpi+openMP, ``mpiprocs_per_node`` may be less than ``ncpus_per_node``.
-        self.mpiprocs_per_node: int = ncpus_per_node
-
         #: The processor model if it needs to be specified.
         #: The associated PBS header line is ``#PBS -l select=#:ncpus=#:mpiprocs=#:model={model}``
         #: If left as `None`, the ``:model={mode}`` will not be added to the header line
@@ -84,6 +78,7 @@ class PBS(Launcher):
 
         self.workdir_env_variable = '$PBS_O_WORKDIR'
         self.batch_file_extension = 'pbs'
+        self.hashbang: str = '#!/usr/bin/env bash'
 
     @property
     def requested_number_of_nodes(self):
@@ -119,26 +114,47 @@ class PBS(Launcher):
         full_command: str
             The full command string.
         """
-        proc_info = ' '
-        omp_env_variable = ''
-        if openmp_threads is not None:
-            omp_env_variable += f'OMP_NUM_THREADS={openmp_threads} '
+        omp_env_vars = self._determine_omp_settings(openmp_threads)
+        proc_info = self._set_proc_and_omplace_info(openmp_threads)
 
-            num_mpi_procs = (self.ncpus_per_node // openmp_threads) * self.requested_number_of_nodes
-            proc_info += f'-np {num_mpi_procs} '
-            self.mpiprocs_per_node = (self.ncpus_per_node // openmp_threads)
+        direct_output = f'> {output_root_name}.out 2>&1'
+        full_command = [omp_env_vars, self.mpiexec, proc_info, command, direct_output]
+        return self._filter_empty_strings_from_list_and_combine(full_command)
 
-            if self.mpiexec == 'mpiexec_mpt':
-                procs = ','.join([str(i) for i in range(self.ncpus_per_node)])
-                proc_info += f'omplace -c "{procs}" -nt {openmp_threads} -vv '
-            else:
-                omp_env_variable += 'OMP_PLACES=cores OMP_PROC_BIND=close '
-        else:
-            self.mpiprocs_per_node = self.ncpus_per_node
+    def _use_omplace_command(self) -> bool:
+        return self.mpiexec == 'mpiexec_mpt'
 
-        direct_output = f' > {output_root_name}.out 2>&1'
-        full_command = omp_env_variable + self.mpiexec + proc_info + command + direct_output
-        return full_command
+    def _use_openmp(self, openmp_threads: int or None):
+        if type(openmp_threads) == int:
+            if openmp_threads > 1:
+                return True
+        return False
+
+    def _determine_omp_settings(self, openmp_threads: int) -> str:
+        if openmp_threads is None:
+            return ''
+
+        omp_env_vars = [f'OMP_NUM_THREADS={openmp_threads}']
+        if not self._use_omplace_command():
+            omp_env_vars.extend(['OMP_PLACES=cores', 'OMP_PROC_BIND=close'])
+        return self._filter_empty_strings_from_list_and_combine(omp_env_vars)
+
+    def _filter_empty_strings_from_list_and_combine(self, lis: List[str]) -> str:
+        filtered_for_empty_strings = filter(None, lis)
+        return ' '.join(filtered_for_empty_strings)
+
+    def _set_proc_and_omplace_info(self, openmp_threads: int) -> str:
+        if not self._use_openmp(openmp_threads):
+            return ''
+
+        total_num_mpi_procs = (self.ncpus_per_node //
+                               openmp_threads) * self.requested_number_of_nodes
+
+        proc_info = f'-np {total_num_mpi_procs}'
+        if self._use_omplace_command():
+            proc_num_list = ','.join([str(i) for i in range(self.ncpus_per_node)])
+            proc_info += f' omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
+        return proc_info
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [self.hashbang,
@@ -160,7 +176,7 @@ class PBS(Launcher):
     def _create_select_line_of_header(self) -> str:
         select = f'select={self.requested_number_of_nodes}'
         ncpus = f'ncpus={self.ncpus_per_node}'
-        mpiprocs = f'mpiprocs={self.mpiprocs_per_node}'
+        mpiprocs = f'mpiprocs={self.ncpus_per_node}'
 
         select_line = f'#PBS -l {select}:{ncpus}:{mpiprocs}'
         if self.mem is not None:
@@ -328,7 +344,7 @@ class FakePBS(PBS):
     def __init__(self):
         """
         A fake PBS class for directly running commands while still calling as
-        if it were a standard pbs driver.
+        if it were a standard PBS driver.
         This can be used to seemless switch between modes where PBS jobs are
         launched for each "job", or using a FakePBS object when you don't want to
         launch a new pbs job for each "job", e.g., driving a script
