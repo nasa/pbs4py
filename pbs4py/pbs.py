@@ -304,7 +304,7 @@ class PBS(Launcher):
             The type of processor to submit to. Can write out or just the first 3 letters:
             'cas', 'sky', 'bro', 'has', 'ivy', 'san'.
         queue_name:
-            Which queue to submit to: devel, debug, normal, long,
+            Which queue to submit to: devel, debug, normal, long, etc.
         time:
             The requested job walltime in hours
         profile_file:
