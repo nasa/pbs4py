@@ -1,6 +1,3 @@
- [![pipeline status](https://gitlab.larc.nasa.gov/kejacob1/pbs4py/badges/main/pipeline.svg)](https://gitlab.larc.nasa.gov/kejacob1/pbs4py/-/commits/main)
-
-
 # Description
 
 pbs4py is a Python module for automating submission of compute jobs on High Performance
@@ -17,8 +14,6 @@ and a script that can delete multiple jobs based on filters.
 
 
 # Documentation
-[LaRC gitlab page](https://kejacob1.gitlab-pages.larc.nasa.gov/pbs4py/)
-
 The pbs4py documentation is generated from the source code with [Sphinx](https://www.sphinx-doc.org/en/master/).
 Once you have installed pbs4py, the documentation is built by running `make html` in the docs directory.
 The generated documentation will be in `docs/build/html`.
