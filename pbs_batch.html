@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>PBS Job Batch Submission &#8212; pbs4py  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="BSUB Job Launcher" href="bsub.html" />
+    <link rel="prev" title="PBS Job Launcher" href="pbs.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bsub.html" title="BSUB Job Launcher"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pbs.html" title="PBS Job Launcher"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PBS Job Batch Submission</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pbs-job-batch-submission">
+<span id="pbs-batch-section"></span><h1>PBS Job Batch Submission<a class="headerlink" href="#pbs-job-batch-submission" title="Permalink to this heading">¶</a></h1>
+<p>The PBSBatch class is a tool launch many jobs simultaneously.</p>
+<p>The basic steps are:</p>
+<ol class="arabic simple">
+<li><p>Instantiating a <a class="reference internal" href="pbs.html#pbs4py.pbs.PBS" title="pbs4py.pbs.PBS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBS</span></code></a> that will be used to submit the jobs.</p></li>
+<li><p>Creating a list of <a class="reference internal" href="#pbs4py.pbs_batch.BatchJob" title="pbs4py.pbs_batch.BatchJob"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchJob</span></code></a> objects that hold the name of the job and a list of the commands to run.</p></li>
+<li><p>Setting up the job directory with the appropriate input files.</p></li>
+<li><p>Giving the <code class="docutils literal notranslate"><span class="pre">PBS</span></code> object and list of <code class="docutils literal notranslate"><span class="pre">BatchJob</span></code> to the <a class="reference internal" href="#pbs4py.pbs_batch.PBSBatch" title="pbs4py.pbs_batch.PBSBatch"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBSBatch</span></code></a> constructor and then calling one of the launch methods.</p></li>
+</ol>
+<section id="setting-up-the-job-directories">
+<h2>Setting up the Job Directories<a class="headerlink" href="#setting-up-the-job-directories" title="Permalink to this heading">¶</a></h2>
+<p>By default jobs are launched in directories with the same name as the job.
+This prevents concurrent jobs in the batch from overwriting each other’s output files.</p>
+<p>To set up a job, these directories can be created and populated with code like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">batch</span> <span class="o">=</span> <span class="n">PBSBatch</span><span class="p">(</span><span class="n">pbs</span><span class="p">,</span><span class="n">jobs</span><span class="p">)</span>
+
+<span class="n">batch</span><span class="o">.</span><span class="n">create_directories</span><span class="p">()</span>
+<span class="n">common_inputs_to_copy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fun3d.nml&#39;</span><span class="p">,</span><span class="s1">&#39;*.cfg&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">common_inputs_to_copy</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cp </span><span class="si">{</span><span class="nb">input</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="launch-methods">
+<h2>Launch Methods<a class="headerlink" href="#launch-methods" title="Permalink to this heading">¶</a></h2>
+<p>The batch jobs can be submitted with two different methods of the <a class="reference internal" href="#pbs4py.pbs_batch.PBSBatch" title="pbs4py.pbs_batch.PBSBatch"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBSBatch</span></code></a> class.</p>
+<p><a class="reference internal" href="#pbs4py.pbs_batch.PBSBatch.launch_jobs_with_limit" title="pbs4py.pbs_batch.PBSBatch.launch_jobs_with_limit"><code class="xref py py-func docutils literal notranslate"><span class="pre">launch_jobs_with_limit()</span></code></a> will launch every job in the list,
+but it will only allow a certain number of jobs to be active in the queue system
+(queued, running, held) at a time. This would be the preferred launch method if
+you have many jobs and don’t want to submit 100s of jobs into the queue at a time
+as a courtesy to your fellow HPC users.</p>
+<p><a class="reference internal" href="#pbs4py.pbs_batch.PBSBatch.launch_all_jobs" title="pbs4py.pbs_batch.PBSBatch.launch_all_jobs"><code class="xref py py-func docutils literal notranslate"><span class="pre">launch_all_jobs()</span></code></a> will launch every job in the list.
+It has an optional argument to wait for the jobs to finish before returning or
+returning immediately after all of the jobs are submitted to the queue.</p>
+</section>
+<section id="module-pbs4py.pbs_batch">
+<span id="batch-job-class"></span><h2>Batch Job Class<a class="headerlink" href="#module-pbs4py.pbs_batch" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.BatchJob">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.pbs_batch.</span></span><span class="sig-name descname"><span class="pre">BatchJob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for individual PBS jobs within a batch of jobs</p>
+<p>Can be used as a context manager to enter/exit a directory
+with the job’s name</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.BatchJob.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.BatchJob.body">
+<span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of commands to run in PBS job</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.BatchJob.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>pbs job identifier returned by qsub</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.BatchJob.get_pbs_job_state">
+<span class="sig-name descname"><span class="pre">get_pbs_job_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.get_pbs_job_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the job’s status after it has been submitted.
+Returns the entry of job_state in the qstat information, e.g.,
+‘Q’, ‘R’, ‘F’, ‘H’, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="pbsbatch-class">
+<h2>PBSBatch Class<a class="headerlink" href="#pbsbatch-class" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.PBSBatch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.pbs_batch.</span></span><span class="sig-name descname"><span class="pre">PBSBatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pbs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_separate_directories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.PBSBatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Batch of PBS jobs. Assumes all jobs required the same
+job request size. By default, separate directories with the job’s name
+will be used to separate output files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pbs</strong> (<a class="reference internal" href="pbs.html#pbs4py.pbs.PBS" title="pbs4py.pbs.PBS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBS</span></code></a>) – PBS handler that will be used to submit the jobs</p></li>
+<li><p><strong>jobs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#pbs4py.pbs_batch.BatchJob" title="pbs4py.pbs_batch.BatchJob"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchJob</span></code></a>]) – List of Job objects that will be run</p></li>
+<li><p><strong>use_separate_directories</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – whether to run each job in a separate directory with the job’s name</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.PBSBatch.create_directories">
+<span class="sig-name descname"><span class="pre">create_directories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.PBSBatch.create_directories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the set of directories with the jobs’ names</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.PBSBatch.launch_all_jobs">
+<span class="sig-name descname"><span class="pre">launch_all_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_for_jobs_to_finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_frequency_in_secs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.PBSBatch.launch_all_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch of the all of the jobs in the list. Stores the pbs
+job id in the job objects</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wait_for_jobs_to_finish</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the jobs will be submitted, and this function will not return
+until all of the jobs are finished.</p></li>
+<li><p><strong>check_frequency_in_secs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Time interval to wait before checking if all jobs are done. Only relevant
+if <code class="docutils literal notranslate"><span class="pre">wait_for_jobs_to_finish</span></code> is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.PBSBatch.launch_jobs_with_limit">
+<span class="sig-name descname"><span class="pre">launch_jobs_with_limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_jobs_at_a_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_frequency_in_secs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.PBSBatch.launch_jobs_with_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The “courteous” version of launch_all_jobs(wait_for_jobs_to_finish=True) and where a limit
+is set for the maximum number of jobs running or in the queue at a time since some people
+may not like if you submit 1000 jobs at once.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_jobs_at_a_time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Limit for number of jobs to have queued, running, or held at a time</p></li>
+<li><p><strong>check_frequency_in_secs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Time interval to wait before checking if jobs’ statuses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs_batch.PBSBatch.wait_for_all_jobs_to_finish">
+<span class="sig-name descname"><span class="pre">wait_for_all_jobs_to_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_frequency_in_secs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs_batch.PBSBatch.wait_for_all_jobs_to_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>A blocking check for all the jobs in the batch to finish. Can be paired with
+<code class="docutils literal notranslate"><span class="pre">launch_all_jobs</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>check_frequency_in_secs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – How often to check and print the jobs’ states</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">PBS Job Batch Submission</a><ul>
+<li><a class="reference internal" href="#setting-up-the-job-directories">Setting up the Job Directories</a></li>
+<li><a class="reference internal" href="#launch-methods">Launch Methods</a></li>
+<li><a class="reference internal" href="#module-pbs4py.pbs_batch">Batch Job Class</a></li>
+<li><a class="reference internal" href="#pbsbatch-class">PBSBatch Class</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pbs.html"
+                          title="previous chapter">PBS Job Launcher</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="bsub.html"
+                          title="next chapter">BSUB Job Launcher</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pbs_batch.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bsub.html" title="BSUB Job Launcher"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pbs.html" title="PBS Job Launcher"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PBS Job Batch Submission</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, NASA.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

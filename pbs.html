@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>PBS Job Launcher &#8212; pbs4py  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PBS Job Batch Submission" href="pbs_batch.html" />
+    <link rel="prev" title="pbs4py" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pbs_batch.html" title="PBS Job Batch Submission"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pbs4py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PBS Job Launcher</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pbs-job-launcher">
+<span id="pbs-section"></span><h1>PBS Job Launcher<a class="headerlink" href="#pbs-job-launcher" title="Permalink to this heading">¶</a></h1>
+<p>The PBS class is a tool to define properties of the PBS set up you want to use,
+write pbs scripts, and launch jobs.
+The <code class="docutils literal notranslate"><span class="pre">PBS</span></code> class has several classmethods that serve as alternate constructors which fill in properties of some NASA HPC systems and queue.
+Examples of instantiating with this methods is shown below.
+For systems or queues not covered by these classmethods, the basic queue attributes are
+set in the standard constructor, and less common ones can be adjusted by
+changing the attributes of the object.</p>
+<section id="module-pbs4py.pbs">
+<span id="pbs-class"></span><h2>PBS Class<a class="headerlink" href="#module-pbs4py.pbs" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.pbs.</span></span><span class="sig-name descname"><span class="pre">PBS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queue_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'K4-route'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncpus_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue_node_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">A class for creating and running pbs jobs. Default queue properties are for K4.</div>
+<div class="line">Defaults not set during instantiation can be adjusted by directly modifying attributes.</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Queue name which goes on the “#PBS -N {name}” line of the pbs header</p></li>
+<li><p><strong>ncpus_per_node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Number of CPU cores per node</p></li>
+<li><p><strong>queue_node_limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of nodes allowed in this queue</p></li>
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested job walltime in hours</p></li>
+<li><p><strong>profile_file</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.queue_name">
+<span class="sig-name descname"><span class="pre">queue_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.queue_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the queue which goes on the <code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-N</span> <span class="pre">{queue_name}</span></code>
+line of the pbs header</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.ncpus_per_node">
+<span class="sig-name descname"><span class="pre">ncpus_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.ncpus_per_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of CPU cores per node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.queue_node_limit">
+<span class="sig-name descname"><span class="pre">queue_node_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.queue_node_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number nodes allowed by the queue</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The requested wall time for the pbs job(s) in hours</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pbs4py.pbs.PBS.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The processor model if it needs to be specified.
+The associated PBS header line is <code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-l</span> <span class="pre">select=#:ncpus=#:mpiprocs=#:model={model}</span></code>
+If left as <cite>None</cite>, the <code class="docutils literal notranslate"><span class="pre">:model={mode}</span></code> will not be added to the header line</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.group_list">
+<span class="sig-name descname"><span class="pre">group_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pbs4py.pbs.PBS.group_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>The group for the group_list entry of the pbs header if necessary.
+The associated PBS header line is <code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-W</span> <span class="pre">group_list={group_list}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.mem">
+<span class="sig-name descname"><span class="pre">mem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pbs4py.pbs.PBS.mem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Requested memory size on the select line. Need to include units in the str.
+The associated PBS header line is <code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-l</span> <span class="pre">select=#:mem={mem}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.array_range">
+<span class="sig-name descname"><span class="pre">array_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pbs4py.pbs.PBS.array_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index range for PBS array of jobs
+The associated PBS header line is <code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-J</span> <span class="pre">{array_range}</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.mpiexec">
+<span class="sig-name descname"><span class="pre">mpiexec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.mpiexec" title="Permalink to this definition">¶</a></dt>
+<dd><p>mpiexec, mpirun, mpiexec_mpt, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The mpi execution command name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.mail_options">
+<span class="sig-name descname"><span class="pre">mail_options</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.mail_options" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">pbs</span> <span class="pre">-m</span></code> mail options. ‘e’ at exit, ‘b’ at beginning, ‘a’ at abort</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.mail_list">
+<span class="sig-name descname"><span class="pre">mail_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pbs4py.pbs.PBS.mail_list" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">pbs</span> <span class="pre">-M</span></code> mail list. Who to email when mail_options are triggered</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.dependency_type">
+<span class="sig-name descname"><span class="pre">dependency_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.dependency_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of dependency if dependency active.
+Default is ‘afterok’ which only launches the new job if the previous one was successful.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.profile_filename">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profile_filename</span></span><a class="headerlink" href="#pbs4py.pbs.PBS.profile_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file to source at the start of the pbs script to set the environment.
+Typical names include ‘~/.profile’, ‘~/.bashrc’, and ‘~/.cshrc’.
+The default profile filename is ‘~/.bashrc’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.hashbang">
+<span class="sig-name descname"><span class="pre">hashbang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.pbs.PBS.hashbang" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hashbang line which sets the shell for the PBS script.
+If unset, the default is <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">bash</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.requested_number_of_nodes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><a class="headerlink" href="#pbs4py.pbs.PBS.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of nodes to request. That is, the ‘select’ number in the
+<code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-l</span> <span class="pre">select={requested_number_of_nodes}:ncpus=40:mpiprocs=40</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.create_mpi_command">
+<span class="sig-name descname"><span class="pre">create_mpi_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openmp_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.create_mpi_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a command with mpiexec and route its standard and error output to a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The command thats needs to run in parallel</p></li>
+<li><p><strong>output_root_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The root name of the output file, {output_root_name}.out.</p></li>
+<li><p><strong>openmp_threads</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – The number of openmp threads per mpi process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>full_command</strong> – The full command string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.k4">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">k4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.k4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for the K4 queues on LaRC’s K cluster including K4-standard-512.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested job walltime in hours</p></li>
+<li><p><strong>profile_file</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.k3">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">k3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.k3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for the K3 queues on LaRC’s K cluster including K3-standard-512.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested job walltime in hours</p></li>
+<li><p><strong>profile_file</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.k3a">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">k3a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.k3a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for the K3a queue on LaRC’s K cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested job walltime in hours</p></li>
+<li><p><strong>profile_file</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.nas">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proc_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'broadwell'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'long'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.nas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for the queues at NAS. Must specify the group_list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group_list</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The charge number or group for the group_list entry of the pbs header.
+The associated PBS header line is “#PBS -W group_list={group_list}”.</p></li>
+<li><p><strong>proc_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The type of processor to submit to. Can write out or just the first 3 letters:
+‘cas’, ‘sky’, ‘bro’, ‘has’, ‘ivy’, ‘san’.</p></li>
+<li><p><strong>queue_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Which queue to submit to: devel, debug, normal, long, etc.</p></li>
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested job walltime in hours</p></li>
+<li><p><strong>profile_file</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.launch">
+<span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.launch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a job script and launch the job</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
+<li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
+<li><p><strong>blocking</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true, this function will wait for the job to complete before returning.
+If false, this function will launch the job but not wait for it to finish.</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>command_output</strong> – The stdout of the launch command. If the job is successfully launch,
+this will be the job id.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.PBS.write_job_file">
+<span class="sig-name descname"><span class="pre">write_job_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.PBS.write_job_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a launch script file in the current directory for the commands defined in <code class="docutils literal notranslate"><span class="pre">job_body</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of file to write to</p></li>
+<li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
+<li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="pbs-s-classmethod-constructors">
+<h3>PBS’s classmethod constructors<a class="headerlink" href="#pbs-s-classmethod-constructors" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pbs4py</span> <span class="kn">import</span> <span class="n">PBS</span>
+
+<span class="n">k4</span> <span class="o">=</span> <span class="n">PBS</span><span class="o">.</span><span class="n">k4</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">48</span><span class="p">)</span>
+<span class="n">k3</span> <span class="o">=</span> <span class="n">PBS</span><span class="o">.</span><span class="n">k3</span><span class="p">()</span>
+<span class="n">k3a</span> <span class="o">=</span> <span class="n">PBS</span><span class="o">.</span><span class="n">k3a</span><span class="p">()</span>
+<span class="n">nas</span> <span class="o">=</span> <span class="n">PBS</span><span class="o">.</span><span class="n">nas</span><span class="p">(</span><span class="n">group_list</span><span class="o">=</span><span class="s1">&#39;n1337&#39;</span><span class="p">,</span> <span class="n">proc_type</span><span class="o">=</span><span class="s1">&#39;skylake&#39;</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">72</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fakepbs-class">
+<h2>FakePBS Class<a class="headerlink" href="#fakepbs-class" title="Permalink to this heading">¶</a></h2>
+<p>Some scripts may be set up with the PBS job handler originally, but you may want to run
+the script within an existing PBS job without launching new PBS jobs.
+The FakePBS object appears to driving scripts as a standard PBS object,
+but directly runs the commands instead of putting them into a PBS job and launching the job.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pbs4py.pbs.FakePBS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.pbs.</span></span><span class="sig-name descname"><span class="pre">FakePBS</span></span><a class="headerlink" href="#pbs4py.pbs.FakePBS" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fake PBS class for directly running commands while still calling as
+if it were a standard PBS driver.
+This can be used to seemless switch between modes where PBS jobs are
+launched for each “job”, or using a FakePBS object when you don’t want to
+launch a new pbs job for each “job”, e.g., driving a script
+while already within the PBS job.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.pbs.FakePBS.launch">
+<span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.pbs.FakePBS.launch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the commands in the job_body</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – [ignored]</p></li>
+<li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run</p></li>
+<li><p><strong>blocking</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – [ignored]</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – [ignored]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pbs_command_output</strong> – Empty string but returning something to match true PBS launch output</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">PBS Job Launcher</a><ul>
+<li><a class="reference internal" href="#module-pbs4py.pbs">PBS Class</a><ul>
+<li><a class="reference internal" href="#pbs-s-classmethod-constructors">PBS’s classmethod constructors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fakepbs-class">FakePBS Class</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">pbs4py</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pbs_batch.html"
+                          title="next chapter">PBS Job Batch Submission</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pbs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pbs_batch.html" title="PBS Job Batch Submission"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pbs4py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PBS Job Launcher</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, NASA.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

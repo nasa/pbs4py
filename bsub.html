@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>BSUB Job Launcher &#8212; pbs4py  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PBS Job Class" href="job.html" />
+    <link rel="prev" title="PBS Job Batch Submission" href="pbs_batch.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="job.html" title="PBS Job Class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pbs_batch.html" title="PBS Job Batch Submission"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BSUB Job Launcher</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bsub-job-launcher">
+<span id="bsub-section"></span><h1>BSUB Job Launcher<a class="headerlink" href="#bsub-job-launcher" title="Permalink to this heading">¶</a></h1>
+<p>The BSUB class is a tool to write and launch job scripts on DOE HPC systems.</p>
+<section id="module-pbs4py.bsub">
+<span id="bsub-class"></span><h2>BSUB Class<a class="headerlink" href="#module-pbs4py.bsub" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.bsub.</span></span><span class="sig-name descname"><span class="pre">BSUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngpu_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Class for creating and running jobs using the Department of Energy
+batch system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The project which to charge for submitted jobs</p></li>
+<li><p><strong>ngpu_per_node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of GPUs per compute node</p></li>
+<li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested wall time for the job(s) in hours</p></li>
+<li><p><strong>profile_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The requested wall time for the job(s) in hours</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.requested_number_of_nodes">
+<span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of compute nodes requested</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ngpu_per_node">
+<span class="sig-name descname"><span class="pre">ngpu_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ngpu_per_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of GPUs per compute node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.project">
+<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>The project which to charge for submitted jobs</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.mail_when_complete">
+<span class="sig-name descname"><span class="pre">mail_when_complete</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.mail_when_complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mail a job report when complete</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.profile_filename">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profile_filename</span></span><a class="headerlink" href="#pbs4py.bsub.BSUB.profile_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file to source at the start of the pbs script to set the environment.
+Typical names include ‘~/.profile’, ‘~/.bashrc’, and ‘~/.cshrc’.
+The default profile filename is ‘~/.bashrc’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.launch">
+<span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.launch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a job script and launch the job</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
+<li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
+<li><p><strong>blocking</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true, this function will wait for the job to complete before returning.
+If false, this function will launch the job but not wait for it to finish.</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>command_output</strong> – The stdout of the launch command. If the job is successfully launch,
+this will be the job id.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.write_job_file">
+<span class="sig-name descname"><span class="pre">write_job_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.write_job_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a launch script file in the current directory for the commands defined in <code class="docutils literal notranslate"><span class="pre">job_body</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of file to write to</p></li>
+<li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
+<li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.hashbang">
+<span class="sig-name descname"><span class="pre">hashbang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.hashbang" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hashbang line which sets the shell for the PBS script.
+If unset, the default is <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">bash</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">BSUB Job Launcher</a><ul>
+<li><a class="reference internal" href="#module-pbs4py.bsub">BSUB Class</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pbs_batch.html"
+                          title="previous chapter">PBS Job Batch Submission</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="job.html"
+                          title="next chapter">PBS Job Class</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/bsub.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="job.html" title="PBS Job Class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pbs_batch.html" title="PBS Job Batch Submission"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pbs4py  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BSUB Job Launcher</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, NASA.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>
