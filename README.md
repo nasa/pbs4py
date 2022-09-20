@@ -20,6 +20,12 @@ The pbs4py documentation is generated from the source code with [Sphinx](https:/
 Once you have installed pbs4py, the documentation is built by running `make html` in the docs directory.
 The generated documentation will be in `docs/build/html`.
 
+# Installation
+pbs4py can be installed with
+
+```
+pip install pbs4py
+```
 
 # Quick Start
 
