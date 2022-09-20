@@ -14,10 +14,18 @@ and a script that can delete multiple jobs based on filters.
 
 
 # Documentation
+[Documentation is hosted using Github Pages](https://nasa.github.io/pbs4py/)
+
 The pbs4py documentation is generated from the source code with [Sphinx](https://www.sphinx-doc.org/en/master/).
 Once you have installed pbs4py, the documentation is built by running `make html` in the docs directory.
 The generated documentation will be in `docs/build/html`.
 
+# Installation
+pbs4py can be installed with
+
+```
+pip install pbs4py
+```
 
 # Quick Start
 
