@@ -126,7 +126,7 @@ class Launcher:
         raise NotImplementedError('Launcher must implement a _run_job method')
 
     def _redirect_shell_output(self, output_filename):
-        if self.shell == 'tsch':
+        if self.shell == 'tcsh':
             return f'>& {output_filename}'
         else:
             return f'&> {output_filename}'

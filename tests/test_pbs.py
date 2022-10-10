@@ -19,6 +19,15 @@ def test_profile_file_checking():
         pbs.profile_filename = nonexistant_file
 
 
+def test_output_redirection():
+    pbs = PBS(profile_file=test_profile)
+    pbs.shell = 'bash'
+    assert pbs._redirect_shell_output('dog.out') == '&> dog.out'
+
+    pbs.shell = 'tcsh'
+    assert pbs._redirect_shell_output('dog.out') == '>& dog.out'
+
+
 def test_create_mpi_command_openmpi():
     pbs = PBS(profile_file=test_profile)
     pbs.ncpus_per_node = 30
