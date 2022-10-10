@@ -42,7 +42,7 @@ from setuptools import setup, find_packages
 
 
 __package_name__ = "pbs4py"
-__package_version__ = "1.0.0"
+__package_version__ = "1.0.1"
 
 root = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(root, 'README.md'), encoding='utf-8') as f:
