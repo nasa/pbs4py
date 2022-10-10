@@ -9,7 +9,7 @@
 
 
 cd $PBS_O_WORKDIR
-source ~/.bashrc
+source_line
 
 command1
 command2

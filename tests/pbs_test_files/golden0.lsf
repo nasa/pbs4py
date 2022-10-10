@@ -1,4 +1,4 @@
-#!/usr/bin/tcsh
+#!/usr/bin/env tcsh
 #BSUB -P ard149
 #BSUB -J test_job
 #BSUB -nnodes 2
@@ -7,7 +7,7 @@
 
 
 cd $LS_SUBCWD
-source ~/.bashrc
+source_line
 
 command1
 command2
