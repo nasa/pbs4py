@@ -29,6 +29,10 @@ class PBS(Launcher):
         profile_file:
             The file setting the environment to source inside the PBS job
         """
+        #: The maximum number nodes allowed by the queue
+        self.queue_node_limit: int = queue_node_limit
+
+        super().__init__()
 
         #: The name of the queue which goes on the ``#PBS -N {queue_name}``
         #: line of the pbs header
@@ -36,9 +40,6 @@ class PBS(Launcher):
 
         #: The number of CPU cores per node.
         self.ncpus_per_node: int = ncpus_per_node
-
-        #: The maximum number nodes allowed by the queue
-        self.queue_node_limit: int = queue_node_limit
 
         #: The requested wall time for the pbs job(s) in hours
         self.time: int = time
@@ -73,12 +74,9 @@ class PBS(Launcher):
         #: Default is 'afterok' which only launches the new job if the previous one was successful.
         self.dependency_type: str = 'afterok'
 
-        self.profile_filename: str = profile_file
-        self.requested_number_of_nodes: int = 1
-
+        self.profile_filename = profile_file
         self.workdir_env_variable = '$PBS_O_WORKDIR'
         self.batch_file_extension = 'pbs'
-        self.hashbang: str = '#!/usr/bin/env bash'
 
     @property
     def requested_number_of_nodes(self):
@@ -117,8 +115,8 @@ class PBS(Launcher):
         omp_env_vars = self._determine_omp_settings(openmp_threads)
         proc_info = self._set_proc_and_omplace_info(openmp_threads)
 
-        direct_output = f'> {output_root_name}.out 2>&1'
-        full_command = [omp_env_vars, self.mpiexec, proc_info, command, direct_output]
+        redirect_output = self._redirect_shell_output(f'{output_root_name}.out')
+        full_command = [omp_env_vars, self.mpiexec, proc_info, command, redirect_output]
         return self._filter_empty_strings_from_list_and_combine(full_command)
 
     def _use_omplace_command(self) -> bool:
@@ -157,7 +155,7 @@ class PBS(Launcher):
         return proc_info
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
-        header_lines = [self.hashbang,
+        header_lines = [self._create_hashbang(),
                         self._create_job_line_of_header(job_name),
                         self._create_queue_line_of_header(),
                         self._create_select_line_of_header(),
@@ -341,7 +339,7 @@ class PBS(Launcher):
 
 
 class FakePBS(PBS):
-    def __init__(self):
+    def __init__(self, profile_file='~/.bashrc'):
         """
         A fake PBS class for directly running commands while still calling as
         if it were a standard PBS driver.
@@ -350,7 +348,7 @@ class FakePBS(PBS):
         launch a new pbs job for each "job", e.g., driving a script
         while already within the PBS job.
         """
-        super().__init__()
+        super().__init__(profile_file=profile_file)
 
     def launch(self, job_name: str, job_body: List[str],
                blocking: bool = True, dependency: str = None) -> str:

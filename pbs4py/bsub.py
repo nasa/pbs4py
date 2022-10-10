@@ -25,11 +25,10 @@ class BSUB(Launcher):
         profile_filename:
             The file setting the environment to source inside the PBS job
         """
+        super().__init__()
+
         #: The requested wall time for the job(s) in hours
         self.time: int = time
-
-        #: The number of compute nodes requested
-        self.requested_number_of_nodes: int = 1
 
         #: The number of GPUs per compute node.
         self.ngpu_per_node: int = ngpu_per_node
@@ -48,11 +47,12 @@ class BSUB(Launcher):
                            output_root_name: str,
                            openmp_threads: int = 1) -> str:
         num_mpi_procs = self.requested_number_of_nodes * self.ngpu_per_node
-        command = f'jsrun -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} > {output_root_name}.out 2>&1'
+        redirect_output = self._redirect_shell_output(f'{output_root_name}.out')
+        command = f'jsrun -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} {redirect_output}'
         return command
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
-        header_lines = [self.hashbang,
+        header_lines = [self._create_hashbang(),
                         self._create_project_line_of_header(),
                         self._create_job_name_line_of_header(job_name),
                         self._create_number_of_nodes_line_of_header(),

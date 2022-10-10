@@ -1,6 +1,10 @@
+import os
 import pytest
 from typing import List
 from pbs4py import PBS
+
+test_directory = os.path.dirname(os.path.abspath(__file__))
+test_profile = f'{test_directory}/testing_bashrc'
 
 
 def check_list_of_strings(actual: List[str], expected: List[str]):
@@ -17,7 +21,8 @@ def pbs_header_test():
     time = 24
     hashbang = '#!/usr/bin/tcsh'
     pbs_header_test = PBS(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
-                          queue_node_limit=queue_node_limit, time=time)
+                          queue_node_limit=queue_node_limit, time=time,
+                          profile_file=test_profile)
     pbs_header_test.hashbang = hashbang
     pbs_header_test.requested_number_of_nodes = 2
     return pbs_header_test
