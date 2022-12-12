@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="PBS Job Class" href="job.html" /> 
@@ -49,8 +50,8 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">job_dir</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">job_id</span>
 </pre></div>
 </div>
-<section id="Positional Arguments">
-<h3>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this heading">¶</a></h3>
+<section id="positional-arguments">
+<h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this heading">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>job_id</kbd></dt>
 <dd><p>The ID number of the job</p>
@@ -78,8 +79,8 @@ before any jobs are deleted.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">job_dir</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">id_range</span> <span class="n">ID_RANGE</span> <span class="n">ID_RANGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">queue</span> <span class="n">QUEUE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">confirm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">confirm</span><span class="p">]</span>
 </pre></div>
 </div>
-<section id="options">
-<h3>options<a class="headerlink" href="#options" title="Permalink to this heading">¶</a></h3>
+<section id="named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this heading">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>--id_range</kbd></dt>
 <dd><p>Delete jobs in a range of id numbers, [min id, max id]</p>
@@ -126,12 +127,12 @@ printed to the screen asking the user for confirmation. Add <code class="docutil
     <ul>
 <li><a class="reference internal" href="#">Scripts</a><ul>
 <li><a class="reference internal" href="#job-directory-script">Job Directory Script</a><ul>
-<li><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li><a class="reference internal" href="#positional-arguments">Positional Arguments</a></li>
 <li><a class="reference internal" href="#qdir-alias-to-cd-to-job-s-directory">qdir alias to cd to job’s directory</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#qdel-for-user-jobs-script">Qdel for User Jobs Script</a><ul>
-<li><a class="reference internal" href="#options">options</a></li>
+<li><a class="reference internal" href="#named-arguments">Named Arguments</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
@@ -184,7 +185,7 @@ printed to the screen asking the user for confirmation. Add <code class="docutil
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, NASA.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

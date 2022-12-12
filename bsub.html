@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="PBS Job Class" href="job.html" />
@@ -71,12 +72,6 @@ batch system.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.requested_number_of_nodes">
-<span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of compute nodes requested</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ngpu_per_node">
 <span class="sig-name descname"><span class="pre">ngpu_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ngpu_per_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of GPUs per compute node.</p>
@@ -99,7 +94,7 @@ batch system.</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">profile_filename</span></span><a class="headerlink" href="#pbs4py.bsub.BSUB.profile_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>The file to source at the start of the pbs script to set the environment.
 Typical names include ‘~/.profile’, ‘~/.bashrc’, and ‘~/.cshrc’.
-The default profile filename is ‘~/.bashrc’</p>
+If you do not wish to source a file, set to ‘’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -118,7 +113,7 @@ The default profile filename is ‘~/.bashrc’</p>
 <li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
 <li><p><strong>blocking</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true, this function will wait for the job to complete before returning.
 If false, this function will launch the job but not wait for it to finish.</p></li>
-<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -141,7 +136,7 @@ this will be the job id.</p>
 <li><p><strong>job_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of file to write to</p></li>
 <li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
 <li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
-<li><p><strong>dependency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
+<li><p><strong>dependency</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
 </ul>
 </dd>
 </dl>
@@ -151,7 +146,19 @@ this will be the job id.</p>
 <dt class="sig sig-object py" id="pbs4py.bsub.BSUB.hashbang">
 <span class="sig-name descname"><span class="pre">hashbang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.hashbang" title="Permalink to this definition">¶</a></dt>
 <dd><p>The hashbang line which sets the shell for the PBS script.
-If unset, the default is <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">bash</span></code>.</p>
+If unset, the default is <code class="docutils literal notranslate"><span class="pre">#!/usr/bin/env</span> <span class="pre">{self.shell}</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.shell">
+<span class="sig-name descname"><span class="pre">shell</span></span><a class="headerlink" href="#pbs4py.bsub.BSUB.shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>The shell flavor to use in the PBS job</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.requested_number_of_nodes">
+<span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of compute nodes requested</p>
 </dd></dl>
 
 </dd></dl>
@@ -170,7 +177,22 @@ If unset, the default is <code class="docutils literal notranslate"><span class=
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">BSUB Job Launcher</a><ul>
-<li><a class="reference internal" href="#module-pbs4py.bsub">BSUB Class</a></li>
+<li><a class="reference internal" href="#module-pbs4py.bsub">BSUB Class</a><ul>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB"><code class="docutils literal notranslate"><span class="pre">BSUB</span></code></a><ul>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.time"><code class="docutils literal notranslate"><span class="pre">BSUB.time</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.ngpu_per_node"><code class="docutils literal notranslate"><span class="pre">BSUB.ngpu_per_node</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.project"><code class="docutils literal notranslate"><span class="pre">BSUB.project</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.mail_when_complete"><code class="docutils literal notranslate"><span class="pre">BSUB.mail_when_complete</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.profile_filename"><code class="docutils literal notranslate"><span class="pre">BSUB.profile_filename</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.launch"><code class="docutils literal notranslate"><span class="pre">BSUB.launch()</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.write_job_file"><code class="docutils literal notranslate"><span class="pre">BSUB.write_job_file()</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.hashbang"><code class="docutils literal notranslate"><span class="pre">BSUB.hashbang</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.shell"><code class="docutils literal notranslate"><span class="pre">BSUB.shell</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.requested_number_of_nodes"><code class="docutils literal notranslate"><span class="pre">BSUB.requested_number_of_nodes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -228,7 +250,7 @@ If unset, the default is <code class="docutils literal notranslate"><span class=
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, NASA.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
