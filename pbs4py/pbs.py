@@ -27,7 +27,8 @@ class PBS(Launcher):
         time:
             The requested job walltime in hours
         profile_file:
-            The file setting the environment to source inside the PBS job
+            The file setting the environment to source inside the PBS job. Set to
+            '' if you do not wish to source a file.
         """
         #: The maximum number nodes allowed by the queue
         self.queue_node_limit: int = queue_node_limit
