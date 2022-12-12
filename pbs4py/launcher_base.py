@@ -26,7 +26,7 @@ class Launcher:
         """
         The file to source at the start of the pbs script to set the environment.
         Typical names include '~/.profile', '~/.bashrc', and '~/.cshrc'.
-        The default profile filename is '~/.bashrc'
+        If you do not wish to source a file, set to ''.
 
         :type: str
         """
@@ -97,7 +97,8 @@ class Launcher:
                 fh.write('\n')
 
             fh.write(f'cd {self.workdir_env_variable}\n')
-            fh.write('source %s\n' % self.profile_filename)
+            if self.profile_filename != '':
+                fh.write('source %s\n' % self.profile_filename)
 
             for _ in range(1):
                 fh.write('\n')

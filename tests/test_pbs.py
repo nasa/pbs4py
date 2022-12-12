@@ -60,6 +60,20 @@ def test_create_mpi_command_mpt():
     assert mpi_command == expected_command
 
 
+def test_mpiprocs():
+    pbs = PBS(profile_file=test_profile)
+
+    pbs.ncpus_per_node = 20
+    assert pbs.mpiprocs_per_node == 20
+
+    pbs.ncpus_per_node = 40
+    assert pbs.mpiprocs_per_node == 40
+
+    pbs.mpiprocs_per_node = 4
+    assert pbs.mpiprocs_per_node == 4
+    assert pbs.ncpus_per_node == 40
+
+
 def test_k3_class_method():
     k3 = PBS.k3(profile_file=test_profile)
     assert k3.queue_name == 'K3-route'

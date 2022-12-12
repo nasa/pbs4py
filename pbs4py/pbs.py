@@ -27,7 +27,8 @@ class PBS(Launcher):
         time:
             The requested job walltime in hours
         profile_file:
-            The file setting the environment to source inside the PBS job
+            The file setting the environment to source inside the PBS job. Set to
+            '' if you do not wish to source a file.
         """
         #: The maximum number nodes allowed by the queue
         self.queue_node_limit: int = queue_node_limit
@@ -77,6 +78,7 @@ class PBS(Launcher):
         self.profile_filename = profile_file
         self.workdir_env_variable = '$PBS_O_WORKDIR'
         self.batch_file_extension = 'pbs'
+        self.mpiprocs_per_node = None
 
     @property
     def requested_number_of_nodes(self):
@@ -91,6 +93,24 @@ class PBS(Launcher):
     @requested_number_of_nodes.setter
     def requested_number_of_nodes(self, number_of_nodes):
         self._requested_number_of_nodes = np.min((number_of_nodes, self.queue_node_limit))
+
+    @property
+    def mpiprocs_per_node(self):
+        """
+        The number of requested mpiprocs per node. If not set, the launcher will default
+        to the number of cpus per node.
+        ``#PBS -l select=1:ncpus=40:mpiprocs={mpiprocs_per_node}``.
+
+        :type: int
+        """
+        if self._mpiprocs_per_node is None:
+            return self.ncpus_per_node
+        else:
+            return self._mpiprocs_per_node
+
+    @mpiprocs_per_node.setter
+    def mpiprocs_per_node(self, mpiprocs):
+        self._mpiprocs_per_node = mpiprocs
 
     def create_mpi_command(self, command: str,
                            output_root_name: str,
@@ -174,7 +194,7 @@ class PBS(Launcher):
     def _create_select_line_of_header(self) -> str:
         select = f'select={self.requested_number_of_nodes}'
         ncpus = f'ncpus={self.ncpus_per_node}'
-        mpiprocs = f'mpiprocs={self.ncpus_per_node}'
+        mpiprocs = f'mpiprocs={self.mpiprocs_per_node}'
 
         select_line = f'#PBS -l {select}:{ncpus}:{mpiprocs}'
         if self.mem is not None:
@@ -339,7 +359,7 @@ class PBS(Launcher):
 
 
 class FakePBS(PBS):
-    def __init__(self, profile_file='~/.bashrc'):
+    def __init__(self, profile_file=''):
         """
         A fake PBS class for directly running commands while still calling as
         if it were a standard PBS driver.

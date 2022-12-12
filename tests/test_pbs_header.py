@@ -63,6 +63,13 @@ def test_select_line_with_model_defined(pbs_header_test: PBS):
     assert header == expected
 
 
+def test_select_line_with_mpiprocs_defined(pbs_header_test: PBS):
+    pbs_header_test.mpiprocs_per_node = 3
+    header = pbs_header_test._create_select_line_of_header()
+    expected = "#PBS -l select=2:ncpus=5:mpiprocs=3"
+    assert header == expected
+
+
 def test_select_line_with_mem_defined(pbs_header_test: PBS):
     pbs_header_test.mem = '245gb'
     header = pbs_header_test._create_select_line_of_header()
