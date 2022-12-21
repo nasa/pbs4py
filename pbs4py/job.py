@@ -24,6 +24,12 @@ class PBSJob:
         #: The model attribute on the select line from the job submission
         self.model: str = ''
 
+        #: The number of resources on the select line
+        self.requested_number_of_nodes: int = 0
+
+        #: The number of cpus for node
+        self.ncpus_per_node = 0
+
         #: The queue which this job was submitted to
         self.queue: str = ''
 
@@ -82,6 +88,9 @@ class PBSJob:
             self.model = qstat_dict['Resource_List.select'].split('model=')[-1]
         else:
             self.model = ''
+        self.requested_number_of_nodes = int(qstat_dict['Resource_List.select'].split(':')[0])
+        self.ncpus_per_node = int(
+            qstat_dict['Resource_List.select'].split('ncpus=')[-1].split(':')[0])
 
     def _set_empty_attributes(self):
         self.name = ''
