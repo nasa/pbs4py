@@ -21,11 +21,14 @@ def test_profile_file_checking():
 
 def test_output_redirection():
     pbs = PBS(profile_file=test_profile)
+    pbs.shell = 'tcsh'
+    assert pbs._redirect_shell_output('dog.out') == '>& dog.out'
+
     pbs.shell = 'bash'
     assert pbs._redirect_shell_output('dog.out') == '&> dog.out'
 
-    pbs.shell = 'tcsh'
-    assert pbs._redirect_shell_output('dog.out') == '>& dog.out'
+    pbs.tee_output = True
+    assert pbs._redirect_shell_output('dog.out') == '2>&1 | tee dog.out'
 
 
 def test_create_mpi_command_openmpi():

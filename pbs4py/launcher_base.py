@@ -21,6 +21,9 @@ class Launcher:
         self.profile_filename: str = ''
         self.batch_file_extension: str = ''
 
+        #: If true, redirection of the output of mpi commands changed to tee
+        self.tee_output: bool = False
+
     @property
     def profile_filename(self):
         """
@@ -97,8 +100,8 @@ class Launcher:
                 fh.write('\n')
 
             fh.write(f'cd {self.workdir_env_variable}\n')
-            if self.profile_filename != '':
-                fh.write('source %s\n' % self.profile_filename)
+            if len(self.profile_filename) > 0:
+                fh.write(f'source {self.profile_filename}\n')
 
             for _ in range(1):
                 fh.write('\n')
@@ -127,6 +130,9 @@ class Launcher:
         raise NotImplementedError('Launcher must implement a _run_job method')
 
     def _redirect_shell_output(self, output_filename):
+        if self.tee_output:
+            return f'2>&1 | tee {output_filename}'
+
         if self.shell == 'tcsh':
             return f'>& {output_filename}'
         else:
