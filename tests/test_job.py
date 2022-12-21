@@ -89,6 +89,8 @@ def test_read_K_properties_from_qstat():
     assert job.state == 'F'
     assert job.workdir == '/lustre3/hpnobackup2/kejacob1/projects/cad_to_solution/pbs4py/examples/batch_with_job_limit/sample0'
     assert job.model == ''
+    assert job.ncpus_per_node == 16
+    assert job.requested_number_of_nodes == 1
 
 
 def test_read_NAS_properties_from_qstat():
@@ -100,6 +102,8 @@ def test_read_NAS_properties_from_qstat():
     assert job.state == 'Q'
     assert job.workdir == '/nobackup/kejacob1/projects/sfe/support'
     assert job.model == 'sky_ele'
+    assert job.ncpus_per_node == 40
+    assert job.requested_number_of_nodes == 16
 
 
 def test_unknown_job():
@@ -110,3 +114,5 @@ def test_unknown_job():
     assert job.state == ''
     assert job.workdir == ''
     assert job.model == ''
+    assert job.ncpus_per_node == 0
+    assert job.requested_number_of_nodes == 0
