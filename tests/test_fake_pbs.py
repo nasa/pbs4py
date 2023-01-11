@@ -11,6 +11,7 @@ def test_fakePBS():
     file = 'fake_file.txt'
     assert not os.path.isfile(f'{test_directory}/{file}')
     job_body = [f'touch {test_directory}/{file}']
-    pbs.launch(job_name, job_body)
+    job_id = pbs.launch(job_name, job_body)
     assert os.path.isfile(f'{test_directory}/{file}')
+    assert job_id == 'FakePBS.0'
     os.system(f'rm {test_directory}/{file}')
