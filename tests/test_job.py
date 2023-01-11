@@ -81,9 +81,9 @@ class FakeUnknownJob(PBSJob):
 
 
 def test_read_K_properties_from_qstat():
-    job = FakeKJob(2493765)
+    job = FakeKJob('2493765')
 
-    assert job.id == 2493765
+    assert job.id == '2493765'
     assert job.name == 'sample0'
     assert job.queue == 'K3a-standard'
     assert job.state == 'F'
@@ -94,9 +94,9 @@ def test_read_K_properties_from_qstat():
 
 
 def test_read_NAS_properties_from_qstat():
-    job = FakeNASJob(13198744)
+    job = FakeNASJob('13198744')
 
-    assert job.id == 13198744
+    assert job.id == '13198744'
     assert job.name == 'C006ste'
     assert job.queue == 'devel'
     assert job.state == 'Q'
@@ -107,8 +107,8 @@ def test_read_NAS_properties_from_qstat():
 
 
 def test_unknown_job():
-    job = FakeUnknownJob(123456)
-    assert job.id == 123456
+    job = FakeUnknownJob('123456')
+    assert job.id == '123456'
     assert job.name == ''
     assert job.queue == ''
     assert job.state == ''

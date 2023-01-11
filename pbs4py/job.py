@@ -4,7 +4,7 @@ from typing import List, Union
 
 
 class PBSJob:
-    def __init__(self, id: int):
+    def __init__(self, id: str):
         """
         A class for querying information and managing a particular submitted
         pbs job. For the id number in the constructor, the qstat command will
@@ -13,11 +13,11 @@ class PBSJob:
         Parameters
         ----------
         id:
-            The id number of the job
+            The id of the PBS job
         """
 
-        #: The ID number of the job
-        self.id: int = id
+        #: The ID of the PBS job
+        self.id: str = id
 
         #: The name of the job
         self.name: str = ''
