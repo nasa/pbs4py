@@ -41,7 +41,7 @@ class PBSJob:
         self.workdir: str = ''
 
         #: The exit status of the pbs job
-        self.exit_status
+        self.exit_status: int = None
 
         self.read_properties_from_qstat()
 
