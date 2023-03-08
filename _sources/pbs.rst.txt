@@ -41,5 +41,7 @@ the script within an existing PBS job without launching new PBS jobs.
 The FakePBS object appears to driving scripts as a standard PBS object,
 but directly runs the commands instead of putting them into a PBS job and launching the job.
 
+.. automodule:: pbs4py.fake_pbs
+
 .. autoclass:: FakePBS
    :members:
