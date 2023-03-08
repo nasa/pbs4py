@@ -308,6 +308,18 @@ class PBS(Launcher):
                    profile_file=profile_file)
 
     @classmethod
+    def k4_v100(cls, time: int = 72, profile_file: str = '~/.bashrc'):
+        return cls(queue_name='K4-V100', ncpus_per_node=4,
+                   queue_node_limit=1, time=time,
+                   profile_file=profile_file)
+
+    @classmethod
+    def k5_a100(cls, time: int = 72, profile_file: str = '~/.bashrc'):
+        return cls(queue_name='K5-A100', ncpus_per_node=8,
+                   queue_node_limit=1, time=time,
+                   profile_file=profile_file)
+
+    @classmethod
     def nas(cls, group_list: str, proc_type: str = 'broadwell', queue_name: str = 'long',
             time: int = 72, profile_file: str = '~/.bashrc'):
         """
