@@ -98,6 +98,20 @@ def test_k4_class_method():
     assert k4.queue_node_limit == 16
 
 
+def test_k4_v100_class_method():
+    k4v100 = PBS.k4_v100(profile_file=test_profile)
+    assert k4v100.queue_name == 'K4-V100'
+    assert k4v100.ncpus_per_node == 4
+    assert k4v100.queue_node_limit == 1
+
+
+def test_k5_a100_class_method():
+    k5 = PBS.k5_a100(profile_file=test_profile)
+    assert k5.queue_name == 'K5-A100'
+    assert k5.ncpus_per_node == 8
+    assert k5.queue_node_limit == 1
+
+
 def test_nas_cascadelake_class_method():
     nas = PBS.nas('n1337', 'cas', profile_file=test_profile)
     assert nas.group_list == 'n1337'
