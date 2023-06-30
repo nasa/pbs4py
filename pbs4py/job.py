@@ -162,8 +162,12 @@ class PBSJob:
         self.walltime_requested = self._convert_walltime_to_seconds(qstat_dict['Resource_List.walltime'])
         if self.state!='Q':
             self.hostname = qstat_dict['exec_host'].split('/')[0]
-            self.walltime_used = self._convert_walltime_to_seconds(qstat_dict['resources_used.walltime'])
-            self.walltime_remaining = self.walltime_requested - self.walltime_used
+            self.walltime_used = qstat_dict.get('resources_used.walltime')
+            if self.walltime_used is not None:
+                self.walltime_used = self._convert_walltime_to_seconds(self.walltime_used)
+                self.walltime_remaining = self.walltime_requested - self.walltime_used
+            else:
+                self.walltime_remaining = None
 
     def _convert_walltime_to_seconds(self, walltime: str):
         walltime_split = walltime.split(':')
