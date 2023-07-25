@@ -77,18 +77,18 @@ def test_mpiprocs():
     assert pbs.ncpus_per_node == 40
 
 
-def test_k3_class_method():
-    k3 = PBS.k3(profile_file=test_profile)
-    assert k3.queue_name == 'K3-route'
-    assert k3.ncpus_per_node == 16
-    assert k3.queue_node_limit == 40
-
-
 def test_k3a_class_method():
     k3a = PBS.k3a(profile_file=test_profile)
     assert k3a.queue_name == 'K3a-route'
     assert k3a.ncpus_per_node == 16
     assert k3a.queue_node_limit == 25
+
+
+def test_k3b_class_method():
+    k3 = PBS.k3b(profile_file=test_profile)
+    assert k3.queue_name == 'K3b-route'
+    assert k3.ncpus_per_node == 28
+    assert k3.queue_node_limit == 74
 
 
 def test_k4_class_method():

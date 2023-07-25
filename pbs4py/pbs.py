@@ -276,9 +276,9 @@ class PBS(Launcher):
                    profile_file=profile_file)
 
     @classmethod
-    def k3(cls, time: int = 72, profile_file: str = '~/.bashrc'):
+    def k3b(cls, time: int = 72, profile_file: str = '~/.bashrc'):
         """
-        Constructor for the K3 queues on LaRC's K cluster including K3-standard-512.
+        Constructor for the K3b queues on LaRC's K cluster.
 
         Parameters
         ----------
@@ -287,8 +287,8 @@ class PBS(Launcher):
         profile_file:
             The file setting the environment to source inside the PBS job
         """
-        return cls(queue_name='K3-route', ncpus_per_node=16,
-                   queue_node_limit=40, time=time,
+        return cls(queue_name='K3b-route', ncpus_per_node=28,
+                   queue_node_limit=74, time=time,
                    profile_file=profile_file)
 
     @classmethod
