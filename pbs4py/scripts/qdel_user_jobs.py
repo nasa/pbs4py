@@ -47,7 +47,7 @@ def get_active_jobs_for_user():
     for line in qstat_output:
         if line:
             id = int(re.match('\s*[0-9]+', line)[0])
-            jobs.append(PBSJob(id))
+            jobs.append(PBSJob(str(id)))
     return jobs
 
 
