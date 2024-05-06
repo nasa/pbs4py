@@ -37,15 +37,16 @@ STATES GOVERNMENT, ITS CONTRACTORS AND SUBCONTRACTORS, AS WELL AS ANY PRIOR
 RECIPIENT, TO THE EXTENT PERMITTED BY LAW.  RECIPIENT'S SOLE REMEDY FOR ANY SUCH
  MATTER SHALL BE THE IMMEDIATE, UNILATERAL TERMINATION OF THIS AGREEMENT.
 """
+
 import os
 from setuptools import setup, find_packages
 
 
 __package_name__ = "pbs4py"
-__package_version__ = "1.0.4"
+__package_version__ = "1.0.5"
 
 root = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(root, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(root, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
@@ -53,13 +54,12 @@ setup(
     version=__package_version__,
     description=("PBS scripting utilities"),
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="Kevin Jacobson",
     author_email="kevin.e.jacobson@nasa.gov",
     zip_safe=False,
     packages=find_packages(),
-    scripts=['pbs4py/scripts/qdel_user_jobs.py',
-             'pbs4py/scripts/job_dir.py'],
-    install_requires=['numpy'],
-    python_requires='>=3.6'
+    scripts=["pbs4py/scripts/qdel_user_jobs.py", "pbs4py/scripts/job_dir.py"],
+    install_requires=["numpy"],
+    python_requires=">=3.6",
 )
