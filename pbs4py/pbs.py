@@ -9,6 +9,7 @@ from pbs4py.launcher_base import Launcher
 class PBS(Launcher):
     def __init__(self, queue_name: str = 'K4-route',
                  ncpus_per_node: int = 40,
+                 ngpus_per_node: int = 0,
                  queue_node_limit: int = 10,
                  time: int = 72,
                  profile_file: str = '~/.bashrc'):
@@ -22,6 +23,8 @@ class PBS(Launcher):
             Queue name which goes on the "#PBS -N {name}" line of the pbs header
         ncpus_per_node:
             Number of CPU cores per node
+        ngpus_per_node:
+            Number of GPUs per node
         queue_node_limit:
             Maximum number of nodes allowed in this queue
         time:
@@ -41,6 +44,9 @@ class PBS(Launcher):
 
         #: The number of CPU cores per node.
         self.ncpus_per_node: int = ncpus_per_node
+
+        #: The number of GPUs per node.
+        self.ngpus_per_node: int = ngpus_per_node
 
         #: The requested wall time for the pbs job(s) in hours
         self.time: int = time
@@ -196,7 +202,10 @@ class PBS(Launcher):
         ncpus = f'ncpus={self.ncpus_per_node}'
         mpiprocs = f'mpiprocs={self.mpiprocs_per_node}'
 
-        select_line = f'#PBS -l {select}:{ncpus}:{mpiprocs}'
+        select_line = f'#PBS -l {select}:{ncpus}'
+        if self.ngpus_per_node > 0:
+            select_line += f':ngpus={self.ngpus_per_node}'
+        select_line += f':{mpiprocs}'
         if self.mem is not None:
             select_line += f':mem={self.mem}'
         if self.model is not None:
@@ -308,15 +317,20 @@ class PBS(Launcher):
                    profile_file=profile_file)
 
     @classmethod
-    def k4_v100(cls, time: int = 72, profile_file: str = '~/.bashrc'):
-        return cls(queue_name='K4-V100', ncpus_per_node=4,
-                   queue_node_limit=1, time=time,
+    def k4_v100(cls, time: int = 72, ncpus_per_node = 0, ngpus_per_node = 4, profile_file: str = '~/.bashrc'):
+        if ncpus_per_node == 0:
+            ncpus_per_node = ngpus_per_node
+        return cls(queue_name='K4-V100', ncpus_per_node=ncpus_per_node,
+                   ngpus_per_node = ngpus_per_node,
+                   queue_node_limit=4, time=time,
                    profile_file=profile_file)
 
     @classmethod
-    def k5_a100(cls, time: int = 72, profile_file: str = '~/.bashrc'):
-        return cls(queue_name='K5-A100', ncpus_per_node=8,
-                   queue_node_limit=1, time=time,
+    def k5_a100(cls, time: int = 72, ncpus_per_node = 0, ngpus_per_node = 8, profile_file: str = '~/.bashrc'):
+        if ncpus_per_node == 0:
+            ncpus_per_node = ngpus_per_node
+        return cls(queue_name='K5-A100-80', ncpus_per_node=ncpus_per_node, ngpus_per_node = ngpus_per_node,
+                   queue_node_limit=2, time=time,
                    profile_file=profile_file)
 
     @classmethod
