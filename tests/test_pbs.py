@@ -102,14 +102,14 @@ def test_k4_v100_class_method():
     k4v100 = PBS.k4_v100(profile_file=test_profile)
     assert k4v100.queue_name == 'K4-V100'
     assert k4v100.ncpus_per_node == 4
-    assert k4v100.queue_node_limit == 1
+    assert k4v100.queue_node_limit == 4
 
 
 def test_k5_a100_class_method():
     k5 = PBS.k5_a100(profile_file=test_profile)
-    assert k5.queue_name == 'K5-A100'
+    assert k5.queue_name == 'K5-A100-80'
     assert k5.ncpus_per_node == 8
-    assert k5.queue_node_limit == 1
+    assert k5.queue_node_limit == 2
 
 
 def test_nas_cascadelake_class_method():

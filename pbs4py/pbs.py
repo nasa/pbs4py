@@ -322,7 +322,7 @@ class PBS(Launcher):
             ncpus_per_node = ngpus_per_node
         return cls(queue_name='K4-V100', ncpus_per_node=ncpus_per_node,
                    ngpus_per_node = ngpus_per_node,
-                   queue_node_limit=2, time=time,
+                   queue_node_limit=4, time=time,
                    profile_file=profile_file)
 
     @classmethod
