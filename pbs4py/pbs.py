@@ -316,7 +316,7 @@ class PBS(Launcher):
         return cls(queue_name="K3a-route", ncpus_per_node=16, queue_node_limit=25, time=time, profile_file=profile_file)
 
     @classmethod
-    def k4_v100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=4, profile_file: str = "~/.bashrc"):
+    def k4_v100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=4, mem="90G", profile_file: str = "~/.bashrc"):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -325,11 +325,12 @@ class PBS(Launcher):
             ngpus_per_node=ngpus_per_node,
             queue_node_limit=4,
             time=time,
+            mem=mem,
             profile_file=profile_file,
         )
 
     @classmethod
-    def k5_a100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, profile_file: str = "~/.bashrc"):
+    def k5_a100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="90G", profile_file: str = "~/.bashrc"):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -338,6 +339,7 @@ class PBS(Launcher):
             ngpus_per_node=ngpus_per_node,
             queue_node_limit=2,
             time=time,
+            mem=mem,
             profile_file=profile_file,
         )
 
