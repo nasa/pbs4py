@@ -105,8 +105,15 @@ def test_k4_v100_class_method():
     assert k4v100.queue_node_limit == 4
 
 
-def test_k5_a100_class_method():
-    k5 = PBS.k5_a100(profile_file=test_profile)
+def test_k5_a100_40_class_method():
+    k5 = PBS.k5_a100_40(profile_file=test_profile)
+    assert k5.queue_name == 'K5-A100-40'
+    assert k5.ncpus_per_node == 8
+    assert k5.queue_node_limit == 2
+
+
+def test_k5_a100_80_class_method():
+    k5 = PBS.k5_a100_80(profile_file=test_profile)
     assert k5.queue_name == 'K5-A100-80'
     assert k5.ncpus_per_node == 8
     assert k5.queue_node_limit == 2
@@ -150,8 +157,58 @@ def test_nas_ivybridge_class_method():
 def test_nas_sandybridge_class_method():
     nas = PBS.nas('n1337', 'san', profile_file=test_profile)
     assert nas.group_list == 'n1337'
-    assert nas.ncpus_per_node == 20
+    assert nas.ncpus_per_node == 16
     assert nas.model == 'san'
+
+
+def test_nas_mil_class_method():
+    nas = PBS.nas('n1337', 'mil', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 128
+    assert nas.model == 'mil_ait'
+
+
+def test_nas_rom_class_method():
+    nas = PBS.nas('n1337', 'rom', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 128
+    assert nas.model == 'rom_ait'
+
+
+def test_nas_mil_a100_class_method():
+    nas = PBS.nas('n1337', 'mil_a100', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 64
+    assert nas.ngpus_per_node == 4
+    assert nas.mem == '500G'
+    assert nas.model == 'mil_a100'
+
+
+def test_nas_sky_gpu_class_method():
+    nas = PBS.nas('n1337', 'sky_gpu', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 36
+    assert nas.ngpus_per_node == 4
+    assert nas.mem == '200G'
+    assert nas.model == 'sky_gpu'
+
+
+def test_nas_cas_gpu_class_method():
+    nas = PBS.nas('n1337', 'cas_gpu', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 48
+    assert nas.ngpus_per_node == 4
+    assert nas.mem == '200G'
+    assert nas.model == 'cas_gpu'
+
+
+def test_nas_rom_gpu_class_method():
+    nas = PBS.nas('n1337', 'rom_gpu', profile_file=test_profile)
+    assert nas.group_list == 'n1337'
+    assert nas.ncpus_per_node == 128
+    assert nas.ngpus_per_node == 8
+    assert nas.mem == '700G'
+    assert nas.model == 'rom_gpu'
 
 
 def test_nas_class_method_with_bad_queue_name():

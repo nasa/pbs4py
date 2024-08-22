@@ -316,7 +316,7 @@ class PBS(Launcher):
         return cls(queue_name="K3a-route", ncpus_per_node=16, queue_node_limit=25, time=time, profile_file=profile_file)
 
     @classmethod
-    def k4_v100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=4, mem="90G", profile_file: str = "~/.bashrc"):
+    def k4_v100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=4, mem="200G", profile_file: str = "~/.bashrc"):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -330,11 +330,25 @@ class PBS(Launcher):
         )
 
     @classmethod
-    def k5_a100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="90G", profile_file: str = "~/.bashrc"):
+    def k5_a100_80(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
             queue_name="K5-A100-80",
+            ncpus_per_node=ncpus_per_node,
+            ngpus_per_node=ngpus_per_node,
+            queue_node_limit=2,
+            time=time,
+            mem=mem,
+            profile_file=profile_file,
+        )
+
+    @classmethod
+    def k5_a100_40(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"):
+        if ncpus_per_node == 0:
+            ncpus_per_node = ngpus_per_node
+        return cls(
+            queue_name="K5-A100-40",
             ncpus_per_node=ncpus_per_node,
             ngpus_per_node=ngpus_per_node,
             queue_node_limit=2,
@@ -350,6 +364,7 @@ class PBS(Launcher):
         proc_type: str = "broadwell",
         queue_name: str = "long",
         time: int = 72,
+        mem: str = None,
         profile_file: str = "~/.bashrc",
     ):
         """
@@ -370,33 +385,68 @@ class PBS(Launcher):
         profile_file:
             The file setting the environment to source inside the PBS job
         """
-
-        if "cas" in proc_type.lower():
+        if "sky_gpu" in proc_type.lower():
+            ncpus_per_node = 36
+            ngpus_per_node = 4
+            model = "sky_gpu"
+            mem="200G"
+        elif "cas_gpu" in proc_type.lower():
+            ncpus_per_node = 48
+            ngpus_per_node = 4
+            model = "cas_gpu"
+            mem="200G"
+        elif "rom_gpu" in proc_type.lower():
+            ncpus_per_node = 128
+            ngpus_per_node = 8
+            model = "rom_gpu"
+            mem="700G"
+        elif "mil_a100" in proc_type.lower():
+            ncpus_per_node = 64
+            ngpus_per_node = 4
+            model = "mil_a100"
+            mem="500G"
+        elif "cas" in proc_type.lower():
             ncpus_per_node = 40
+            ngpus_per_node = 0
             model = "cas_ait"
         elif "sky" in proc_type.lower():
             ncpus_per_node = 40
+            ngpus_per_node = 0
             model = "sky_ele"
         elif "bro" in proc_type.lower():
             ncpus_per_node = 28
+            ngpus_per_node = 0
             model = "bro"
         elif "has" in proc_type.lower():
             ncpus_per_node = 24
+            ngpus_per_node = 0
             model = "has"
         elif "ivy" in proc_type.lower():
             ncpus_per_node = 20
+            ngpus_per_node = 0
             model = "ivy"
         elif "san" in proc_type.lower():
-            ncpus_per_node = 20
+            ncpus_per_node = 16
+            ngpus_per_node = 0
             model = "san"
+        elif "rom" in proc_type.lower():
+            ncpus_per_node = 128
+            ngpus_per_node = 0
+            model = "rom_ait"
+        elif "mil" in proc_type.lower():
+            ncpus_per_node = 128
+            ngpus_per_node = 0
+            model = "mil_ait"
         else:
             raise ValueError("Unknown NAS processor selection")
 
         pbs = cls(
             queue_name=queue_name,
             ncpus_per_node=ncpus_per_node,
+            ngpus_per_node=ngpus_per_node,
             queue_node_limit=int(1e6),
             time=time,
+            mem=mem,
             profile_file=profile_file,
         )
 
