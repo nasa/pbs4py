@@ -91,6 +91,7 @@ class PBS(Launcher):
         self.workdir_env_variable = "$PBS_O_WORKDIR"
         self.batch_file_extension = "pbs"
         self.mpiprocs_per_node = None
+        self.ranks_per_node_command = "--npernode"
 
     @property
     def requested_number_of_nodes(self):
@@ -175,9 +176,10 @@ class PBS(Launcher):
         if not self._use_openmp(openmp_threads):
             return ""
 
-        total_num_mpi_procs = (self.ncpus_per_node // openmp_threads) * self.requested_number_of_nodes
+        mpi_procs_per_node = (self.ncpus_per_node // openmp_threads)
 
-        proc_info = f"-np {total_num_mpi_procs}"
+        proc_info = f"{self.ranks_per_node_command} {mpi_procs_per_node}"
+
         if self._use_omplace_command():
             proc_num_list = ",".join([str(i) for i in range(self.ncpus_per_node)])
             proc_info += f' omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
