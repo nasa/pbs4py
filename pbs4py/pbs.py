@@ -167,10 +167,10 @@ class PBS(Launcher):
         if self.mpiexec == "mpiexec_mpt":
             return True
 
-        output = subprocess.run(
-            [self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-        ).stdout
-        return "MPT" in output
+        output = subprocess.run([self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if output.returncode != 0:  # default to non-MPT if no mpiexec available on host (unit tests runner)
+            return False
+        return "MPT" in output.stdout
 
     def _get_ranks_per_node_flag(self):
         if self.ranks_per_node_flag is not None:
