@@ -129,7 +129,7 @@ class PBS(Launcher):
     def mpiprocs_per_node(self, mpiprocs):
         self._mpiprocs_per_node = mpiprocs
 
-    def create_mpi_command(self, command: str, output_root_name: str, openmp_threads: int = None) -> str:
+    def create_mpi_command(self, command: str, output_root_name: str, openmp_threads: int = None, ranks_per_node: int = None) -> str:
         """
         Wrap a command with mpiexec and route its standard and error output to a file
 
@@ -141,6 +141,8 @@ class PBS(Launcher):
             The root name of the output file, {output_root_name}.out.
         openmp_threads:
             The number of openmp threads per mpi process.
+        ranks_per_node:
+            The number of MPI ranks per compute node.
 
         Returns
         -------
@@ -148,10 +150,11 @@ class PBS(Launcher):
             The full command string.
         """
         omp_env_vars = self._determine_omp_settings(openmp_threads)
-        proc_info = self._set_proc_and_omplace_info(openmp_threads)
+        ranks_per_node_info = self._set_ranks_per_node_info(openmp_threads, ranks_per_node)
+        openmp_info = self._set_openmp_info(openmp_threads)
 
         redirect_output = self._redirect_shell_output(f"{output_root_name}.out")
-        full_command = [omp_env_vars, self.mpiexec, proc_info, command, redirect_output]
+        full_command = [omp_env_vars, self.mpiexec, ranks_per_node_info, openmp_info, command, redirect_output]
         return self._filter_empty_strings_from_list_and_combine(full_command)
 
     def _use_omplace_command(self) -> bool:
@@ -171,7 +174,7 @@ class PBS(Launcher):
             output = subprocess.run(
                 [self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
             )
-            return "MPT" in output.stdout
+            return ("MPT" in output.stderr or "MPT" in output.stdout)
         except FileNotFoundError:
             print(f"Executable '{self.mpiexec}' not found")
             return False
@@ -198,18 +201,27 @@ class PBS(Launcher):
         filtered_for_empty_strings = filter(None, lis)
         return " ".join(filtered_for_empty_strings)
 
-    def _set_proc_and_omplace_info(self, openmp_threads: int) -> str:
+    def _set_ranks_per_node_info(self, openmp_threads: int, ranks_per_node: int) -> str:
+        if ranks_per_node is None and openmp_threads is None:
+            return ""
+        elif ranks_per_node is not None:
+            mpi_procs_per_node = ranks_per_node
+        else: #openmp_threads is not None:
+            mpi_procs_per_node = self.ncpus_per_node // openmp_threads
+
+        ranks_per_node_flag = self._get_ranks_per_node_flag()
+        ranks_per_proc_info = f"{ranks_per_node_flag} {mpi_procs_per_node}"
+        return ranks_per_proc_info
+
+    def _set_openmp_info(self, openmp_threads: int) -> str:
         if not self._use_openmp(openmp_threads):
             return ""
 
-        mpi_procs_per_node = self.ncpus_per_node // openmp_threads
-        ranks_per_node_flag = self._get_ranks_per_node_flag()
-        proc_info = f"{ranks_per_node_flag} {mpi_procs_per_node}"
-
+        openmp_info = ""
         if self._use_omplace_command():
             proc_num_list = ",".join([str(i) for i in range(self.ncpus_per_node)])
-            proc_info += f' omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
-        return proc_info
+            openmp_info = f'omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
+        return openmp_info
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [

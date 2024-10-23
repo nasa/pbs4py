@@ -38,20 +38,24 @@ def test_create_mpi_command_openmpi():
     dummy_command = 'foo'
     output_root_name = 'dog'
 
-    mpi_command = pbs.create_mpi_command(dummy_command, output_root_name)
-    expected_command = 'mpirun foo &> dog.out'
-    assert mpi_command == expected_command
+    if not pbs._using_mpt():
+        mpi_command = pbs.create_mpi_command(dummy_command, output_root_name)
+        expected_command = 'mpirun foo &> dog.out'
+        assert mpi_command == expected_command
 
-    mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, openmp_threads=5)
-    expected_command = 'OMP_NUM_THREADS=5 OMP_PLACES=cores OMP_PROC_BIND=close mpirun --npernode 6 foo &> dog.out'
-    assert mpi_command == expected_command
+        mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, openmp_threads=5)
+        expected_command = 'OMP_NUM_THREADS=5 OMP_PLACES=cores OMP_PROC_BIND=close mpirun --npernode 6 foo &> dog.out'
+        assert mpi_command == expected_command
+
+        mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, ranks_per_node=3)
+        expected_command = 'mpirun --npernode 3 foo &> dog.out'
+        assert mpi_command == expected_command
 
 
 def test_create_mpi_command_mpt():
     pbs = PBS(profile_file=test_profile)
     pbs.ncpus_per_node = 20
     pbs.mpiexec = 'mpiexec_mpt'
-    pbs.ranks_per_node_command = '-perhost'
     dummy_command = 'foo'
     output_root_name = 'dog'
 
@@ -61,6 +65,14 @@ def test_create_mpi_command_mpt():
 
     mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, openmp_threads=5)
     expected_command = 'OMP_NUM_THREADS=5 mpiexec_mpt -perhost 4 omplace -c "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19" -nt 5 -vv foo &> dog.out'
+    assert mpi_command == expected_command
+
+    mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, ranks_per_node=4)
+    expected_command = 'mpiexec_mpt -perhost 4 foo &> dog.out'
+    assert mpi_command == expected_command
+
+    mpi_command = pbs.create_mpi_command(dummy_command, output_root_name, ranks_per_node=5)
+    expected_command = 'mpiexec_mpt -perhost 5 foo &> dog.out'
     assert mpi_command == expected_command
 
 
