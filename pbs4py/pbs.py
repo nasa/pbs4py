@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import subprocess
 from typing import List, Union
 import numpy as np
 
@@ -87,6 +88,10 @@ class PBS(Launcher):
         #: Default is 'afterok' which only launches the new job if the previous one was successful.
         self.dependency_type: str = "afterok"
 
+        #: Command line option for mpiexec to specify the number of MPI ranks for host/node.
+        #: Default is to set it based on the mpiexec version.
+        self.ranks_per_node_flag: str = None
+
         self.profile_filename = profile_file
         self.workdir_env_variable = "$PBS_O_WORKDIR"
         self.batch_file_extension = "pbs"
@@ -124,7 +129,7 @@ class PBS(Launcher):
     def mpiprocs_per_node(self, mpiprocs):
         self._mpiprocs_per_node = mpiprocs
 
-    def create_mpi_command(self, command: str, output_root_name: str, openmp_threads: int = None) -> str:
+    def create_mpi_command(self, command: str, output_root_name: str, openmp_threads: int = None, ranks_per_node: int = None) -> str:
         """
         Wrap a command with mpiexec and route its standard and error output to a file
 
@@ -136,6 +141,8 @@ class PBS(Launcher):
             The root name of the output file, {output_root_name}.out.
         openmp_threads:
             The number of openmp threads per mpi process.
+        ranks_per_node:
+            The number of MPI ranks per compute node.
 
         Returns
         -------
@@ -143,20 +150,43 @@ class PBS(Launcher):
             The full command string.
         """
         omp_env_vars = self._determine_omp_settings(openmp_threads)
-        proc_info = self._set_proc_and_omplace_info(openmp_threads)
+        ranks_per_node_info = self._set_ranks_per_node_info(openmp_threads, ranks_per_node)
+        openmp_info = self._set_openmp_info(openmp_threads)
 
         redirect_output = self._redirect_shell_output(f"{output_root_name}.out")
-        full_command = [omp_env_vars, self.mpiexec, proc_info, command, redirect_output]
+        full_command = [omp_env_vars, self.mpiexec, ranks_per_node_info, openmp_info, command, redirect_output]
         return self._filter_empty_strings_from_list_and_combine(full_command)
 
     def _use_omplace_command(self) -> bool:
-        return self.mpiexec == "mpiexec_mpt"
+        return self._using_mpt()
 
     def _use_openmp(self, openmp_threads: int or None):
         if type(openmp_threads) == int:
             if openmp_threads > 1:
                 return True
         return False
+
+    def _using_mpt(self) -> bool:
+        if self.mpiexec == "mpiexec_mpt":
+            return True
+
+        try:
+            output = subprocess.run(
+                [self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
+            return ("MPT" in output.stderr or "MPT" in output.stdout)
+        except FileNotFoundError:
+            print(f"Executable '{self.mpiexec}' not found")
+            return False
+
+    def _get_ranks_per_node_flag(self):
+        if self.ranks_per_node_flag is not None:
+            return self.ranks_per_node_flag
+        else:
+            if self._using_mpt():
+                return "-perhost"
+            else:
+                return "--npernode"
 
     def _determine_omp_settings(self, openmp_threads: int) -> str:
         if openmp_threads is None:
@@ -171,17 +201,27 @@ class PBS(Launcher):
         filtered_for_empty_strings = filter(None, lis)
         return " ".join(filtered_for_empty_strings)
 
-    def _set_proc_and_omplace_info(self, openmp_threads: int) -> str:
+    def _set_ranks_per_node_info(self, openmp_threads: int, ranks_per_node: int) -> str:
+        if ranks_per_node is None and openmp_threads is None:
+            return ""
+        elif ranks_per_node is not None:
+            mpi_procs_per_node = ranks_per_node
+        else: #openmp_threads is not None:
+            mpi_procs_per_node = self.ncpus_per_node // openmp_threads
+
+        ranks_per_node_flag = self._get_ranks_per_node_flag()
+        ranks_per_proc_info = f"{ranks_per_node_flag} {mpi_procs_per_node}"
+        return ranks_per_proc_info
+
+    def _set_openmp_info(self, openmp_threads: int) -> str:
         if not self._use_openmp(openmp_threads):
             return ""
 
-        total_num_mpi_procs = (self.ncpus_per_node // openmp_threads) * self.requested_number_of_nodes
-
-        proc_info = f"-np {total_num_mpi_procs}"
+        openmp_info = ""
         if self._use_omplace_command():
             proc_num_list = ",".join([str(i) for i in range(self.ncpus_per_node)])
-            proc_info += f' omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
-        return proc_info
+            openmp_info = f'omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
+        return openmp_info
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [
@@ -330,7 +370,9 @@ class PBS(Launcher):
         )
 
     @classmethod
-    def k5_a100_80(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"):
+    def k5_a100_80(
+        cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"
+    ):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -344,7 +386,9 @@ class PBS(Launcher):
         )
 
     @classmethod
-    def k5_a100_40(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"):
+    def k5_a100_40(
+        cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"
+    ):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -389,22 +433,22 @@ class PBS(Launcher):
             ncpus_per_node = 36
             ngpus_per_node = 4
             model = "sky_gpu"
-            mem="200G"
+            mem = "200G"
         elif "cas_gpu" in proc_type.lower():
             ncpus_per_node = 48
             ngpus_per_node = 4
             model = "cas_gpu"
-            mem="200G"
+            mem = "200G"
         elif "rom_gpu" in proc_type.lower():
             ncpus_per_node = 128
             ngpus_per_node = 8
             model = "rom_gpu"
-            mem="700G"
+            mem = "700G"
         elif "mil_a100" in proc_type.lower():
             ncpus_per_node = 64
             ngpus_per_node = 4
             model = "mil_a100"
-            mem="500G"
+            mem = "500G"
         elif "cas" in proc_type.lower():
             ncpus_per_node = 40
             ngpus_per_node = 0
