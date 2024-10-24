@@ -1,8 +1,68 @@
 import pytest
 from pbs4py.job import PBSJob
 
-
 class FakeKJob(PBSJob):
+    def _run_qstat_to_get_full_job_attributes(self):
+        stand_in_output = [
+        "Job Id: 4259576.pbssrv1",
+        "    Job_Name = oat_steady_l6",
+        "    Job_Owner = kejacob1@k4-li1-ib0",
+        "    job_state = Q",
+        "    queue = K4-standard",
+        "    server = pbssrv1",
+        "    Checkpoint = u",
+        "    ctime = Thu Oct 24 12:26:31 2024",
+        "    Error_Path = k4-li1-ib0:/lustre3/hpnobackup2/kejacob1/projects/rca/buffet/c",
+        "	ases/oat15a/ncfv_rans_pointwise_revised_grid_cc/grid_l6/aoa3.6/steady/o",
+        "	at_steady_l6.e4259576",
+        "    Hold_Types = n",
+        "    Join_Path = oe",
+        "    Keep_Files = n",
+        "    Mail_Points = a",
+        "    mtime = Thu Oct 24 12:26:32 2024",
+        "    Output_Path = k4-li1-ib0.ccf-beowulf.ndc.nasa.gov:/lustre3/hpnobackup2/keja",
+        "	cob1/projects/rca/buffet/cases/oat15a/ncfv_rans_pointwise_revised_grid_",
+        "	cc/grid_l6/aoa3.6/steady/oat_steady_l6_pbs.log",
+        "    Priority = 0",
+        "    qtime = Thu Oct 24 12:26:31 2024",
+        "    Rerunable = False",
+        "    Resource_List.mem = 96000mb",
+        "    Resource_List.mpiprocs = 400",
+        "    Resource_List.ncpus = 400",
+        "    Resource_List.nodect = 10",
+        "    Resource_List.nodegroup = K4-open",
+        "    Resource_List.place = scatter:excl",
+        "    Resource_List.select = 10:ncpus=40:mpiprocs=40",
+        "    Resource_List.walltime = 72:00:00",
+        "    substate = 10",
+        "    Variable_List = PBS_O_HOME=/u/kejacob1,PBS_O_LANG=C,PBS_O_LOGNAME=kejacob1,",
+        "	PBS_O_PATH=/hpnobackup2/kejacob1/projects/cbse/cbse_clean/cbse/build_o",
+        "	pt/bin:/u/kejacob1/.local/bin:/u/kejacob1/bin:/usr/local/pkgs-viz/cuda_",
+        "	12.2.2/bin:/usr/local/pkgs-viz/cuda_12.2.2/nvvm/bin:/usr/local/pkgs-viz",
+        "	/cuda_12.2.2/nsight-systems-2023.2.3/bin:/u/shared/fun3d/fun3d_users/mo",
+        "	dules/ParMETIS/4.0.3-mpt-2.25-intel_2019.5.281/bin:/opt/hpe/hpc/mpt/mpt",
+        "	-2.25/bin:/usr/local/pkgs-modules/intel_2019/inspector/bin64:/usr/local",
+        "	/pkgs-modules/intel_2019/advisor/bin64:/usr/local/pkgs-modules/intel_20",
+        "	19/compilers_and_libraries_2019.5.281/linux/bin/intel64:/usr/local/pkgs",
+        "	-modules/intel_2019/vtune_amplifier/bin64:/hpnobackup2/shared/kejacob1/",
+        "	modules/gdb/python_3.9.5/bin:/usr/local/pkgs-modules/Python_3.9.5/bin:/",
+        "	hpnobackup2/shared/kejacob1/modules/clang-format/16.0.6/bin:/usr/local/",
+        "	pkgs-modules/gcc_8.2.0/bin:/usr/local/pkgs-modules/autoconf_2.72/bin:/u",
+        "	sr/local/pkgs/modules_4.2.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:",
+        "	/sbin,PBS_O_MAIL=/var/spool/mail/kejacob1,PBS_O_SHELL=/bin/bash,",
+        "	PBS_O_WORKDIR=/lustre3/hpnobackup2/kejacob1/projects/rca/buffet/cases/",
+        "	oat15a/ncfv_rans_pointwise_revised_grid_cc/grid_l6/aoa3.6/steady,",
+        "	PBS_O_SYSTEM=Linux,PBS_O_QUEUE=K4-route,PBS_O_HOST=k4-li1-ib0",
+        "    comment = Not Running: Queue K4-standard per-user limit reached on resource",
+        "	 ncpus",
+        "    etime = Thu Oct 24 12:26:31 2024",
+        "    eligible_time = 00:00:01",
+        "    Submit_arguments = oat_steady_l6.pbs",
+        "    project = _pbs_project_default",
+        "    Submit_Host = k4-li1-ib0"]
+        return stand_in_output
+
+class FakeKJobOld(PBSJob):
     def _run_qstat_to_get_full_job_attributes(self):
         stand_in_output = [
             "    Job: 2493765.pbssrv2", "Job_Name = sample0", "Job_Owner = kejacob1@k4-li1-ib0",
@@ -81,7 +141,19 @@ class FakeUnknownJob(PBSJob):
 
 
 def test_read_K_properties_from_qstat():
-    job = FakeKJob('2493765')
+    job = FakeKJob('2493761')
+
+    assert job.id == '2493761'
+    assert job.name == 'oat_steady_l6'
+    assert job.queue == 'K4-standard'
+    assert job.state == 'Q'
+    assert job.workdir == '/lustre3/hpnobackup2/kejacob1/projects/rca/buffet/cases/oat15a/ncfv_rans_pointwise_revised_grid_cc/grid_l6/aoa3.6/steady'
+    assert job.model == ''
+    assert job.ncpus_per_node == 40
+    assert job.requested_number_of_nodes == 10
+
+def test_read_K_old_properties_from_qstat():
+    job = FakeKJobOld('2493765')
 
     assert job.id == '2493765'
     assert job.name == 'sample0'
