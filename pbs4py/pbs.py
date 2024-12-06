@@ -17,6 +17,7 @@ class PBS(Launcher):
         time: int = 72,
         mem: str = None,
         profile_file: str = "~/.bashrc",
+        requested_number_of_nodes: int = 1,
     ):
         """
         | A class for creating and running pbs jobs. Default queue properties are for K4.
@@ -39,6 +40,8 @@ class PBS(Launcher):
         profile_file:
             The file setting the environment to source inside the PBS job. Set to
             '' if you do not wish to source a file.
+        requested_number_of_nodes:
+            The number of compute nodes to request
         """
         #: The maximum number nodes allowed by the queue
         self.queue_node_limit: int = queue_node_limit
@@ -96,6 +99,7 @@ class PBS(Launcher):
         self.workdir_env_variable = "$PBS_O_WORKDIR"
         self.batch_file_extension = "pbs"
         self.mpiprocs_per_node = None
+        self.requested_number_of_nodes = requested_number_of_nodes
 
     @property
     def requested_number_of_nodes(self):
@@ -129,7 +133,9 @@ class PBS(Launcher):
     def mpiprocs_per_node(self, mpiprocs):
         self._mpiprocs_per_node = mpiprocs
 
-    def create_mpi_command(self, command: str, output_root_name: str, openmp_threads: int = None, ranks_per_node: int = None) -> str:
+    def create_mpi_command(
+        self, command: str, output_root_name: str, openmp_threads: int = None, ranks_per_node: int = None
+    ) -> str:
         """
         Wrap a command with mpiexec and route its standard and error output to a file
 
@@ -174,7 +180,7 @@ class PBS(Launcher):
             output = subprocess.run(
                 [self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
             )
-            return ("MPT" in output.stderr or "MPT" in output.stdout)
+            return "MPT" in output.stderr or "MPT" in output.stdout
         except FileNotFoundError:
             print(f"Executable '{self.mpiexec}' not found")
             return False
@@ -206,7 +212,7 @@ class PBS(Launcher):
             return ""
         elif ranks_per_node is not None:
             mpi_procs_per_node = ranks_per_node
-        else: #openmp_threads is not None:
+        else:  # openmp_threads is not None:
             mpi_procs_per_node = self.ncpus_per_node // openmp_threads
 
         ranks_per_node_flag = self._get_ranks_per_node_flag()
@@ -314,7 +320,7 @@ class PBS(Launcher):
 
     # Alternate constructors for NASA HPC queues
     @classmethod
-    def k4(cls, time: int = 72, profile_file: str = "~/.bashrc"):
+    def k4(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K4 queues on LaRC's K cluster including K4-standard-512.
 
@@ -324,11 +330,20 @@ class PBS(Launcher):
             The requested job walltime in hours
         profile_file:
             The file setting the environment to source inside the PBS job
+        requested_number_of_nodes:
+            The number of compute nodes to request
         """
-        return cls(queue_name="K4-route", ncpus_per_node=40, queue_node_limit=16, time=time, profile_file=profile_file)
+        return cls(
+            queue_name="K4-route",
+            ncpus_per_node=40,
+            queue_node_limit=16,
+            time=time,
+            profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
+        )
 
     @classmethod
-    def k3b(cls, time: int = 72, profile_file: str = "~/.bashrc"):
+    def k3b(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3b queues on LaRC's K cluster.
 
@@ -338,11 +353,20 @@ class PBS(Launcher):
             The requested job walltime in hours
         profile_file:
             The file setting the environment to source inside the PBS job
+        requested_number_of_nodes:
+            The number of compute nodes to request
         """
-        return cls(queue_name="K3b-route", ncpus_per_node=28, queue_node_limit=74, time=time, profile_file=profile_file)
+        return cls(
+            queue_name="K3b-route",
+            ncpus_per_node=28,
+            queue_node_limit=74,
+            time=time,
+            profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
+        )
 
     @classmethod
-    def k3a(cls, time: int = 72, profile_file: str = "~/.bashrc"):
+    def k3a(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3a queue on LaRC's K cluster.
 
@@ -352,11 +376,28 @@ class PBS(Launcher):
             The requested job walltime in hours
         profile_file:
             The file setting the environment to source inside the PBS job
+        requested_number_of_nodes:
+            The number of compute nodes to request
         """
-        return cls(queue_name="K3a-route", ncpus_per_node=16, queue_node_limit=25, time=time, profile_file=profile_file)
+        return cls(
+            queue_name="K3a-route",
+            ncpus_per_node=16,
+            queue_node_limit=25,
+            time=time,
+            profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
+        )
 
     @classmethod
-    def k4_v100(cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=4, mem="200G", profile_file: str = "~/.bashrc"):
+    def k4_v100(
+        cls,
+        time: int = 72,
+        ncpus_per_node=0,
+        ngpus_per_node=4,
+        mem="200G",
+        profile_file: str = "~/.bashrc",
+        requested_number_of_nodes: int = 1,
+    ):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
         return cls(
@@ -367,11 +408,18 @@ class PBS(Launcher):
             time=time,
             mem=mem,
             profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
     def k5_a100_80(
-        cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"
+        cls,
+        time: int = 72,
+        ncpus_per_node=0,
+        ngpus_per_node=8,
+        mem="700G",
+        profile_file: str = "~/.bashrc",
+        requested_number_of_nodes: int = 1,
     ):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
@@ -383,11 +431,18 @@ class PBS(Launcher):
             time=time,
             mem=mem,
             profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
     def k5_a100_40(
-        cls, time: int = 72, ncpus_per_node=0, ngpus_per_node=8, mem="700G", profile_file: str = "~/.bashrc"
+        cls,
+        time: int = 72,
+        ncpus_per_node=0,
+        ngpus_per_node=8,
+        mem="700G",
+        profile_file: str = "~/.bashrc",
+        requested_number_of_nodes: int = 1,
     ):
         if ncpus_per_node == 0:
             ncpus_per_node = ngpus_per_node
@@ -399,6 +454,7 @@ class PBS(Launcher):
             time=time,
             mem=mem,
             profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
@@ -410,6 +466,7 @@ class PBS(Launcher):
         time: int = 72,
         mem: str = None,
         profile_file: str = "~/.bashrc",
+        requested_number_of_nodes: int = 1,
     ):
         """
         Constructor for the queues at NAS. Must specify the group_list
@@ -492,6 +549,7 @@ class PBS(Launcher):
             time=time,
             mem=mem,
             profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
         )
 
         pbs.group_list = group_list
