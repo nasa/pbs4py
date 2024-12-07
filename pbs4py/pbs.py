@@ -159,8 +159,8 @@ class PBS(Launcher):
         ranks_per_node_info = self._set_ranks_per_node_info(openmp_threads, ranks_per_node)
         openmp_info = self._set_openmp_info(openmp_threads)
 
-        full_command = [omp_env_vars, self.mpiexec, ranks_per_node_info, openmp_info, command, redirect_output]
-        if output_root_name is not None
+        full_command = [omp_env_vars, self.mpiexec, ranks_per_node_info, openmp_info, command]
+        if output_root_name is not None:
             redirect_output = self._redirect_shell_output(f"{output_root_name}.out")
             full_command.append(redirect_output)
         return self._filter_empty_strings_from_list_and_combine(full_command)
