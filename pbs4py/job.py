@@ -157,6 +157,8 @@ class PBSJob:
         self.ncpus_per_node = int(qstat_dict["Resource_List.select"].split("ncpus=")[-1].split(":")[0])
 
         self.exit_status: int = qstat_dict.get("Exit_status")
+        if self.exit_status is not None:
+            self.exit_status = int(self.exit_status)
 
         self.walltime_requested = self._convert_walltime_to_seconds(qstat_dict["Resource_List.walltime"])
         if self.state != "Q":
