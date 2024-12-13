@@ -8,7 +8,7 @@ Job Directory Script
 
 .. argparse::
     :ref: pbs4py.scripts.job_dir.arg_parser
-    :prog: job_dir
+    :prog: job_dir.py
 
 qdir alias to cd to job's directory
 -----------------------------------
@@ -29,7 +29,7 @@ Qdel for User Jobs Script
 
 .. argparse::
     :ref: pbs4py.scripts.qdel_user_jobs.arg_parser
-    :prog: job_dir
+    :prog: qdel_user_jobs.py
 
 
 Example
