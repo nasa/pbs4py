@@ -1,6 +1,7 @@
 import time
 import os
 from typing import List, Union
+import subprocess
 
 
 class PBSJob:
@@ -136,7 +137,13 @@ class PBSJob:
             return False
 
     def _run_qstat_to_get_full_job_attributes(self) -> Union[List[str], str]:
-        return os.popen(f"qstat -xf {self.id}").read().split("\n")
+        result = subprocess.run(
+            ["qstat", "-xf", str(self.id)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=False,  # Disable automatic decoding
+        )
+        return result.stdout.decode("utf-8", errors="replace").split("\n")
 
     def _is_a_known_job(self, qstat_output):
         return not "Unknown Job Id" in qstat_output
