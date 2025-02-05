@@ -345,6 +345,29 @@ class PBS(Launcher):
         )
 
     @classmethod
+    def k3c(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+        """
+        Constructor for the K3b queues on LaRC's K cluster.
+
+        Parameters
+        ----------
+        time:
+            The requested job walltime in hours
+        profile_file:
+            The file setting the environment to source inside the PBS job
+        requested_number_of_nodes:
+            The number of compute nodes to request
+        """
+        return cls(
+            queue_name="K3c-route",
+            ncpus_per_node=28,
+            queue_node_limit=74,
+            time=time,
+            profile_file=profile_file,
+            requested_number_of_nodes=requested_number_of_nodes,
+        )
+
+    @classmethod
     def k3b(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3b queues on LaRC's K cluster.

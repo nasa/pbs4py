@@ -103,6 +103,12 @@ def test_k3b_class_method():
     assert k3.ncpus_per_node == 28
     assert k3.queue_node_limit == 74
 
+def test_k3c_class_method():
+    k3 = PBS.k3c(profile_file=test_profile)
+    assert k3.queue_name == 'K3c-route'
+    assert k3.ncpus_per_node == 28
+    assert k3.queue_node_limit == 74
+
 
 def test_k4_class_method():
     k4 = PBS.k4(profile_file=test_profile)
