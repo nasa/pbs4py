@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>PBS Job Class &#8212; pbs4py  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -54,7 +54,7 @@
 pbs job. For the id number in the constructor, the qstat command will
 be used to populate the attributes of the job.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The id of the PBS job</p>
 </dd>
 </dl>
@@ -123,13 +123,13 @@ be used to populate the attributes of the job.</p>
 <span class="sig-name descname"><span class="pre">qdel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">echo_command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.job.PBSJob.qdel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call qdel to delete this job</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>echo_command</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to print the command before running it</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>command_output</strong> – The output of the shell command</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -142,7 +142,7 @@ be used to populate the attributes of the job.</p>
 Returns the entry of job_state in the qstat information, e.g.,
 ‘Q’, ‘R’, ‘F’, ‘H’, etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>

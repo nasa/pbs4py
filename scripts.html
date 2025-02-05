@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Scripts &#8212; pbs4py  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -47,7 +47,7 @@
 <h2>Job Directory Script<a class="headerlink" href="#job-directory-script" title="Permalink to this heading">¶</a></h2>
 <p><p>A script to print the directory that a job is running in.</p>
 </p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">job_dir</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">job_id</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">job_dir</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">job_id</span>
 </pre></div>
 </div>
 <section id="positional-arguments">
@@ -76,7 +76,7 @@ The list of jobs to be deleted can be filtered by id range, job name substring, 
 For safety, the default behavior is to show the user which jobs will be deleted and ask for confirmation
 before any jobs are deleted.</p>
 </p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">job_dir</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">id_range</span> <span class="n">ID_RANGE</span> <span class="n">ID_RANGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">queue</span> <span class="n">QUEUE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">confirm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">confirm</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">qdel_user_jobs</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">id_range</span> <span class="n">ID_RANGE</span> <span class="n">ID_RANGE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">queue</span> <span class="n">QUEUE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">confirm</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">confirm</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="named-arguments">

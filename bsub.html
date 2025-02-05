@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>BSUB Job Launcher &#8212; pbs4py  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -56,7 +56,7 @@
 <dd><p>A Class for creating and running jobs using the Department of Energy
 batch system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The project which to charge for submitted jobs</p></li>
 <li><p><strong>ngpu_per_node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of GPUs per compute node</p></li>
@@ -96,7 +96,7 @@ batch system.</p>
 Typical names include ‘~/.profile’, ‘~/.bashrc’, and ‘~/.cshrc’.
 If you do not wish to source a file, set to ‘’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -107,7 +107,7 @@ If you do not wish to source a file, set to ‘’.</p>
 <span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.launch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a job script and launch the job</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>
 <li><p><strong>job_body</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – List of commands to run in the body of the job.</p></li>
@@ -116,11 +116,11 @@ If false, this function will launch the job but not wait for it to finish.</p></
 <li><p><strong>dependency</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Jobs that this one depends one. For PBS, these are colon separated in the string</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>command_output</strong> – The stdout of the launch command. If the job is successfully launch,
 this will be the job id.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -131,7 +131,7 @@ this will be the job id.</p>
 <span class="sig-name descname"><span class="pre">write_job_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.write_job_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a launch script file in the current directory for the commands defined in <code class="docutils literal notranslate"><span class="pre">job_body</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>job_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – name of file to write to</p></li>
 <li><p><strong>job_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the job.</p></li>

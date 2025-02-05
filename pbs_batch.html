@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>PBS Job Batch Submission &#8212; pbs4py  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -96,7 +96,7 @@ with the job’s name</p>
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the job.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -107,7 +107,7 @@ with the job’s name</p>
 <span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.body" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of commands to run in PBS job</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>List[str]</p>
 </dd>
 </dl>
@@ -118,7 +118,7 @@ with the job’s name</p>
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#pbs4py.pbs_batch.BatchJob.id" title="Permalink to this definition">¶</a></dt>
 <dd><p>pbs job identifier returned by qsub</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -131,7 +131,7 @@ with the job’s name</p>
 Returns the entry of job_state in the qstat information, e.g.,
 ‘Q’, ‘R’, ‘F’, ‘H’, etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
 </dd>
 </dl>
@@ -149,7 +149,7 @@ Returns the entry of job_state in the qstat information, e.g.,
 job request size. By default, separate directories with the job’s name
 will be used to separate output files.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pbs</strong> (<a class="reference internal" href="pbs.html#pbs4py.pbs.PBS" title="pbs4py.pbs.PBS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBS</span></code></a>) – PBS handler that will be used to submit the jobs</p></li>
 <li><p><strong>jobs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#pbs4py.pbs_batch.BatchJob" title="pbs4py.pbs_batch.BatchJob"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchJob</span></code></a>]) – List of Job objects that will be run</p></li>
@@ -169,7 +169,7 @@ will be used to separate output files.</p>
 <dd><p>Launch of the all of the jobs in the list. Stores the pbs
 job id in the job objects</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>wait_for_jobs_to_finish</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the jobs will be submitted, and this function will not return
 until all of the jobs are finished.</p></li>
@@ -187,7 +187,7 @@ if <code class="docutils literal notranslate"><span class="pre">wait_for_jobs_to
 is set for the maximum number of jobs running or in the queue at a time since some people
 may not like if you submit 1000 jobs at once.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>max_jobs_at_a_time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Limit for number of jobs to have queued, running, or held at a time</p></li>
 <li><p><strong>check_frequency_in_secs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Time interval to wait before checking if jobs’ statuses.</p></li>
@@ -202,7 +202,7 @@ may not like if you submit 1000 jobs at once.</p>
 <dd><p>A blocking check for all the jobs in the batch to finish. Can be paired with
 <code class="docutils literal notranslate"><span class="pre">launch_all_jobs</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>check_frequency_in_secs</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – How often to check and print the jobs’ states</p>
 </dd>
 </dl>
