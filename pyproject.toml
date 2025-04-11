@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pbs4py"
+version = "1.0.10"
+description = "PBS scripting utilities"
+readme = "README.md"
+requires-python = ">=3.6"
+authors = [{ name = "Kevin Jacobson", email = "kevin.e.jacobson@nasa.gov" }]
+dependencies = ["numpy"]
+license = { file = "LICENSE"}
+
+[project.scripts]
+"qdel_user_jobs.py" = "pbs4py.scripts.qdel_user_jobs:main"
+"job_dir.py" = "pbs4py.scripts.job_dir:main"
