@@ -24,6 +24,9 @@ class Launcher:
         #: If true, redirection of the output of mpi commands changed to tee
         self.tee_output: bool = False
 
+        #: The number of CPU cores per node.
+        self.ncpus_per_node: int = 1
+
     @property
     def profile_filename(self):
         """
