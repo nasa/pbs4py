@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbs4py"
-version = "1.0.10"
+version = "1.1.0"
 description = "PBS scripting utilities"
 readme = "README.md"
 requires-python = ">=3.6"
