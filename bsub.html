@@ -52,31 +52,19 @@
 <span id="bsub-class"></span><h2>BSUB Class<a class="headerlink" href="#module-pbs4py.bsub" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pbs4py.bsub.BSUB">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.bsub.</span></span><span class="sig-name descname"><span class="pre">BSUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngpu_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pbs4py.bsub.</span></span><span class="sig-name descname"><span class="pre">BSUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngpus_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue_node_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'~/.bashrc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_number_of_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Class for creating and running jobs using the Department of Energy
 batch system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The project which to charge for submitted jobs</p></li>
-<li><p><strong>ngpu_per_node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of GPUs per compute node</p></li>
+<li><p><strong>ngpu_per_node</strong> – The number of GPUs per compute node</p></li>
 <li><p><strong>time</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The requested wall time for the job(s) in hours</p></li>
 <li><p><strong>profile_filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file setting the environment to source inside the PBS job</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.time" title="Permalink to this definition">¶</a></dt>
-<dd><p>The requested wall time for the job(s) in hours</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ngpu_per_node">
-<span class="sig-name descname"><span class="pre">ngpu_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ngpu_per_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of GPUs per compute node.</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pbs4py.bsub.BSUB.project">
 <span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.project" title="Permalink to this definition">¶</a></dt>
@@ -102,6 +90,39 @@ If you do not wish to source a file, set to ‘’.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.mpiexec">
+<span class="sig-name descname"><span class="pre">mpiexec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.mpiexec" title="Permalink to this definition">¶</a></dt>
+<dd><p>mpiexec, mpirun, mpiexec_mpt, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>The mpi execution command name</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.create_mpi_command">
+<span class="sig-name descname"><span class="pre">create_mpi_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_root_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openmp_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.create_mpi_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a command with mpiexec and route its standard and error output to a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The command thats needs to run in parallel</p></li>
+<li><p><strong>output_root_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The root name of the output file, {output_root_name}.out.</p></li>
+<li><p><strong>openmp_threads</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of openmp threads per mpi process.</p></li>
+<li><p><strong>ranks_per_node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of MPI ranks per compute node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>full_command</strong> – The full command string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pbs4py.bsub.BSUB.launch">
 <span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pbs4py.bsub.BSUB.launch" title="Permalink to this definition">¶</a></dt>
@@ -122,6 +143,31 @@ this will be the job id.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.mpiprocs_per_node">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mpiprocs_per_node</span></span><a class="headerlink" href="#pbs4py.bsub.BSUB.mpiprocs_per_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of requested mpiprocs per node. If not set, the launcher will default
+to the number of cpus per node.
+<code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-l</span> <span class="pre">select=1:ncpus=40:mpiprocs={mpiprocs_per_node}</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.requested_number_of_nodes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><a class="headerlink" href="#pbs4py.bsub.BSUB.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of nodes to request. That is, the ‘select’ number in the
+<code class="docutils literal notranslate"><span class="pre">#PBS</span> <span class="pre">-l</span> <span class="pre">select={requested_number_of_nodes}:ncpus=40:mpiprocs=40</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -156,9 +202,34 @@ If unset, the default is <code class="docutils literal notranslate"><span class=
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.requested_number_of_nodes">
-<span class="sig-name descname"><span class="pre">requested_number_of_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.requested_number_of_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of compute nodes requested</p>
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.queue_node_limit">
+<span class="sig-name descname"><span class="pre">queue_node_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.queue_node_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number nodes allowed by the queue</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The requested wall time for the pbs job(s) in hours</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ncpus_per_node">
+<span class="sig-name descname"><span class="pre">ncpus_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ncpus_per_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of CPU cores per node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ngpus_per_node">
+<span class="sig-name descname"><span class="pre">ngpus_per_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ngpus_per_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of GPUs per node.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pbs4py.bsub.BSUB.ranks_per_node_flag">
+<span class="sig-name descname"><span class="pre">ranks_per_node_flag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pbs4py.bsub.BSUB.ranks_per_node_flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command line option for mpiexec to specify the number of MPI ranks for host/node.
+Default is to set it based on the mpiexec version.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -185,16 +256,22 @@ If unset, the default is <code class="docutils literal notranslate"><span class=
 <li><a class="reference internal" href="#">BSUB Job Launcher</a><ul>
 <li><a class="reference internal" href="#module-pbs4py.bsub">BSUB Class</a><ul>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB"><code class="docutils literal notranslate"><span class="pre">BSUB</span></code></a><ul>
-<li><a class="reference internal" href="#pbs4py.bsub.BSUB.time"><code class="docutils literal notranslate"><span class="pre">BSUB.time</span></code></a></li>
-<li><a class="reference internal" href="#pbs4py.bsub.BSUB.ngpu_per_node"><code class="docutils literal notranslate"><span class="pre">BSUB.ngpu_per_node</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.project"><code class="docutils literal notranslate"><span class="pre">BSUB.project</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.mail_when_complete"><code class="docutils literal notranslate"><span class="pre">BSUB.mail_when_complete</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.profile_filename"><code class="docutils literal notranslate"><span class="pre">BSUB.profile_filename</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.mpiexec"><code class="docutils literal notranslate"><span class="pre">BSUB.mpiexec</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.create_mpi_command"><code class="docutils literal notranslate"><span class="pre">BSUB.create_mpi_command()</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.launch"><code class="docutils literal notranslate"><span class="pre">BSUB.launch()</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.mpiprocs_per_node"><code class="docutils literal notranslate"><span class="pre">BSUB.mpiprocs_per_node</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.requested_number_of_nodes"><code class="docutils literal notranslate"><span class="pre">BSUB.requested_number_of_nodes</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.write_job_file"><code class="docutils literal notranslate"><span class="pre">BSUB.write_job_file()</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.hashbang"><code class="docutils literal notranslate"><span class="pre">BSUB.hashbang</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.shell"><code class="docutils literal notranslate"><span class="pre">BSUB.shell</span></code></a></li>
-<li><a class="reference internal" href="#pbs4py.bsub.BSUB.requested_number_of_nodes"><code class="docutils literal notranslate"><span class="pre">BSUB.requested_number_of_nodes</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.queue_node_limit"><code class="docutils literal notranslate"><span class="pre">BSUB.queue_node_limit</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.time"><code class="docutils literal notranslate"><span class="pre">BSUB.time</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.ncpus_per_node"><code class="docutils literal notranslate"><span class="pre">BSUB.ncpus_per_node</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.ngpus_per_node"><code class="docutils literal notranslate"><span class="pre">BSUB.ngpus_per_node</span></code></a></li>
+<li><a class="reference internal" href="#pbs4py.bsub.BSUB.ranks_per_node_flag"><code class="docutils literal notranslate"><span class="pre">BSUB.ranks_per_node_flag</span></code></a></li>
 <li><a class="reference internal" href="#pbs4py.bsub.BSUB.tee_output"><code class="docutils literal notranslate"><span class="pre">BSUB.tee_output</span></code></a></li>
 </ul>
 </li>
