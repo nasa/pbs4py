@@ -13,8 +13,8 @@ class FakePBS(PBS):
     while already within the PBS job.
     """
 
-    def __init__(self, profile_file='', stop_at_first_failure=False):
-        super().__init__(profile_file=profile_file)
+    def __init__(self, profile_filename='', stop_at_first_failure=False):
+        super().__init__(profile_filename=profile_filename)
         self.stop_at_first_failure = stop_at_first_failure
 
     def launch(self, job_name: str, job_body: List[str],

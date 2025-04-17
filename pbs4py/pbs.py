@@ -16,7 +16,7 @@ class PBS(Launcher):
         queue_node_limit: int = 10,
         time: int = 72,
         mem: str = None,
-        profile_file: str = "~/.bashrc",
+        profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
     ):
         """
@@ -43,23 +43,12 @@ class PBS(Launcher):
         requested_number_of_nodes:
             The number of compute nodes to request
         """
-        #: The maximum number nodes allowed by the queue
-        self.queue_node_limit: int = queue_node_limit
-
-        super().__init__()
+        super().__init__(ncpus_per_node, ngpus_per_node, queue_node_limit,
+                         time, profile_filename, requested_number_of_nodes)
 
         #: The name of the queue which goes on the ``#PBS -N {queue_name}``
         #: line of the pbs header
         self.queue_name: str = queue_name
-
-        #: The number of CPU cores per node.
-        self.ncpus_per_node: int = ncpus_per_node
-
-        #: The number of GPUs per node.
-        self.ngpus_per_node: int = ngpus_per_node
-
-        #: The requested wall time for the pbs job(s) in hours
-        self.time: int = time
 
         #: The processor model if it needs to be specified.
         #: The associated PBS header line is ``#PBS -l select=#:ncpus=#:mpiprocs=#:model={model}``
@@ -78,9 +67,6 @@ class PBS(Launcher):
         #: The associated PBS header line is ``#PBS -J {array_range}``
         self.array_range: Union[str, None] = None
 
-        #: The mpi execution command name: mpiexec, mpirun, mpiexec_mpt, etc.
-        self.mpiexec: str = "mpiexec"
-
         #: ``pbs -m`` mail options. 'e' at exit, 'b' at beginning, 'a' at abort
         self.mail_options: str = None
 
@@ -91,145 +77,12 @@ class PBS(Launcher):
         #: Default is 'afterok' which only launches the new job if the previous one was successful.
         self.dependency_type: str = "afterok"
 
-        #: Command line option for mpiexec to specify the number of MPI ranks for host/node.
-        #: Default is to set it based on the mpiexec version.
-        self.ranks_per_node_flag: str = None
+        self.mpiexec: str = "mpiexec"
+        self.ranks_per_node_flag = None
 
-        self.profile_filename = profile_file
         self.workdir_env_variable = "$PBS_O_WORKDIR"
         self.batch_file_extension = "pbs"
-        self.mpiprocs_per_node = None
         self.requested_number_of_nodes = requested_number_of_nodes
-
-    @property
-    def requested_number_of_nodes(self):
-        """
-        The number of nodes to request. That is, the 'select' number in the
-        ``#PBS -l select={requested_number_of_nodes}:ncpus=40:mpiprocs=40``.
-
-        :type: int
-        """
-        return self._requested_number_of_nodes
-
-    @requested_number_of_nodes.setter
-    def requested_number_of_nodes(self, number_of_nodes):
-        self._requested_number_of_nodes = np.min((number_of_nodes, self.queue_node_limit))
-
-    @property
-    def mpiprocs_per_node(self):
-        """
-        The number of requested mpiprocs per node. If not set, the launcher will default
-        to the number of cpus per node.
-        ``#PBS -l select=1:ncpus=40:mpiprocs={mpiprocs_per_node}``.
-
-        :type: int
-        """
-        if self._mpiprocs_per_node is None:
-            return self.ncpus_per_node
-        else:
-            return self._mpiprocs_per_node
-
-    @mpiprocs_per_node.setter
-    def mpiprocs_per_node(self, mpiprocs):
-        self._mpiprocs_per_node = mpiprocs
-
-    def create_mpi_command(
-        self, command: str, output_root_name: str = None, openmp_threads: int = None, ranks_per_node: int = None
-    ) -> str:
-        """
-        Wrap a command with mpiexec and route its standard and error output to a file
-
-        Parameters
-        ----------
-        command:
-            The command thats needs to run in parallel
-        output_root_name:
-            The root name of the output file, {output_root_name}.out.
-        openmp_threads:
-            The number of openmp threads per mpi process.
-        ranks_per_node:
-            The number of MPI ranks per compute node.
-
-        Returns
-        -------
-        full_command: str
-            The full command string.
-        """
-        omp_env_vars = self._determine_omp_settings(openmp_threads)
-        ranks_per_node_info = self._set_ranks_per_node_info(openmp_threads, ranks_per_node)
-        openmp_info = self._set_openmp_info(openmp_threads)
-
-        full_command = [omp_env_vars, self.mpiexec, ranks_per_node_info, openmp_info, command]
-        if output_root_name is not None:
-            redirect_output = self._redirect_shell_output(f"{output_root_name}.out")
-            full_command.append(redirect_output)
-        return self._filter_empty_strings_from_list_and_combine(full_command)
-
-    def _use_omplace_command(self) -> bool:
-        return self._using_mpt()
-
-    def _use_openmp(self, openmp_threads: int or None):
-        if type(openmp_threads) == int:
-            if openmp_threads > 1:
-                return True
-        return False
-
-    def _using_mpt(self) -> bool:
-        if self.mpiexec == "mpiexec_mpt":
-            return True
-
-        try:
-            output = subprocess.run(
-                [self.mpiexec, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-            )
-            return "MPT" in output.stderr or "MPT" in output.stdout
-        except FileNotFoundError:
-            print(f"Executable '{self.mpiexec}' not found")
-            return False
-
-    def _get_ranks_per_node_flag(self):
-        if self.ranks_per_node_flag is not None:
-            return self.ranks_per_node_flag
-        else:
-            if self._using_mpt():
-                return "-perhost"
-            else:
-                return "--npernode"
-
-    def _determine_omp_settings(self, openmp_threads: int) -> str:
-        if openmp_threads is None:
-            return ""
-
-        omp_env_vars = [f"OMP_NUM_THREADS={openmp_threads}"]
-        if not self._use_omplace_command():
-            omp_env_vars.extend(["OMP_PLACES=cores", "OMP_PROC_BIND=close"])
-        return self._filter_empty_strings_from_list_and_combine(omp_env_vars)
-
-    def _filter_empty_strings_from_list_and_combine(self, lis: List[str]) -> str:
-        filtered_for_empty_strings = filter(None, lis)
-        return " ".join(filtered_for_empty_strings)
-
-    def _set_ranks_per_node_info(self, openmp_threads: int, ranks_per_node: int) -> str:
-        if ranks_per_node is None and openmp_threads is None:
-            return ""
-        elif ranks_per_node is not None:
-            mpi_procs_per_node = ranks_per_node
-        else:  # openmp_threads is not None:
-            mpi_procs_per_node = self.ncpus_per_node // openmp_threads
-
-        ranks_per_node_flag = self._get_ranks_per_node_flag()
-        ranks_per_proc_info = f"{ranks_per_node_flag} {mpi_procs_per_node}"
-        return ranks_per_proc_info
-
-    def _set_openmp_info(self, openmp_threads: int) -> str:
-        if not self._use_openmp(openmp_threads):
-            return ""
-
-        openmp_info = ""
-        if self._use_omplace_command():
-            proc_num_list = ",".join([str(i) for i in range(self.ncpus_per_node)])
-            openmp_info = f'omplace -c "{proc_num_list}" -nt {openmp_threads} -vv'
-        return openmp_info
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [
@@ -314,7 +167,7 @@ class PBS(Launcher):
     def _run_job(self, job_filename: str, blocking: bool, print_command_output=True) -> str:
         options = ""
         if blocking:
-            options += "-Wblock=true"
+            options += "-W block=true"
         command_output = os.popen(f"qsub {options} {job_filename}").read().strip()
         if print_command_output:
             print(command_output)
@@ -322,7 +175,7 @@ class PBS(Launcher):
 
     # Alternate constructors for NASA HPC queues
     @classmethod
-    def k4(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k4(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K4 queues on LaRC's K cluster including K4-standard-512.
 
@@ -340,12 +193,12 @@ class PBS(Launcher):
             ncpus_per_node=40,
             queue_node_limit=16,
             time=time,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
-    def k3c(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k3c(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3b queues on LaRC's K cluster.
 
@@ -363,12 +216,12 @@ class PBS(Launcher):
             ncpus_per_node=28,
             queue_node_limit=74,
             time=time,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
-    def k3b(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k3b(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3b queues on LaRC's K cluster.
 
@@ -386,12 +239,12 @@ class PBS(Launcher):
             ncpus_per_node=28,
             queue_node_limit=74,
             time=time,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
     @classmethod
-    def k3a(cls, time: int = 72, profile_file: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k3a(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
         """
         Constructor for the K3a queue on LaRC's K cluster.
 
@@ -409,7 +262,7 @@ class PBS(Launcher):
             ncpus_per_node=16,
             queue_node_limit=25,
             time=time,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
@@ -420,7 +273,7 @@ class PBS(Launcher):
         ncpus_per_node=0,
         ngpus_per_node=4,
         mem="200G",
-        profile_file: str = "~/.bashrc",
+        profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
     ):
         if ncpus_per_node == 0:
@@ -432,7 +285,7 @@ class PBS(Launcher):
             queue_node_limit=4,
             time=time,
             mem=mem,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
@@ -443,7 +296,7 @@ class PBS(Launcher):
         ncpus_per_node=0,
         ngpus_per_node=8,
         mem="700G",
-        profile_file: str = "~/.bashrc",
+        profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
     ):
         if ncpus_per_node == 0:
@@ -455,7 +308,7 @@ class PBS(Launcher):
             queue_node_limit=2,
             time=time,
             mem=mem,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
@@ -466,7 +319,7 @@ class PBS(Launcher):
         ncpus_per_node=0,
         ngpus_per_node=8,
         mem="700G",
-        profile_file: str = "~/.bashrc",
+        profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
     ):
         if ncpus_per_node == 0:
@@ -478,7 +331,7 @@ class PBS(Launcher):
             queue_node_limit=2,
             time=time,
             mem=mem,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
@@ -490,7 +343,7 @@ class PBS(Launcher):
         queue_name: str = "long",
         time: int = 72,
         mem: str = None,
-        profile_file: str = "~/.bashrc",
+        profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
     ):
         """
@@ -573,10 +426,33 @@ class PBS(Launcher):
             queue_node_limit=int(1e6),
             time=time,
             mem=mem,
-            profile_file=profile_file,
+            profile_filename=profile_filename,
             requested_number_of_nodes=requested_number_of_nodes,
         )
 
         pbs.group_list = group_list
         pbs.model = model
+        return pbs
+
+    @classmethod
+    def cf1(
+        cls,
+        account: str,
+        queue_name: str = "normal",
+        queue_node_limit: int = 30,
+        time: int = 24,
+        ncpus_per_node=64,
+        profile_filename: str = "~/.bashrc",
+        requested_number_of_nodes: int = 2,
+    ):
+        pbs = cls(
+            queue_name=queue_name,
+            queue_node_limit=queue_node_limit,
+            ncpus_per_node=ncpus_per_node,
+            time=time,
+            profile_filename=profile_filename,
+            requested_number_of_nodes=requested_number_of_nodes,
+        )
+        pbs.group_list = account
+        pbs.workdir_env_variable = "$SLURM_SUBMIT_DIR"
         return pbs

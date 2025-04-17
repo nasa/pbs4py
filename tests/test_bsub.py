@@ -19,7 +19,7 @@ def bsub_header_test():
     ngpu = 5
     time = 24
     hashbang = '#!/usr/bin/tcsh'
-    bsub_header_test = BSUB(project, ngpu_per_node=ngpu, time=time,
+    bsub_header_test = BSUB(project, ngpus_per_node=ngpu, time=time,
                             profile_filename=test_profile)
     bsub_header_test.hashbang = hashbang
     bsub_header_test.requested_number_of_nodes = 2
@@ -74,7 +74,7 @@ def test_parse_job_id_from_bsub_output(bsub_header_test: BSUB):
 
 
 def test_create_command(bsub_header_test: BSUB):
-    bsub_header_test.ngpu_per_node = 3
+    bsub_header_test.ngpus_per_node = 3
     bsub_header_test.requested_number_of_nodes = 2
     command = bsub_header_test.create_mpi_command('a.out', 'dog', openmp_threads=2)
     assert command == 'jsrun -n 6 -a 1 -c 2 -g 1 a.out &> dog.out'
