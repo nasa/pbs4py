@@ -7,9 +7,11 @@ from pbs4py.launcher_base import Launcher
 class BSUB(Launcher):
     def __init__(self,
                  project: str,
-                 ngpu_per_node: int = 6,
+                 ngpus_per_node: int = 6,
+                 queue_node_limit: int = 1_000_000,
                  time: int = 72,
-                 profile_filename: str = '~/.bashrc'):
+                 profile_filename: str = '~/.bashrc',
+                 requested_number_of_nodes: int = 1):
         """
         A Class for creating and running jobs using the Department of Energy
         batch system.
@@ -25,13 +27,8 @@ class BSUB(Launcher):
         profile_filename:
             The file setting the environment to source inside the PBS job
         """
-        super().__init__()
-
-        #: The requested wall time for the job(s) in hours
-        self.time: int = time
-
-        #: The number of GPUs per compute node.
-        self.ngpu_per_node: int = ngpu_per_node
+        super().__init__(ngpus_per_node, ngpus_per_node, queue_node_limit,
+                         time, profile_filename, requested_number_of_nodes)
 
         #: The project which to charge for submitted jobs
         self.project: str = project
@@ -42,13 +39,15 @@ class BSUB(Launcher):
         self.profile_filename = profile_filename
         self.workdir_env_variable = '$LS_SUBCWD'
         self.batch_file_extension = 'lsf'
+        self.mpiexec = 'jsrun'
 
     def create_mpi_command(self, command: str,
                            output_root_name: str,
-                           openmp_threads: int = 1) -> str:
-        num_mpi_procs = self.requested_number_of_nodes * self.ngpu_per_node
+                           openmp_threads: int = 1,
+                           ranks_per_node: int = None) -> str:
+        num_mpi_procs = self.requested_number_of_nodes * self.ngpus_per_node
         redirect_output = self._redirect_shell_output(f'{output_root_name}.out')
-        command = f'jsrun -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} {redirect_output}'
+        command = f'{self.mpiexec} -n {num_mpi_procs} -a 1 -c {openmp_threads} -g 1 {command} {redirect_output}'
         return command
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
@@ -85,7 +84,7 @@ class BSUB(Launcher):
 
     def _create_mail_header_line(self) -> List[str]:
         if self.mail_when_complete:
-            return [f'#BSUB -N']
+            return ['#BSUB -N']
         else:
             return []
 

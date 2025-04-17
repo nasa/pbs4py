@@ -22,7 +22,7 @@ def pbs_header_test():
     hashbang = '#!/usr/bin/tcsh'
     pbs_header_test = PBS(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
                           queue_node_limit=queue_node_limit, time=time,
-                          profile_file=test_profile)
+                          profile_filename=test_profile)
     pbs_header_test.hashbang = hashbang
     pbs_header_test.requested_number_of_nodes = 2
     return pbs_header_test
@@ -60,6 +60,13 @@ def test_select_line_with_model_defined(pbs_header_test: PBS):
     pbs_header_test.model = 'bro'
     header = pbs_header_test._create_select_line_of_header()
     expected = "#PBS -l select=2:ncpus=5:mpiprocs=5:model=bro"
+    assert header == expected
+
+
+def test_select_line_with_gpus(pbs_header_test: PBS):
+    pbs_header_test.ngpus_per_node = 2
+    header = pbs_header_test._create_select_line_of_header()
+    expected = "#PBS -l select=2:ncpus=5:ngpus=2:mpiprocs=5"
     assert header == expected
 
 

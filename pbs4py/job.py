@@ -146,7 +146,7 @@ class PBSJob:
         return result.stdout.decode("utf-8", errors="replace").split("\n")
 
     def _is_a_known_job(self, qstat_output):
-        return not "Unknown Job Id" in qstat_output
+        return "Unknown Job Id" not in qstat_output
 
     def _parse_attributes_from_qstat_output(self, qstat_output: List[str]):
         qstat_dict = self._convert_qstat_output_to_a_dictionary(qstat_output)
@@ -161,13 +161,15 @@ class PBSJob:
         else:
             self.model = ""
         self.requested_number_of_nodes = int(qstat_dict["Resource_List.select"].split(":")[0])
-        self.ncpus_per_node = int(qstat_dict["Resource_List.select"].split("ncpus=")[-1].split(":")[0])
+        self.ncpus_per_node = int(
+            qstat_dict["Resource_List.select"].split("ncpus=")[-1].split(":")[0])
 
         self.exit_status: int = qstat_dict.get("Exit_status")
         if self.exit_status is not None:
             self.exit_status = int(self.exit_status)
 
-        self.walltime_requested = self._convert_walltime_to_seconds(qstat_dict["Resource_List.walltime"])
+        self.walltime_requested = self._convert_walltime_to_seconds(
+            qstat_dict["Resource_List.walltime"])
         if self.state != "Q":
             self.hostname = qstat_dict["exec_host"].split("/")[0]
             self.walltime_used = qstat_dict.get("resources_used.walltime")

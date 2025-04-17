@@ -30,7 +30,7 @@ def test_write_job_file_regression_check():
     hashbang = '#!/usr/bin/bash'
     pbs = PBS(queue_name=queue_name, ncpus_per_node=ncpus_per_node,
               queue_node_limit=queue_node_limit, time=time,
-              profile_file=test_profile)
+              profile_filename=test_profile)
     pbs.hashbang = hashbang
 
     job_name = 'test_job'

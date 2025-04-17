@@ -5,7 +5,7 @@ test_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_fakePBS():
-    pbs = FakePBS(profile_file=f'{test_directory}/testing_bashrc')
+    pbs = FakePBS(profile_filename=f'{test_directory}/testing_bashrc')
     job_name = 'test'
 
     file = 'fake_file.txt'
