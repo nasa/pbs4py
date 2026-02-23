@@ -37,7 +37,7 @@ class PBS(Launcher):
             The requested job walltime in hours
         mem:
             The requested memory size. String to allow specifying in G, MB, etc.
-        profile_file:
+        profile_filename:
             The file setting the environment to source inside the PBS job. Set to
             '' if you do not wish to source a file.
         requested_number_of_nodes:
