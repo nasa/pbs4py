@@ -395,7 +395,7 @@ class PBS(Launcher):
         elif "bro" in proc_type.lower():
             ncpus_per_node = 28
             ngpus_per_node = 0
-            model = "bro"
+            model = "bro_ele"
         elif "has" in proc_type.lower():
             ncpus_per_node = 24
             ngpus_per_node = 0
