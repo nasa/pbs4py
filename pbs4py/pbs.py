@@ -228,9 +228,6 @@ class PBS(Launcher):
     def k5_a100_80(cls, **kwargs):
         """
         Constructor for the K5-A100-80 GPU queue on LaRC's K cluster.
-
-        **kwargs:
-            Additional arguments to pass to the PBS constructor
         """
         # set ncpus_per_node as ngpus if not directly set
         if kwargs.get('ncpus_per_node', 0) == 0:
@@ -262,7 +259,7 @@ class PBS(Launcher):
         return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def nas(cls, group_list: str, proc_type: str = "broadwell", **kwargs):
+    def nas(cls, group_list: str, proc_type: str = "rome", **kwargs):
         """
         Constructor for the queues at NAS. Must specify the group_list
 
@@ -274,16 +271,6 @@ class PBS(Launcher):
         proc_type:
             The type of processor to submit to. Can write out or just the first 3 letters:
             'cas', 'sky', 'bro', 'has', 'ivy', 'san', 'rom', 'mil', 'tur'.
-        queue_name:
-            Which queue to submit to: devel, debug, normal, long, etc.
-        time:
-            The requested job walltime in hours
-        profile_filename:
-            The file setting the environment to source inside the PBS job
-        requested_number_of_nodes:
-            The number of compute nodes to request
-        **kwargs:
-            Additional arguments to pass to the PBS constructor
         """
 
         proc_configs = {
@@ -336,8 +323,6 @@ class PBS(Launcher):
         ----------
         account:
             The account/group for the group_list entry
-        **kwargs:
-            Additional arguments to pass to the PBS constructor
         """
         defaults = {
             'queue_name': 'normal',
