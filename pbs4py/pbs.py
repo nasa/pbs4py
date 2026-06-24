@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import os
-import subprocess
 from typing import List, Union
-import numpy as np
 
 from pbs4py.launcher_base import Launcher
 
@@ -18,6 +16,7 @@ class PBS(Launcher):
         mem: str = None,
         profile_filename: str = "~/.bashrc",
         requested_number_of_nodes: int = 1,
+        model: str = None,
     ):
         """
         | A class for creating and running pbs jobs. Default queue properties are for K4.
@@ -53,7 +52,7 @@ class PBS(Launcher):
         #: The processor model if it needs to be specified.
         #: The associated PBS header line is ``#PBS -l select=#:ncpus=#:mpiprocs=#:model={model}``
         #: If left as `None`, the ``:model={mode}`` will not be added to the header line
-        self.model: Union[str, None] = None
+        self.model = model
 
         #: The group for the group_list entry of the pbs header if necessary.
         #: The associated PBS header line is ``#PBS -W group_list={group_list}``
@@ -83,6 +82,9 @@ class PBS(Launcher):
         self.workdir_env_variable = "$PBS_O_WORKDIR"
         self.batch_file_extension = "pbs"
         self.requested_number_of_nodes = requested_number_of_nodes
+
+        #: scatter placement, for example excl would be "#place=scatter:excl"
+        self.place = None
 
     def _create_list_of_standard_header_options(self, job_name: str) -> List[str]:
         header_lines = [
@@ -134,6 +136,7 @@ class PBS(Launcher):
         header_lines = []
         header_lines.extend(self._create_group_list_header_line())
         header_lines.extend(self._create_array_range_header_line())
+        header_lines.extend(self._create_place_line())
         header_lines.extend(self._create_mail_options_header_lines())
         header_lines.extend(self._create_job_dependencies_header_line(dependency))
         return header_lines
@@ -147,6 +150,12 @@ class PBS(Launcher):
     def _create_array_range_header_line(self) -> List[str]:
         if self.array_range is not None:
             return [f"#PBS -J {self.array_range}"]
+        else:
+            return []
+
+    def _create_place_line(self):
+        if self.place is not None:
+            return [f"#PBS -l place=scatter:{self.place}"]
         else:
             return []
 
@@ -175,177 +184,85 @@ class PBS(Launcher):
 
     # Alternate constructors for NASA HPC queues
     @classmethod
-    def k4(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k4(cls, **kwargs):
         """
         Constructor for the K4 queues on LaRC's K cluster including K4-standard-512.
-
-        Parameters
-        ----------
-        time:
-            The requested job walltime in hours
-        profile_file:
-            The file setting the environment to source inside the PBS job
-        requested_number_of_nodes:
-            The number of compute nodes to request
         """
-        return cls(
-            queue_name="K4-route",
-            ncpus_per_node=40,
-            queue_node_limit=16,
-            time=time,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+        defaults = {
+            'queue_name': "K4-route",
+            'ncpus_per_node': 40,
+            'queue_node_limit': 16,
+        }
+        return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def k3c(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k3b(cls, **kwargs):
         """
         Constructor for the K3b queues on LaRC's K cluster.
-
-        Parameters
-        ----------
-        time:
-            The requested job walltime in hours
-        profile_file:
-            The file setting the environment to source inside the PBS job
-        requested_number_of_nodes:
-            The number of compute nodes to request
         """
-        return cls(
-            queue_name="K3c-route",
-            ncpus_per_node=28,
-            queue_node_limit=74,
-            time=time,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+        defaults = {
+            'queue_name': "K3b-route",
+            'ncpus_per_node': 28,
+            'queue_node_limit': 74,
+        }
+        return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def k3b(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k4_v100(cls, **kwargs):
         """
-        Constructor for the K3b queues on LaRC's K cluster.
-
-        Parameters
-        ----------
-        time:
-            The requested job walltime in hours
-        profile_file:
-            The file setting the environment to source inside the PBS job
-        requested_number_of_nodes:
-            The number of compute nodes to request
+        Constructor for the K4-V100 GPU queue on LaRC's K cluster.
         """
-        return cls(
-            queue_name="K3b-route",
-            ncpus_per_node=28,
-            queue_node_limit=74,
-            time=time,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+        # set ncpus_per_node as ngpus if not directly set
+        if kwargs.get('ncpus_per_node', 0) == 0:
+            kwargs['ncpus_per_node'] = kwargs.get('ngpus_per_node', 4)
+
+        defaults = {
+            'queue_name': "K4-V100",
+            'ngpus_per_node': 4,
+            'queue_node_limit': 4,
+            'mem': "200G",
+        }
+        return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def k3a(cls, time: int = 72, profile_filename: str = "~/.bashrc", requested_number_of_nodes: int = 1):
+    def k5_a100_80(cls, **kwargs):
         """
-        Constructor for the K3a queue on LaRC's K cluster.
+        Constructor for the K5-A100-80 GPU queue on LaRC's K cluster.
 
-        Parameters
-        ----------
-        time:
-            The requested job walltime in hours
-        profile_file:
-            The file setting the environment to source inside the PBS job
-        requested_number_of_nodes:
-            The number of compute nodes to request
+        **kwargs:
+            Additional arguments to pass to the PBS constructor
         """
-        return cls(
-            queue_name="K3a-route",
-            ncpus_per_node=16,
-            queue_node_limit=25,
-            time=time,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+        # set ncpus_per_node as ngpus if not directly set
+        if kwargs.get('ncpus_per_node', 0) == 0:
+            kwargs['ncpus_per_node'] = kwargs.get('ngpus_per_node', 8)
+
+        defaults = {
+            'queue_name': "K5-A100-80",
+            'ngpus_per_node': 8,
+            'queue_node_limit': 2,
+            'mem': "700G",
+        }
+        return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def k4_v100(
-        cls,
-        time: int = 72,
-        ncpus_per_node=0,
-        ngpus_per_node=4,
-        mem="200G",
-        profile_filename: str = "~/.bashrc",
-        requested_number_of_nodes: int = 1,
-    ):
-        if ncpus_per_node == 0:
-            ncpus_per_node = ngpus_per_node
-        return cls(
-            queue_name="K4-V100",
-            ncpus_per_node=ncpus_per_node,
-            ngpus_per_node=ngpus_per_node,
-            queue_node_limit=4,
-            time=time,
-            mem=mem,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+    def k5_a100_40(cls, **kwargs):
+        """
+        Constructor for the K5-A100-40 GPU queue on LaRC's K cluster.
+        """
+        # set ncpus_per_node as ngpus if not directly set
+        if kwargs.get('ncpus_per_node', 0) == 0:
+            kwargs['ncpus_per_node'] = kwargs.get('ngpus_per_node', 8)
+
+        defaults = {
+            'queue_name': "K5-A100-40",
+            'ngpus_per_node': 8,
+            'queue_node_limit': 2,
+            'mem': "700G",
+        }
+        return cls(**{**defaults, **kwargs})
 
     @classmethod
-    def k5_a100_80(
-        cls,
-        time: int = 72,
-        ncpus_per_node=0,
-        ngpus_per_node=8,
-        mem="700G",
-        profile_filename: str = "~/.bashrc",
-        requested_number_of_nodes: int = 1,
-    ):
-        if ncpus_per_node == 0:
-            ncpus_per_node = ngpus_per_node
-        return cls(
-            queue_name="K5-A100-80",
-            ncpus_per_node=ncpus_per_node,
-            ngpus_per_node=ngpus_per_node,
-            queue_node_limit=2,
-            time=time,
-            mem=mem,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
-
-    @classmethod
-    def k5_a100_40(
-        cls,
-        time: int = 72,
-        ncpus_per_node=0,
-        ngpus_per_node=8,
-        mem="700G",
-        profile_filename: str = "~/.bashrc",
-        requested_number_of_nodes: int = 1,
-    ):
-        if ncpus_per_node == 0:
-            ncpus_per_node = ngpus_per_node
-        return cls(
-            queue_name="K5-A100-40",
-            ncpus_per_node=ncpus_per_node,
-            ngpus_per_node=ngpus_per_node,
-            queue_node_limit=2,
-            time=time,
-            mem=mem,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
-
-    @classmethod
-    def nas(
-        cls,
-        group_list: str,
-        proc_type: str = "broadwell",
-        queue_name: str = "long",
-        time: int = 72,
-        mem: str = None,
-        profile_filename: str = "~/.bashrc",
-        requested_number_of_nodes: int = 1,
-    ):
+    def nas(cls, group_list: str, proc_type: str = "broadwell", **kwargs):
         """
         Constructor for the queues at NAS. Must specify the group_list
 
@@ -356,103 +273,81 @@ class PBS(Launcher):
             The associated PBS header line is "#PBS -W group_list={group_list}".
         proc_type:
             The type of processor to submit to. Can write out or just the first 3 letters:
-            'cas', 'sky', 'bro', 'has', 'ivy', 'san'.
+            'cas', 'sky', 'bro', 'has', 'ivy', 'san', 'rom', 'mil', 'tur'.
         queue_name:
             Which queue to submit to: devel, debug, normal, long, etc.
         time:
             The requested job walltime in hours
-        profile_file:
+        profile_filename:
             The file setting the environment to source inside the PBS job
+        requested_number_of_nodes:
+            The number of compute nodes to request
+        **kwargs:
+            Additional arguments to pass to the PBS constructor
         """
-        if "sky_gpu" in proc_type.lower():
-            ncpus_per_node = 36
-            ngpus_per_node = 4
-            model = "sky_gpu"
-            mem = "200G"
-        elif "cas_gpu" in proc_type.lower():
-            ncpus_per_node = 48
-            ngpus_per_node = 4
-            model = "cas_gpu"
-            mem = "200G"
-        elif "rom_gpu" in proc_type.lower():
-            ncpus_per_node = 128
-            ngpus_per_node = 8
-            model = "rom_gpu"
-            mem = "700G"
-        elif "mil_a100" in proc_type.lower():
-            ncpus_per_node = 64
-            ngpus_per_node = 4
-            model = "mil_a100"
-            mem = "500G"
-        elif "cas" in proc_type.lower():
-            ncpus_per_node = 40
-            ngpus_per_node = 0
-            model = "cas_ait"
-        elif "sky" in proc_type.lower():
-            ncpus_per_node = 40
-            ngpus_per_node = 0
-            model = "sky_ele"
-        elif "bro" in proc_type.lower():
-            ncpus_per_node = 28
-            ngpus_per_node = 0
-            model = "bro"
-        elif "has" in proc_type.lower():
-            ncpus_per_node = 24
-            ngpus_per_node = 0
-            model = "has"
-        elif "ivy" in proc_type.lower():
-            ncpus_per_node = 20
-            ngpus_per_node = 0
-            model = "ivy"
-        elif "san" in proc_type.lower():
-            ncpus_per_node = 16
-            ngpus_per_node = 0
-            model = "san"
-        elif "rom" in proc_type.lower():
-            ncpus_per_node = 128
-            ngpus_per_node = 0
-            model = "rom_ait"
-        elif "mil" in proc_type.lower():
-            ncpus_per_node = 128
-            ngpus_per_node = 0
-            model = "mil_ait"
-        else:
-            raise ValueError("Unknown NAS processor selection")
 
-        pbs = cls(
-            queue_name=queue_name,
-            ncpus_per_node=ncpus_per_node,
-            ngpus_per_node=ngpus_per_node,
-            queue_node_limit=int(1e6),
-            time=time,
-            mem=mem,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+        proc_configs = {
+            'sky_gpu': {'ncpus_per_node': 36, 'ngpus_per_node': 4, 'model': 'sky_gpu', 'mem': '200G'},
+            'cas_gpu': {'ncpus_per_node': 48, 'ngpus_per_node': 4, 'model': 'cas_gpu', 'mem': '200G'},
+            'rom_gpu': {'ncpus_per_node': 128, 'ngpus_per_node': 8, 'model': 'rom_gpu', 'mem': '700G'},
+            'mil_a100': {'ncpus_per_node': 64, 'ngpus_per_node': 4, 'model': 'mil_a100', 'mem': '500G'},
+            'cas': {'ncpus_per_node': 40,  'model': 'cas_ait'},
+            'sky': {'ncpus_per_node': 40,  'model': 'sky_ele'},
+            'bro': {'ncpus_per_node': 28,  'model': 'bro'},
+            'rom': {'ncpus_per_node': 128,  'model': 'rom_ait'},
+            'mil': {'ncpus_per_node': 128,  'model': 'mil_ait'},
+            'tur': {'ncpus_per_node': 256,  'model': 'tur_ath'},
+        }
 
+        # map proc_type to configuration
+        proc_lower = proc_type.lower()
+        config = None
+        for key in ['sky_gpu', 'cas_gpu', 'rom_gpu', 'mil_a100']:
+            if key in proc_lower:
+                config = proc_configs[key]
+                break
+
+        if config is None:
+            for key in ['cas', 'sky', 'bro', 'rom', 'mil', 'tur']:
+                if key in proc_lower:
+                    config = proc_configs[key]
+                    break
+
+        if config is None:
+            raise ValueError(f"Unknown NAS processor selection: {proc_type}")
+
+        defaults = {
+            'queue_name': 'long',
+            'queue_node_limit': int(1e6),
+            **config
+        }
+
+        pbs = cls(**{**defaults, **kwargs})
         pbs.group_list = group_list
-        pbs.model = model
+        pbs.model = config['model']
         return pbs
 
     @classmethod
-    def cf1(
-        cls,
-        account: str,
-        queue_name: str = "normal",
-        queue_node_limit: int = 30,
-        time: int = 24,
-        ncpus_per_node=64,
-        profile_filename: str = "~/.bashrc",
-        requested_number_of_nodes: int = 2,
-    ):
-        pbs = cls(
-            queue_name=queue_name,
-            queue_node_limit=queue_node_limit,
-            ncpus_per_node=ncpus_per_node,
-            time=time,
-            profile_filename=profile_filename,
-            requested_number_of_nodes=requested_number_of_nodes,
-        )
+    def cf1(cls, account: str, **kwargs):
+        """
+        Constructor for the CF1 cluster.
+
+        Parameters
+        ----------
+        account:
+            The account/group for the group_list entry
+        **kwargs:
+            Additional arguments to pass to the PBS constructor
+        """
+        defaults = {
+            'queue_name': 'normal',
+            'queue_node_limit': 30,
+            'time': 24,
+            'ncpus_per_node': 64,
+            'requested_number_of_nodes': 2,
+        }
+
+        pbs = cls(**{**defaults, **kwargs})
         pbs.group_list = account
         pbs.workdir_env_variable = "$SLURM_SUBMIT_DIR"
         return pbs
