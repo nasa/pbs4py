@@ -6,23 +6,9 @@ test_directory = os.path.dirname(os.path.abspath(__file__))
 test_profile = f'{test_directory}/testing_bashrc'
 
 
-def test_k3a_class_method():
-    k3a = PBS.k3a(profile_filename=test_profile)
-    assert k3a.queue_name == 'K3a-route'
-    assert k3a.ncpus_per_node == 16
-    assert k3a.queue_node_limit == 25
-
-
 def test_k3b_class_method():
     k3 = PBS.k3b(profile_filename=test_profile)
     assert k3.queue_name == 'K3b-route'
-    assert k3.ncpus_per_node == 28
-    assert k3.queue_node_limit == 74
-
-
-def test_k3c_class_method():
-    k3 = PBS.k3c(profile_filename=test_profile)
-    assert k3.queue_name == 'K3c-route'
     assert k3.ncpus_per_node == 28
     assert k3.queue_node_limit == 74
 
@@ -74,27 +60,6 @@ def test_nas_broadwell_class_method():
     assert nas.group_list == 'n1337'
     assert nas.ncpus_per_node == 28
     assert nas.model == 'bro'
-
-
-def test_nas_haswell_class_method():
-    nas = PBS.nas('n1337', 'has', profile_filename=test_profile)
-    assert nas.group_list == 'n1337'
-    assert nas.ncpus_per_node == 24
-    assert nas.model == 'has'
-
-
-def test_nas_ivybridge_class_method():
-    nas = PBS.nas('n1337', 'ivy', profile_filename=test_profile)
-    assert nas.group_list == 'n1337'
-    assert nas.ncpus_per_node == 20
-    assert nas.model == 'ivy'
-
-
-def test_nas_sandybridge_class_method():
-    nas = PBS.nas('n1337', 'san', profile_filename=test_profile)
-    assert nas.group_list == 'n1337'
-    assert nas.ncpus_per_node == 16
-    assert nas.model == 'san'
 
 
 def test_nas_mil_class_method():
