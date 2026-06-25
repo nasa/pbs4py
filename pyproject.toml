@@ -17,4 +17,4 @@ monitor = ["dash>=2.0"]
 [project.scripts]
 "qdel_user_jobs.py" = "pbs4py.scripts.qdel_user_jobs:main"
 "job_dir.py" = "pbs4py.scripts.job_dir:main"
-pbs-monitor = "pbs4py.monitoring.pbs_monitor:main"
+"pbs_monitor.py" = "pbs4py.monitoring.pbs_monitor:main"

@@ -13,25 +13,41 @@ from pbs4py.job import PBSJob
 
 
 def _get_user_job_ids(user: str | None = None) -> list[str]:
-    """Return all job ids (active + recently finished) for the user."""
+    """Return all job ids (active + finished history) for the user."""
     user = user or getpass.getuser()
     result = subprocess.run(
-        ["qstat", "-xu", user],
+        ["qselect", "-x", "-u", user],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         check=False,
     )
-    job_ids: list[str] = []
-    for line in result.stdout.decode("utf-8", errors="replace").splitlines():
-        # qstat -xu lines starting with a digit are job rows; the first token is the id.
-        token = line.split(None, 1)[0] if line.strip() else ""
-        if token and token[0].isdigit():
-            job_ids.append(token)
-    return job_ids
+    return [
+        line.strip()
+        for line in result.stdout.decode("utf-8", errors="replace").splitlines()
+        if line.strip()
+    ]
 
 
 def get_user_jobs(user: str | None = None) -> list[PBSJob]:
-    return [PBSJob(jid) for jid in _get_user_job_ids(user)]
+    jobs = []
+    for jid in _get_user_job_ids(user):
+        try:
+            jobs.append(PBSJob(jid))
+        except Exception:
+            print(f"\n=== Failed to load PBSJob for id: {jid} ===", flush=True)
+            result = subprocess.run(
+                ["qstat", "-xf", jid],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            print("--- stdout ---", flush=True)
+            print(result.stdout.decode("utf-8", errors="replace"), flush=True)
+            print("--- stderr ---", flush=True)
+            print(result.stderr.decode("utf-8", errors="replace"), flush=True)
+            print(f"--- returncode: {result.returncode} ---", flush=True)
+            raise
+    return jobs
 
 
 def has_dog_out(job: PBSJob) -> bool:
@@ -48,4 +64,4 @@ def split_active_and_finished(
     active = [j for j in jobs if j.state in ("Q", "R", "H", "E", "B", "W", "T")]
     finished = [j for j in jobs if j.state == "F"]
     finished.sort(key=lambda j: j.mtime or datetime.min, reverse=True)
-    return active, finished
+    return active, finished[:n_recent_finished]
