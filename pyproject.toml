@@ -4,14 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbs4py"
-version = "1.1.0"
+version = "1.2.0"
 description = "PBS scripting utilities"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 authors = [{ name = "Kevin Jacobson", email = "kevin.e.jacobson@nasa.gov" }]
-dependencies = ["numpy"]
 license = { file = "LICENSE"}
+
+[project.optional-dependencies]
+monitor = ["dash>=2.0"]
 
 [project.scripts]
 "qdel_user_jobs.py" = "pbs4py.scripts.qdel_user_jobs:main"
 "job_dir.py" = "pbs4py.scripts.job_dir:main"
+pbs-monitor = "pbs4py.monitoring.pbs_monitor:main"

@@ -27,6 +27,11 @@ pbs4py can be installed with
 pip install pbs4py
 ```
 
+For the dash app:
+```
+pip install pbs4py[monitor]
+```
+
 # Quick Start
 
 After installation,
