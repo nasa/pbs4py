@@ -193,7 +193,7 @@ class PBSJob:
         self.mtime_raw = qstat_dict.get("mtime", "")
         self.mtime = self._parse_mtime(self.mtime_raw)
 
-        if self.state != "Q":
+        if self.state in ["R", "F"]:
             self.hostname = qstat_dict["exec_host"].split("/")[0]
             walltime_used = qstat_dict.get("resources_used.walltime")
             if walltime_used is not None:
@@ -282,7 +282,10 @@ class PBSJob:
             return []
         result = subprocess.run(
             ["qstat", "-fx", *ids],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
         )
         # qstat -f output has "Job Id: <id>" section headers; split on those
         jobs = []
@@ -291,10 +294,12 @@ class PBSJob:
         for line in result.stdout.splitlines():
             if line.startswith("Job Id:"):
                 if current_id is not None:
-                    job = cls.__new__(cls)          # skip __init__/qstat
+                    job = cls.__new__(cls)  # skip __init__/qstat
                     job.id = current_id
                     job._set_empty_attributes()
-                    job._parse_attributes_from_qstat_output(["Job Id: " + current_id] + current_lines)
+                    job._parse_attributes_from_qstat_output(
+                        ["Job Id: " + current_id] + current_lines
+                    )
                     jobs.append(job)
                 current_id = line.split(":", 1)[1].strip()
                 current_lines = []
