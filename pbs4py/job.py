@@ -275,3 +275,35 @@ class PBSJob:
     @staticmethod
     def _is_a_continued_qstat_line(line: str) -> bool:
         return line.startswith("\t")
+
+    @classmethod
+    def from_ids_bulk(cls, ids: list[str]) -> list["PBSJob"]:
+        if not ids:
+            return []
+        result = subprocess.run(
+            ["qstat", "-fx", *ids],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False,
+        )
+        # qstat -f output has "Job Id: <id>" section headers; split on those
+        jobs = []
+        current_lines: list[str] = []
+        current_id: str | None = None
+        for line in result.stdout.splitlines():
+            if line.startswith("Job Id:"):
+                if current_id is not None:
+                    job = cls.__new__(cls)          # skip __init__/qstat
+                    job.id = current_id
+                    job._set_empty_attributes()
+                    job._parse_attributes_from_qstat_output(["Job Id: " + current_id] + current_lines)
+                    jobs.append(job)
+                current_id = line.split(":", 1)[1].strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
+        if current_id is not None:
+            job = cls.__new__(cls)
+            job.id = current_id
+            job._set_empty_attributes()
+            job._parse_attributes_from_qstat_output(["Job Id: " + current_id] + current_lines)
+            jobs.append(job)
+        return jobs
