@@ -42,7 +42,7 @@ unit_tests:
     - gitlab_runner
   script:
     - "ssh -o LogLevel=error  ${user_name}@${build_machine} \"cd ${project_dir}
-           && module load Python_3.7.1 && setenv PYTHONPATH `pwd`:$PYTHONPATH && pytest -vs \" "
+           && module load Python_3.12.5 && setenv PYTHONPATH `pwd`:$PYTHONPATH && pytest -vs \" "
 
 test_doc_build:
   stage: docs
