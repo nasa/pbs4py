@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 class PBSJob:
-    def __init__(self, id: str):
+    def __init__(self, id: str = ""):
         """
         A class for querying information and managing a particular submitted
         PBS job. For the id number in the constructor, the ``qstat`` command
@@ -62,7 +62,8 @@ class PBSJob:
         #: Parsed mtime as a datetime (None if not available or unparseable).
         self.mtime: datetime | None = None
 
-        self.read_properties_from_qstat()
+        if len(id) > 0:
+            self.read_properties_from_qstat()
 
     def read_properties_from_qstat(self) -> None:
         """Use ``qstat`` to get the current attributes of this job."""
@@ -278,8 +279,9 @@ class PBSJob:
 
     @classmethod
     def from_ids_bulk(cls, ids: list[str]) -> list["PBSJob"]:
-        if not ids:
+        if len(ids) == 0:
             return []
+
         result = subprocess.run(
             ["qstat", "-fx", *ids],
             stdout=subprocess.PIPE,
@@ -287,28 +289,45 @@ class PBSJob:
             text=True,
             check=False,
         )
-        # qstat -f output has "Job Id: <id>" section headers; split on those
+
+        job_sections = cls._split_qstat_output_by_job(result.stdout)
+
+        # Parse each section into a PBSJob instance
         jobs = []
-        current_lines: list[str] = []
+        for job_id, lines in job_sections:
+            job = cls()
+            job.id = job_id
+            job._parse_attributes_from_qstat_output(["Job Id: " + job_id] + lines)
+            jobs.append(job)
+
+        return jobs
+
+    @staticmethod
+    def _split_qstat_output_by_job(output: str) -> list[tuple[str, list[str]]]:
+        """
+        Split qstat -fx output into (job_id, lines) tuples.
+
+        Each section starts with "Job Id: <id>" and continues until the next
+        "Job Id:" line or end of output.
+        """
+        sections: list[tuple[str, list[str]]] = []
         current_id: str | None = None
-        for line in result.stdout.splitlines():
+        current_lines: list[str] = []
+
+        for line in output.splitlines():
             if line.startswith("Job Id:"):
+                # save previous section if it exists
                 if current_id is not None:
-                    job = cls.__new__(cls)  # skip __init__/qstat
-                    job.id = current_id
-                    job._set_empty_attributes()
-                    job._parse_attributes_from_qstat_output(
-                        ["Job Id: " + current_id] + current_lines
-                    )
-                    jobs.append(job)
+                    sections.append((current_id, current_lines))
+
+                # start new section
                 current_id = line.split(":", 1)[1].strip()
                 current_lines = []
             else:
                 current_lines.append(line)
+
+        # include the last section
         if current_id is not None:
-            job = cls.__new__(cls)
-            job.id = current_id
-            job._set_empty_attributes()
-            job._parse_attributes_from_qstat_output(["Job Id: " + current_id] + current_lines)
-            jobs.append(job)
-        return jobs
+            sections.append((current_id, current_lines))
+
+        return sections
