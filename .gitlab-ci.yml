@@ -53,7 +53,7 @@ test_doc_build:
   script:
     - "ssh -o LogLevel=error  ${user_name}@${build_machine} \"cd ${project_dir}
            && module load Python/3.12.5 && setenv PYTHONPATH `pwd`:$PYTHONPATH
-           && setenv PATH /u/fun3d/.local/bin:$PATH && cd docs
+           && cd docs
            && make html SPHINXOPTS='-W --keep-going'
            && cd build && tar zcvf pbs4py_html.tgz html \" "
 
