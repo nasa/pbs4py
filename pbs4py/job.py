@@ -290,8 +290,6 @@ class PBSJob:
             text=True,
             check=False,
         )
-        with open("qstat_bulk_debug.txt", "w") as debug_file:
-            debug_file.write(result.stdout)
 
         job_sections = cls._split_qstat_output_by_job(result.stdout)
 
