@@ -1,0 +1,786 @@
+Job Id: 127067.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = ddes_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 76817
+    resources_used.cput = 91505:38:17
+    resources_used.mem = 811487484kb
+    resources_used.ncpus = 768
+    resources_used.vmem = 1099660388kb
+    resources_used.walltime = 120:00:31
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Mon Jun 29 09:56:13 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5/medium/aoa3.5/unsteady_200ctu/ddes_ctu200
+	.e127067
+    exec_host = x1001c1s5b0n1/0*256+x1001c1s5b0n2/0*256+x1001c1s5b0n3/0*256
+    exec_vnode = (x1001c1s5b0n1:ncpus=256)+(x1001c1s5b0n2:ncpus=256)+(x1001c1s5
+	b0n3:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Sat Jul  4 09:56:59 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5/medium/aoa3.5/unsteady_200ctu/ddes_ctu20
+	0.o127067
+    Priority = 0
+    qtime = Mon Jun 29 09:56:13 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 768
+    Resource_List.ncpus = 768
+    Resource_List.nodect = 3
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 36.57
+    Resource_List.select = 3:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Mon Jun 29 09:56:15 2026
+    obittime = Sat Jul  4 09:56:59 2026
+    session_id = 1153521
+    jobdir = /u/kejacob1
+    substate = 93
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5/medium/aoa3.5/unsteady_200ctu,PBS_O_SYSTEM=Linux,PBS_O_QUEUE=long
+    comment = Job run at Mon Jun 29 at 09:56 on (x1001c1s5b0n1:ncpus=256)+(x100
+	1c1s5b0n2:ncpus=256)+(x1001c1s5b0n3:ncpus=256) and exceeded resource wa
+	lltime
+    etime = Mon Jun 29 09:56:13 2026
+    run_count = 1
+    eligible_time = 00:00:08
+    Stageout_status = 1
+    Exit_status = -29
+    Submit_arguments = turin.pbs
+    history_timestamp = 1783184219
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 132609.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.2c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 153541
+    resources_used.cput = 122158:27:14
+    resources_used.mem = 1633349028kb
+    resources_used.ncpus = 1536
+    resources_used.vmem = 1100782820kb
+    resources_used.walltime = 80:06:50
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Wed Jul  1 05:19:04 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0.
+	2c_ctu200.e132609
+    exec_host = x1003c3s0b0n1/0*256+x1003c3s0b0n2/0*256+x1003c3s0b0n3/0*256+x10
+	03c3s1b0n0/0*256+x1003c3s1b0n1/0*256+x1003c3s1b0n2/0*256
+    exec_vnode = (x1003c3s0b0n1:ncpus=256)+(x1003c3s0b0n2:ncpus=256)+(x1003c3s0
+	b0n3:ncpus=256)+(x1003c3s1b0n0:ncpus=256)+(x1003c3s1b0n1:ncpus=256)+(x1
+	003c3s1b0n2:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Sat Jul  4 13:26:12 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0
+	.2c_ctu200.o132609
+    Priority = 0
+    qtime = Wed Jul  1 05:19:04 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 1536
+    Resource_List.ncpus = 1536
+    Resource_List.nodect = 6
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 73.14
+    Resource_List.select = 6:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Wed Jul  1 05:19:06 2026
+    obittime = Sat Jul  4 13:26:12 2026
+    session_id = 937502
+    jobdir = /u/kejacob1
+    substate = 92
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.2c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Wed Jul 01 at 05:19 on (x1003c3s0b0n1:ncpus=256)+(x100
+	3c3s0b0n2:ncpus=256)+(x1003c3s0b0n3:ncpus=256)+(x1003c3s1b0n0:ncpus=256
+	)+(x1003c3s1b0n1:ncpus=256)+(x1003c3s1b0n2:ncpus=256) and finished
+    etime = Wed Jul  1 05:19:04 2026
+    run_count = 1
+    eligible_time = 00:00:09
+    Stageout_status = 1
+    Exit_status = 0
+    Submit_arguments = turin.pbs
+    history_timestamp = 1783196772
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 132706.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = unsteady_ctu50_from_freestream_aoa2.80
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 17
+    resources_used.cput = 00:03:16
+    resources_used.mem = 4096kb
+    resources_used.ncpus = 256
+    resources_used.vmem = 32424kb
+    resources_used.walltime = 87:26:15
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Wed Jul  1 05:33:46 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackupp17/kejacob1/projec
+	ts/rca/buffet/cases/oat15a/urans/medium/aoa2.80/unsteady_ctu50_from_fre
+	estream/unsteady_ctu50_from_freestream_aoa2.80.e132706
+    exec_host = x1002c0s1b0n3/0*256
+    exec_vnode = (x1002c0s1b0n3:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = oe
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Sat Jul  4 21:00:30 2026
+    Output_Path = athfe01.head.ath.nas.nasa.gov:/nobackupp17/kejacob1/projects/
+	rca/buffet/cases/oat15a/urans/medium/aoa2.80/unsteady_ctu50_from_freest
+	ream/unsteady_ctu50_from_freestream_aoa2.80_pbs.log
+    Priority = 0
+    qtime = Wed Jul  1 05:33:46 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 256
+    Resource_List.ncpus = 256
+    Resource_List.nodect = 1
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 12.19
+    Resource_List.select = 1:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Wed Jul  1 05:33:48 2026
+    obittime = Sat Jul  4 21:00:30 2026
+    session_id = 1116197
+    jobdir = /u/kejacob1
+    substate = 92
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackupp17/kejacob1/projects/rca/buffet/cases/oat15a/u
+	rans/medium/aoa2.80/unsteady_ctu50_from_freestream,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Wed Jul 01 at 05:33 on (x1002c0s1b0n3:ncpus=256) and f
+	inished
+    etime = Wed Jul  1 05:33:46 2026
+    run_count = 1
+    eligible_time = 00:00:07
+    Stageout_status = 1
+    Exit_status = 0
+    Submit_arguments = unsteady_ctu50_from_freestream_aoa2.80.pbs
+    history_timestamp = 1783224030
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 132707.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = unsteady_ctu50_from_freestream_aoa2.90
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 36
+    resources_used.cput = 00:03:28
+    resources_used.mem = 4096kb
+    resources_used.ncpus = 256
+    resources_used.vmem = 32416kb
+    resources_used.walltime = 87:03:13
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Wed Jul  1 05:33:47 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackupp17/kejacob1/projec
+	ts/rca/buffet/cases/oat15a/urans/medium/aoa2.90/unsteady_ctu50_from_fre
+	estream/unsteady_ctu50_from_freestream_aoa2.90.e132707
+    exec_host = x1000c4s2b0n0/0*256
+    exec_vnode = (x1000c4s2b0n0:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = oe
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Sat Jul  4 20:37:14 2026
+    Output_Path = athfe01.head.ath.nas.nasa.gov:/nobackupp17/kejacob1/projects/
+	rca/buffet/cases/oat15a/urans/medium/aoa2.90/unsteady_ctu50_from_freest
+	ream/unsteady_ctu50_from_freestream_aoa2.90_pbs.log
+    Priority = 0
+    qtime = Wed Jul  1 05:33:47 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 256
+    Resource_List.ncpus = 256
+    Resource_List.nodect = 1
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 12.19
+    Resource_List.select = 1:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Wed Jul  1 05:33:49 2026
+    obittime = Sat Jul  4 20:37:14 2026
+    session_id = 994908
+    jobdir = /u/kejacob1
+    substate = 92
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackupp17/kejacob1/projects/rca/buffet/cases/oat15a/u
+	rans/medium/aoa2.90/unsteady_ctu50_from_freestream,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Wed Jul 01 at 05:33 on (x1000c4s2b0n0:ncpus=256) and f
+	inished
+    etime = Wed Jul  1 05:33:47 2026
+    run_count = 1
+    eligible_time = 00:00:06
+    Stageout_status = 1
+    Exit_status = 0
+    Submit_arguments = unsteady_ctu50_from_freestream_aoa2.90.pbs
+    history_timestamp = 1783222634
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 132790.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.4c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 204933
+    resources_used.cput = 244035:47:38
+    resources_used.mem = 2821165520kb
+    resources_used.ncpus = 2048
+    resources_used.vmem = 1288782540kb
+    resources_used.walltime = 120:00:41
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Wed Jul  1 05:46:38 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0.
+	4c_ctu200.e132790
+    exec_host = x1000c0s0b0n0/0*256+x1000c0s0b0n1/0*256+x1000c0s0b0n2/0*256+x10
+	00c0s0b0n3/0*256+x1000c0s2b0n0/0*256+x1000c0s2b0n2/0*256+x1000c0s2b0n3/
+	0*256+x1000c0s4b0n0/0*256
+    exec_vnode = (x1000c0s0b0n0:ncpus=256)+(x1000c0s0b0n1:ncpus=256)+(x1000c0s0
+	b0n2:ncpus=256)+(x1000c0s0b0n3:ncpus=256)+(x1000c0s2b0n0:ncpus=256)+(x1
+	000c0s2b0n2:ncpus=256)+(x1000c0s2b0n3:ncpus=256)+(x1000c0s4b0n0:ncpus=2
+	56)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Mon Jul  6 05:47:40 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0
+	.4c_ctu200.o132790
+    Priority = 0
+    qtime = Wed Jul  1 05:46:38 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 2048
+    Resource_List.ncpus = 2048
+    Resource_List.nodect = 8
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 97.52
+    Resource_List.select = 8:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Wed Jul  1 05:46:41 2026
+    obittime = Mon Jul  6 05:47:39 2026
+    session_id = 1039862
+    jobdir = /u/kejacob1
+    substate = 93
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.4c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long,
+	PBS_NODEFILE=/var/spool/pbs/aux/132790.pbs06a.hsn.ath.nas.nasa.gov
+    comment = Job run at Wed Jul 01 at 05:46 on (x1000c0s0b0n0:ncpus=256)+(x100
+	0c0s0b0n1:ncpus=256)+(x1000c0s0b0n2:ncpus=256)+(x1000c0s0b0n3:ncpus=256
+	)+(x1000c0s2b0n0:ncpus=256)+(x1000c0s2b0n2:ncpus=256)+(x1000c0s2b0n3:nc
+	pus=256)+(x1000c0s4b0n0:ncpus=256) and exceeded resource walltime
+    etime = Wed Jul  1 05:46:38 2026
+    run_count = 1
+    eligible_time = 00:00:11
+    Stageout_status = 1
+    Exit_status = -29
+    Submit_arguments = turin.pbs
+    history_timestamp = 1783342060
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 174557.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.4c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 204807
+    resources_used.cput = 114419:42:01
+    resources_used.mem = 2814026272kb
+    resources_used.ncpus = 2048
+    resources_used.vmem = 1276762036kb
+    resources_used.walltime = 56:18:00
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Mon Jul 13 06:37:01 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0.
+	4c_ctu200.e174557
+    exec_host = x1003c7s3b0n2/0*256+x1003c7s3b0n3/0*256+x1003c7s4b0n0/0*256+x10
+	03c7s5b0n0/0*256+x1003c7s5b0n1/0*256+x1003c7s6b0n0/0*256+x1003c7s6b0n1/
+	0*256+x1003c7s6b0n2/0*256
+    exec_vnode = (x1003c7s3b0n2:ncpus=256)+(x1003c7s3b0n3:ncpus=256)+(x1003c7s4
+	b0n0:ncpus=256)+(x1003c7s5b0n0:ncpus=256)+(x1003c7s5b0n1:ncpus=256)+(x1
+	003c7s6b0n0:ncpus=256)+(x1003c7s6b0n1:ncpus=256)+(x1003c7s6b0n2:ncpus=2
+	56)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Wed Jul 15 14:55:18 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0
+	.4c_ctu200.o174557
+    Priority = 0
+    qtime = Mon Jul 13 06:37:01 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 2048
+    Resource_List.ncpus = 2048
+    Resource_List.nodect = 8
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 97.52
+    Resource_List.select = 8:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Mon Jul 13 06:37:03 2026
+    obittime = Wed Jul 15 14:55:18 2026
+    session_id = 781610
+    jobdir = /u/kejacob1
+    substate = 93
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.4c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Mon Jul 13 at 06:37 on (x1003c7s3b0n2:ncpus=256)+(x100
+	3c7s3b0n3:ncpus=256)+(x1003c7s4b0n0:ncpus=256)+(x1003c7s5b0n0:ncpus=256
+	)+(x1003c7s5b0n1:ncpus=256)+(x1003c7s6b0n0:ncpus=256)+(x1003c7s6b0n1:nc
+	pus=256)+(x1003c7s6b0n2:ncpus=256) and failed
+    etime = Mon Jul 13 06:37:01 2026
+    run_count = 1
+    eligible_time = 00:00:09
+    Stageout_status = 1
+    Exit_status = 255
+    Submit_arguments = turin.pbs
+    history_timestamp = 1784152518
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 174559.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.2c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 153099
+    resources_used.cput = 4685:52:58
+    resources_used.mem = 1630537904kb
+    resources_used.ncpus = 1536
+    resources_used.vmem = 1097283800kb
+    resources_used.walltime = 03:06:47
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Mon Jul 13 06:37:56 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0.
+	2c_ctu200.e174559
+    exec_host = x1003c3s4b0n3/0*256+x1003c3s5b0n1/0*256+x1003c3s5b0n2/0*256+x10
+	03c3s5b0n3/0*256+x1003c3s6b0n0/0*256+x1003c3s6b0n1/0*256
+    exec_vnode = (x1003c3s4b0n3:ncpus=256)+(x1003c3s5b0n1:ncpus=256)+(x1003c3s5
+	b0n2:ncpus=256)+(x1003c3s5b0n3:ncpus=256)+(x1003c3s6b0n0:ncpus=256)+(x1
+	003c3s6b0n1:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Mon Jul 13 09:51:12 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0
+	.2c_ctu200.o174559
+    Priority = 0
+    qtime = Mon Jul 13 06:37:56 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 1536
+    Resource_List.ncpus = 1536
+    Resource_List.nodect = 6
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 73.14
+    Resource_List.select = 6:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Mon Jul 13 06:37:58 2026
+    obittime = Mon Jul 13 09:51:12 2026
+    session_id = 2995808
+    jobdir = /u/kejacob1
+    substate = 93
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.2c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Mon Jul 13 at 06:37 on (x1003c3s4b0n3:ncpus=256)+(x100
+	3c3s5b0n1:ncpus=256)+(x1003c3s5b0n2:ncpus=256)+(x1003c3s5b0n3:ncpus=256
+	)+(x1003c3s6b0n0:ncpus=256)+(x1003c3s6b0n1:ncpus=256)
+    etime = Mon Jul 13 06:37:56 2026
+    run_count = 1
+    eligible_time = 00:00:09
+    Exit_status = -20
+    Submit_arguments = turin.pbs
+    history_timestamp = 1783961472
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 177054.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.2c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 153565
+    resources_used.cput = 75042:34:29
+    resources_used.mem = 1632696064kb
+    resources_used.ncpus = 1536
+    resources_used.vmem = 1100898056kb
+    resources_used.walltime = 49:13:38
+    job_state = R
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Tue Jul 14 09:50:43 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0.
+	2c_ctu200.e177054
+    exec_host = x1001c3s0b0n0/0*256+x1001c3s0b0n1/0*256+x1001c3s0b0n2/0*256+x10
+	01c3s0b0n3/0*256+x1001c3s2b0n0/0*256+x1001c3s2b0n1/0*256
+    exec_vnode = (x1001c3s0b0n0:ncpus=256)+(x1001c3s0b0n1:ncpus=256)+(x1001c3s0
+	b0n2:ncpus=256)+(x1001c3s0b0n3:ncpus=256)+(x1001c3s2b0n0:ncpus=256)+(x1
+	001c3s2b0n1:ncpus=256)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Thu Jul 16 11:04:28 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.2c/medium/aoa3.5/unsteady_ctu200/0
+	.2c_ctu200.o177054
+    Priority = 0
+    qtime = Tue Jul 14 09:50:43 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 1536
+    Resource_List.ncpus = 1536
+    Resource_List.nodect = 6
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 73.14
+    Resource_List.select = 6:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Tue Jul 14 09:50:45 2026
+    session_id = 2077775
+    jobdir = /u/kejacob1
+    substate = 42
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.2c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = Job run at Tue Jul 14 at 09:50 on (x1001c3s0b0n0:ncpus=256)+(x100
+	1c3s0b0n1:ncpus=256)+(x1001c3s0b0n2:ncpus=256)+(x1001c3s0b0n3:ncpus=256
+	)+(x1001c3s2b0n0:ncpus=256)+(x1001c3s2b0n1:ncpus=256)
+    etime = Tue Jul 14 09:50:43 2026
+    run_count = 1
+    eligible_time = 00:00:08
+    Submit_arguments = turin.pbs
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 178178.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.4c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    job_state = F
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Thu Jul 16 04:56:41 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0.
+	4c_ctu200.e178178
+    group_list = a2336
+    Hold_Types = s
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Thu Jul 16 06:07:39 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0
+	.4c_ctu200.o178178
+    Priority = 0
+    qtime = Thu Jul 16 04:56:41 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 2048
+    Resource_List.ncpus = 2048
+    Resource_List.nodect = 8
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 97.52
+    Resource_List.select = 8:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Thu Jul 16 05:24:02 2026
+    obittime = Thu Jul 16 05:25:20 2026
+    session_id = 1957381
+    substate = 91
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.4c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long
+    comment = job held, too many failed attempts to run and terminated
+    run_count = 21
+    eligible_time = 00:42:30
+    Exit_status = -3
+    Submit_arguments = turin.pbs
+    history_timestamp = 1784207259
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
+Job Id: 178186.pbs06a.hsn.ath.nas.nasa.gov
+    Job_Name = 0.4c_ctu200
+    Job_Owner = kejacob1@athfe01-hsn0.hsn.ath.nas.nasa.gov
+    resources_used.cpupercent = 204557
+    resources_used.cput = 9715:49:44
+    resources_used.mem = 2798283404kb
+    resources_used.ncpus = 2048
+    resources_used.vmem = 1272902544kb
+    resources_used.walltime = 04:49:11
+    job_state = R
+    queue = long
+    server = pbs06a.hsn.ath.nas.nasa.gov
+    Account_Name = ARMD
+    Checkpoint = u
+    ctime = Thu Jul 16 06:07:25 2026
+    Error_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects/
+	rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0.
+	4c_ctu200.e178186
+    exec_host = x1000c2s0b0n0/0*256+x1000c2s0b0n1/0*256+x1000c2s0b0n2/0*256+x10
+	00c2s0b0n3/0*256+x1000c2s1b0n0/0*256+x1000c2s1b0n1/0*256+x1000c2s1b0n2/
+	0*256+x1000c2s1b0n3/0*256
+    exec_vnode = (x1000c2s0b0n0:ncpus=256)+(x1000c2s0b0n1:ncpus=256)+(x1000c2s0
+	b0n2:ncpus=256)+(x1000c2s0b0n3:ncpus=256)+(x1000c2s1b0n0:ncpus=256)+(x1
+	000c2s1b0n1:ncpus=256)+(x1000c2s1b0n2:ncpus=256)+(x1000c2s1b0n3:ncpus=2
+	56)
+    group_list = a2336
+    Hold_Types = n
+    Join_Path = n
+    Keep_Files = n
+    Mail_Points = a
+    mtime = Thu Jul 16 11:04:41 2026
+    Output_Path = athfe01-hsn0.hsn.ath.nas.nasa.gov:/nobackup/kejacob1/projects
+	/rca/buffet/cases/oat15a/ddes5_span0.4c/medium/aoa3.5/unsteady_ctu200/0
+	.4c_ctu200.o178186
+    Priority = 0
+    qtime = Thu Jul 16 06:07:25 2026
+    Rerunable = False
+    Resource_List.mpiprocs = 2048
+    Resource_List.ncpus = 2048
+    Resource_List.nodect = 8
+    Resource_List.place = scatter:excl
+    Resource_List.sbu_rate = 97.52
+    Resource_List.select = 8:ncpus=256:mpiprocs=256:model=tur_ath
+    Resource_List.walltime = 120:00:00
+    stime = Thu Jul 16 06:15:23 2026
+    obittime = Thu Jul 16 06:15:21 2026
+    session_id = 2103367
+    jobdir = /u/kejacob1
+    substate = 42
+    Variable_List = PBS_O_HOME=/home1/kejacob1,PBS_O_LANG=en_US.UTF-8,
+	PBS_O_LOGNAME=kejacob1,
+	PBS_O_PATH=/home1/kejacob1/.local/bin:/home1/kejacob1/bin:/nobackup/ke
+	jacob1/projects/fun3d_intg/build_turin/bin:/opt/cray/pe/python/3.11.7/b
+	in:/swbuild/fun3d/fun3dv14_users/modules/FUN3D_INTG_Turin/14.2/bin:/swb
+	uild/fun3d/fun3dv14_users/modules/tetgen/1.6.0/bin:/swbuild/fun3d/fun3d
+	v14_users/modules/ESP/121/EngSketchPad/bin:/swbuild/fun3d/fun3dv14_user
+	s/modules/Suggar++/4.3.5_cray-mpich_intel/bin:/opt/cray/pals/1.7/bin:/o
+	pt/cray/pe/mpich/8.1.33/ofi/intel/2022.1/bin:/opt/cray/pe/mpich/8.1.33/
+	bin:/opt/cray/pe/craype/2.7.35/bin:/nasa/intel/oneapi/compiler/2023.2.1
+	/linux/lib/oclfpga/bin:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin/i
+	ntel64:/nasa/intel/oneapi/compiler/2023.2.1/linux/bin:/opt/clmgr/sbin:/
+	opt/clmgr/bin:/opt/sgi/sbin:/opt/sgi/bin:/usr/share/Modules/bin:/usr/lo
+	cal/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/c3/bin:/opt/pbs/bin:/us
+	r/diags/scripts/:/usr/diags/bin/non-mpi/:/usr/diags/bin/nvidia/gpuburn_
+	static/:/opt/cray/pe/bin,PBS_O_MAIL=/var/spool/mail/kejacob1,
+	PBS_O_SHELL=/bin/bash,PBS_O_INTERACTIVE_AUTH_METHOD=resvport,
+	PBS_O_HOST=athfe01.head.ath.nas.nasa.gov,
+	PBS_O_WORKDIR=/nobackup/kejacob1/projects/rca/buffet/cases/oat15a/ddes
+	5_span0.4c/medium/aoa3.5/unsteady_ctu200,PBS_O_SYSTEM=Linux,
+	PBS_O_QUEUE=long,
+	PBS_NODEFILE=/var/spool/pbs/aux/178186.pbs06a.hsn.ath.nas.nasa.gov
+    comment = Job run at Thu Jul 16 at 06:15 on (x1000c2s0b0n0:ncpus=256)+(x100
+	0c2s0b0n1:ncpus=256)+(x1000c2s0b0n2:ncpus=256)+(x1000c2s0b0n3:ncpus=256
+	)+(x1000c2s1b0n0:ncpus=256)+(x1000c2s1b0n1:ncpus=256)+(x1000c2s1b0n2:nc
+	pus=256)+(x1000c2s1b0n3:ncpus=256)
+    etime = Thu Jul 16 06:07:25 2026
+    run_count = 7
+    eligible_time = 00:00:09
+    Submit_arguments = turin.pbs
+    project = _pbs_project_default
+    Submit_Host = athfe01-hsn0.hsn.ath.nas.nasa.gov
+
