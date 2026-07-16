@@ -194,8 +194,9 @@ class PBSJob:
         self.mtime_raw = qstat_dict.get("mtime", "")
         self.mtime = self._parse_mtime(self.mtime_raw)
 
-        if self.state in ["R", "F"]:
-            self.hostname = qstat_dict["exec_host"].split("/")[0]
+        exec_host = qstat_dict.get("exec_host")
+        if exec_host is not None:
+            self.hostname = exec_host.split("/")[0]
             walltime_used = qstat_dict.get("resources_used.walltime")
             if walltime_used is not None:
                 self.walltime_used = self._convert_walltime_to_seconds(walltime_used)
@@ -289,6 +290,8 @@ class PBSJob:
             text=True,
             check=False,
         )
+        with open("qstat_bulk_debug.txt", "w") as debug_file:
+            debug_file.write(result.stdout)
 
         job_sections = cls._split_qstat_output_by_job(result.stdout)
 
