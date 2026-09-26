@@ -40,7 +40,8 @@ class SLURM(Launcher):
         time:
             The requested job walltime in hours
         mem:
-            The requested memory size. String to allow specifying in G, MB, etc.
+            The requested memory per node, e.g. '64G' or '512M'. None uses
+            the scheduler default; '0' requests all memory on each node.
         profile_file:
             The file setting the environment to source inside the SLURM job. Set to
             '' if you do not wish to source a file.
@@ -58,7 +59,7 @@ class SLURM(Launcher):
         #: The associated SLURM header line is ``#SBATCH --account={account}``
         self.account: str = None
 
-        #: Requested memory size on the select line. Need to include units in the str.
+        #: Requested memory per node. None leaves the scheduler default unchanged.
         #: The associated SLURM header line is ``#SBATCH --mem={mem}``
         self.mem: Union[str, None] = mem
 
@@ -128,6 +129,7 @@ class SLURM(Launcher):
     def _create_list_of_optional_header_lines(self, dependency):
         header_lines = []
         header_lines.extend(self._create_account_header_line())
+        header_lines.extend(self._create_mem_header_line())
         header_lines.extend(self._create_array_range_header_line())
         header_lines.extend(self._create_mail_options_header_lines())
         header_lines.extend(self._create_job_dependencies_header_line(dependency))
@@ -137,6 +139,12 @@ class SLURM(Launcher):
     def _create_account_header_line(self) -> List[str]:
         if self.account is not None:
             return [f"#SBATCH --account={self.account}"]
+        else:
+            return []
+
+    def _create_mem_header_line(self) -> List[str]:
+        if self.mem is not None:
+            return [f"#SBATCH --mem={self.mem}"]
         else:
             return []
 
